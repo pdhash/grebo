@@ -1,0 +1,5 @@
+const kDefaultPadding = 25.0;
+const kOnBoardingPageAnimationDuration = Duration(milliseconds: 600);
+const kFontSize = 20.0;
+const kBorderRadius = 15.0;
+const kAppFont = "Nexa";
