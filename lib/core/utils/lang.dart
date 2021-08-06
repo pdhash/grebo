@@ -42,8 +42,9 @@ class Lang extends Translations {
           'email_example': 'example@mail.com',
           'password_example': 'XXXXXXXX',
           'submit': 'Submit',
+          'save': 'Save',
           'a_link_to..':
-              'A link to reset your password has been sent to your registered email account.',
+              'A link to reset your password has been sent to your registered\nemail account.',
           //register
           'name': 'Name',
           'confirm_password': 'Confirm Password',
@@ -70,6 +71,32 @@ class Lang extends Translations {
           'post_details': 'Post Details',
           'comments': 'Comments',
           'view_all_comments': 'View All Comments',
+          'no_comments': ' No Comments',
+          //business profile
+          'business_profile': 'Business Profile',
+          'follow': 'Follow',
+          'contact': 'Contact',
+          'message': 'Message',
+          'description': 'Description',
+          'website_links': 'Website Links',
+          'location': 'Location',
+          'availability': 'Availability',
+          'open': 'Open',
+          'closed': 'Closed',
+          'working_hours': 'Working Hours',
+          'working_days': 'Working Days',
+          'services_offered': 'Services Offered',
+          'customer_reviews': 'Customer Reviews',
+          'warning': 'Warning',
+          //customer review
+          'give_feedback': 'Give Feedback',
+          //give feedback
+          'how_was..': 'How was your experience with\nbusiness name',
+          'your_feedback..': 'Your feedback matters to us.',
+          'write_your..': 'Write your review',
+          'upload_photo': 'Upload photo',
+          'click_here': 'Click here to upload',
+          'submitting_review': 'Thanks you for submitting your\nreviews.',
         },
       };
 }

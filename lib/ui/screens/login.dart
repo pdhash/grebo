@@ -11,7 +11,7 @@ import 'package:greboo/ui/shared/appbar.dart';
 import 'package:greboo/ui/shared/custombutton.dart';
 import 'package:greboo/ui/shared/customtextfield.dart';
 
-import 'forgotpassword.dart';
+import 'homeTab/forgotpassword.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -93,7 +93,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       getHeightSizedBox(h: 21),
-                      InkWell(
+                      GestureDetector(
                         onTap: () {
                           Get.to(() => ForgotPassword());
                         },
@@ -119,16 +119,17 @@ class _LoginScreenState extends State<LoginScreen> {
                             Get.to(() => SignUp());
                           }),
                       getHeightSizedBox(h: 23),
-                      InkWell(
+                      GestureDetector(
                         onTap: () {},
                         child: Center(
-                            child: Text(
-                          'continue_as_guest'.tr,
-                          style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              decoration: TextDecoration.underline,
-                              color: AppColor.kDefaultColor),
-                        )),
+                          child: Text(
+                            'continue_as_guest'.tr,
+                            style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                decoration: TextDecoration.underline,
+                                color: AppColor.kDefaultColor),
+                          ),
+                        ),
                       ),
                     ],
                   )),

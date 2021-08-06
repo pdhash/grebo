@@ -3,9 +3,10 @@ import 'package:greboo/core/utils/config.dart';
 
 Future<void> showCustomDialog({
   required BuildContext context,
+  required double height,
   String? title,
   required Widget content,
-  Function()? onTap,
+  required Function()? onTap,
   required Color color,
   required String okText,
 }) async {
@@ -20,29 +21,44 @@ Future<void> showCustomDialog({
         child: ClipRRect(
           borderRadius: BorderRadius.circular(15.0),
           child: Container(
-            height: getProportionateScreenHeight(188),
+            height: height,
             child: Column(
               children: [
-                getHeightSizedBox(h: 27),
+                Spacer(
+                  flex: 2,
+                ),
+                title == null
+                    ? SizedBox()
+                    : Text(
+                        title,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: getProportionateScreenWidth(16)),
+                      ),
+                Spacer(),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: content,
                 ),
-                getHeightSizedBox(h: 29),
-                Spacer(),
+                Spacer(
+                  flex: 2,
+                ),
                 SizedBox(
-                  height: getProportionateScreenHeight(50),
+                  height: getProportionateScreenWidth(45),
                   width: double.infinity,
                   child: MaterialButton(
                     clipBehavior: Clip.antiAliasWithSaveLayer,
                     onPressed: onTap,
                     child: Text(
-                      "Save",
-                      style: TextStyle(color: Colors.white),
+                      okText,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: getProportionateScreenWidth(15)),
                     ),
                     color: color,
                   ),
-                )
+                ),
               ],
             ),
           ),

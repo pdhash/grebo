@@ -31,6 +31,10 @@ dependencies:
   get: ^4.3.4
   flutter_svg: ^0.22.0
   readmore: ^2.1.0
+  url_launcher: ^6.0.9
+  flutter_rating_bar: ^4.0.0
+  image_picker: ^0.8.3
+  flutter_chat_ui: ^1.1.9
 
 dev_dependencies:
   flutter_test:
@@ -57,6 +61,7 @@ flutter:
     - assets/image/signup/
     - assets/image/home/
     - assets/image/static/
+    - assets/image/business profile/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
@@ -75,6 +80,9 @@ flutter:
         - asset: assets/fonts/Nexa/NexaRegular.otf
         - asset: assets/fonts/Nexa/NexaBold.otf
           weight: 700
+    - family: Opensans
+      fonts:
+        - asset: assets/fonts/Opensans/OpenSans-Regular.ttf
 
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

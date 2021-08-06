@@ -4,7 +4,7 @@ import 'package:greboo/core/constants/app_assets.dart';
 import 'package:greboo/core/extension/customButtonextension.dart';
 import 'package:greboo/core/utils/config.dart';
 import 'package:greboo/core/viewmodel/controller/categoriescontroller.dart';
-import 'package:greboo/ui/screens/home.dart';
+import 'package:greboo/ui/screens/homeTab/home.dart';
 import 'package:greboo/ui/shared/appbar.dart';
 import 'package:greboo/ui/shared/custombutton.dart';
 
