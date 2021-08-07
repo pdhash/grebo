@@ -94,6 +94,7 @@ class AppImagePicker {
               ),
               onPressed: () {
                 browseImage(ImageSource.camera, multiple);
+
                 Get.back();
               },
             ),
@@ -104,6 +105,7 @@ class AppImagePicker {
               ),
               onPressed: () {
                 browseImage(ImageSource.gallery, multiple);
+
                 Get.back();
               },
             ),

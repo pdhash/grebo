@@ -47,6 +47,16 @@ class AppImages {
   static final next = 'assets/image/business profile/ic_next.svg';
   static final uploadReview = 'assets/image/business profile/ic_upload.svg';
   static final close = 'assets/image/business profile/ic_close.svg';
+  static final edit = 'assets/image/profile/ic_edit.svg';
+  static final user = 'assets/image/profile/ic_username.svg';
+  static final email = 'assets/image/profile/ic_email.svg';
+  static final setting = 'assets/image/profile/ic_settings.svg';
+  static final gps = 'assets/image/profile/ic_gps.svg';
+  static final aboutUs = 'assets/image/profile/ic_about-us.svg';
+  static final terms = 'assets/image/profile/ic_t&c.svg';
+  static final contactAdmin = 'assets/image/profile/ic_contact-admin.svg';
+  static final faqs = 'assets/image/profile/ic_faqs.svg';
+  static final logOut = 'assets/image/profile/ic_logout.svg';
   static final serviceOffer =
       'assets/image/business profile/ic_services_offered.svg';
 

@@ -268,36 +268,6 @@ class BusinessProfile extends StatelessWidget {
     );
   }
 
-  Widget buildTile(String title, Function()? onTap, String image) {
-    return Column(
-      children: [
-        getHeightSizedBox(h: 15),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
-          child: MaterialButton(
-            padding: EdgeInsets.zero,
-            onPressed: onTap,
-            child: Row(
-              children: [
-                buildWidget(image, 39, 39),
-                getHeightSizedBox(w: 10),
-                Text(
-                  title,
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: getProportionateScreenWidth(16)),
-                ),
-                Spacer(),
-                buildWidget(AppImages.next, 20, 10),
-              ],
-            ),
-          ),
-        ),
-        getHeightSizedBox(h: 15),
-      ],
-    );
-  }
-
   Widget header(String title) {
     return Text(
       title,
@@ -315,7 +285,12 @@ class BusinessProfile extends StatelessWidget {
         GestureDetector(
           onTap: () async {
             if (await canLaunch('https://$link')) {
-              await launch('https://$link');
+              await launch(
+                'https://$link',
+                forceSafariVC: true,
+                forceWebView: true,
+                enableJavaScript: true,
+              );
             } else {
               throw 'could not lunch';
             }
@@ -328,25 +303,6 @@ class BusinessProfile extends StatelessWidget {
           ),
         )
       ],
-    );
-  }
-
-  Widget contactButton(
-      {required String image, required String title, Function()? onTap}) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Column(
-        children: [
-          buildWidget(image, 17, 18),
-          getHeightSizedBox(h: 10),
-          Text(
-            title,
-            style: TextStyle(
-                fontSize: getProportionateScreenWidth(15),
-                color: AppColor.kDefaultFontColor.withOpacity(0.75)),
-          )
-        ],
-      ),
     );
   }
 
@@ -369,8 +325,57 @@ class BusinessProfile extends StatelessWidget {
               )),
     );
   }
+
+  Widget contactButton(
+      {required String image, required String title, Function()? onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        children: [
+          buildWidget(image, 17, 18),
+          getHeightSizedBox(h: 10),
+          Text(
+            title,
+            style: TextStyle(
+                fontSize: getProportionateScreenWidth(15),
+                color: AppColor.kDefaultFontColor.withOpacity(0.75)),
+          )
+        ],
+      ),
+    );
+  }
 }
 
 Widget buildImageTile(String image) {
   return Image.asset(image, fit: BoxFit.cover);
+}
+
+Widget buildTile(String title, Function()? onTap, String image) {
+  return Column(
+    children: [
+      getHeightSizedBox(h: 15),
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
+        child: MaterialButton(
+          padding: EdgeInsets.zero,
+          onPressed: onTap,
+          child: Row(
+            children: [
+              buildWidget(image, 41, 41),
+              getHeightSizedBox(w: 10),
+              Text(
+                title,
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: getProportionateScreenWidth(16)),
+              ),
+              Spacer(),
+              buildWidget(AppImages.next, 20, 10),
+            ],
+          ),
+        ),
+      ),
+      getHeightSizedBox(h: 15),
+    ],
+  );
 }

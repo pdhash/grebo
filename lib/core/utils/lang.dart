@@ -97,6 +97,29 @@ class Lang extends Translations {
           'upload_photo': 'Upload photo',
           'click_here': 'Click here to upload',
           'submitting_review': 'Thanks you for submitting your\nreviews.',
+          //profile
+          'user_name': 'User Name',
+          'settings': 'Settings',
+          //edit profile
+          'edit_profile': 'Edit Profile',
+          'change_image': 'Change Image',
+          //settings
+          'about_us': 'About Us',
+          'terms': 'Terms & Conditions',
+          'contact_admin': 'Contact Admin',
+          'faqs': 'FAQs',
+          'logOut': 'Logout',
+          'terms_and_conditions': 'Terms and Conditions',
+          //About Us
+          'aboutusdes':
+              "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting,",
+          //Terms and Conditions
+          'termsandconditiondes':
+              "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting,",
+          //Contact Admin
+          'how_can_we_help': 'How can we help?',
+          'dialog_msg':
+              'Thanks you for submitting your\nrequest. we will surely help you.'
         },
       };
 }

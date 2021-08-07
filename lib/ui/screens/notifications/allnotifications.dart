@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:greboo/core/constants/appSetting.dart';
 import 'package:greboo/core/constants/app_assets.dart';
 import 'package:greboo/core/constants/appcolor.dart';
 import 'package:greboo/core/utils/config.dart';
-import 'package:greboo/ui/screens/messagesTab/chatscreen.dart';
 import 'package:greboo/ui/shared/postview.dart';
 
-class AllMessages extends StatelessWidget {
+class AllNotification extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: ListView.builder(
-        itemCount: 10,
-        itemBuilder: (context, index) => Column(
+    return ListView.builder(
+      itemCount: 3,
+      itemBuilder: (context, index) {
+        return Column(
           children: [
             ListTile(
               horizontalTitleGap: 12,
+              minVerticalPadding: 17,
+              //  tileColor: Colors.blue.shade50,
               contentPadding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
               leading: Stack(
                 overflow: Overflow.visible,
@@ -39,43 +39,27 @@ class AllMessages extends StatelessWidget {
                   )
                 ],
               ),
-              subtitle: Text(
-                'Hi, Is that Arjun! How are you.',
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                    fontSize: getProportionateScreenWidth(13),
-                    fontWeight: FontWeight.w400,
-                    color: AppColor.kDefaultFontColor),
-              ),
               title: Text(
-                'Samira Sehgal',
-                style: TextStyle(
-                    fontWeight: FontWeight.w700,
-                    fontSize: getProportionateScreenWidth(15)),
+                'Admin, app as new features. update now to check',
+                style: TextStyle(fontSize: getProportionateScreenWidth(15)),
               ),
-              onTap: () {
-                Get.to(() => ChatView(index: index));
-              },
-              trailing: Padding(
-                padding: EdgeInsets.only(bottom: 11),
+              subtitle: Align(
+                alignment: Alignment.centerRight,
                 child: Text(
-                  '2:30 PM',
+                  'Today 2:30 PM',
                   style: TextStyle(
-                      fontSize: getProportionateScreenWidth(13),
-                      color: AppColor.kDefaultFontColor.withOpacity(0.50)),
+                      color: AppColor.kDefaultFontColor.withOpacity(0.65),
+                      fontSize: getProportionateScreenWidth(12)),
                 ),
               ),
             ),
-            //  getHeightSizedBox(h: 10),
+            //getHeightSizedBox(h: 10),
             Divider(
               height: 0,
-              thickness: 1,
-              color: AppColor.kDefaultFontColor.withOpacity(0.08),
-            ),
+            )
           ],
-        ),
-      ),
+        );
+      },
     );
   }
 }

@@ -35,6 +35,7 @@ dependencies:
   flutter_rating_bar: ^4.0.0
   image_picker: ^0.8.3
   flutter_chat_ui: ^1.1.9
+  fluttertoast: ^8.0.8
 
 dev_dependencies:
   flutter_test:
@@ -62,6 +63,7 @@ flutter:
     - assets/image/home/
     - assets/image/static/
     - assets/image/business profile/
+    - assets/image/profile/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

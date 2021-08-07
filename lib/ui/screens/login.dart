@@ -6,6 +6,7 @@ import 'package:greboo/core/constants/appcolor.dart';
 import 'package:greboo/core/extension/customButtonextension.dart';
 import 'package:greboo/core/utils/config.dart';
 import 'package:greboo/core/viewmodel/controller/loginController.dart';
+import 'package:greboo/ui/screens/mainscreen.dart';
 import 'package:greboo/ui/screens/signup.dart';
 import 'package:greboo/ui/shared/appbar.dart';
 import 'package:greboo/ui/shared/custombutton.dart';
@@ -109,7 +110,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           padding: 5,
                           type: CustomButtonType.colourButton,
                           text: 'login'.tr,
-                          onTap: () {}),
+                          onTap: () {
+                            Get.offAll(() => HomeScreen());
+                          }),
                       getHeightSizedBox(h: 20),
                       CustomButton(
                           padding: 5,
