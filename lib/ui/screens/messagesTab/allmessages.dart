@@ -19,7 +19,7 @@ class AllMessages extends StatelessWidget {
               horizontalTitleGap: 12,
               contentPadding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
               leading: Stack(
-                overflow: Overflow.visible,
+                clipBehavior: Clip.antiAlias,
                 children: [
                   buildCircleProfile(
                       image: AppImages.defaultProfile, width: 40, height: 40),

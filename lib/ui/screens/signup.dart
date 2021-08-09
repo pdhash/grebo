@@ -13,11 +13,11 @@ import 'package:greboo/ui/shared/customtextfield.dart';
 
 class SignUp extends StatelessWidget {
   final GlobalKey<FormState> globalKey = GlobalKey<FormState>();
-  TextEditingController name = TextEditingController();
-  TextEditingController email = TextEditingController();
-  TextEditingController password = TextEditingController();
-  TextEditingController confirmPassword = TextEditingController();
-  SignUpController signUpController = Get.put(SignUpController());
+  final TextEditingController name = TextEditingController();
+  final TextEditingController email = TextEditingController();
+  final TextEditingController password = TextEditingController();
+  final TextEditingController confirmPassword = TextEditingController();
+  final SignUpController signUpController = Get.put(SignUpController());
   @override
   Widget build(BuildContext context) {
     return GetBuilder(
@@ -54,7 +54,11 @@ class SignUp extends StatelessWidget {
                             fontSize: getProportionateScreenWidth(16)),
                       ),
                       Get.height < 800 ? getHeightSizedBox(h: 10) : SizedBox(),
-                      CustomTextField(controller: name, hintText: 'John smith'),
+                      CustomTextField(
+                        controller: name,
+                        hintText: 'John smith',
+                        textCapitalization: TextCapitalization.sentences,
+                      ),
                       getHeightSizedBox(h: 18),
                       Text(
                         'email'.tr,
@@ -64,7 +68,10 @@ class SignUp extends StatelessWidget {
                       ),
                       Get.height < 800 ? getHeightSizedBox(h: 10) : SizedBox(),
                       CustomTextField(
-                          controller: email, hintText: 'johnsmith@gmail.com'),
+                          keyboardType: TextInputType.emailAddress,
+                          textCapitalization: TextCapitalization.none,
+                          controller: email,
+                          hintText: 'johnsmith@gmail.com'),
                       getHeightSizedBox(h: 18),
                       Text(
                         'password'.tr,
@@ -76,6 +83,7 @@ class SignUp extends StatelessWidget {
                       Obx(() => CustomTextField(
                             controller: password,
                             hintText: 'XXXXXXXX',
+                            keyboardType: TextInputType.visiblePassword,
                             obSecureText: signUpController.showText.value,
                             suffix: IconButton(
                               padding: EdgeInsets.zero,
@@ -92,7 +100,7 @@ class SignUp extends StatelessWidget {
                           )),
                       getHeightSizedBox(h: 18),
                       Text(
-                        'confirm_Password'.tr,
+                        'confirm_password'.tr,
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: getProportionateScreenWidth(16)),
@@ -102,14 +110,15 @@ class SignUp extends StatelessWidget {
                         () => CustomTextField(
                           controller: confirmPassword,
                           hintText: 'XXXXXXXX',
-                          obSecureText: signUpController.showText.value,
+                          keyboardType: TextInputType.visiblePassword,
+                          obSecureText: signUpController.showText2.value,
                           suffix: IconButton(
                             padding: EdgeInsets.zero,
                             onPressed: () {
-                              signUpController.showText.toggle();
+                              signUpController.showText2.toggle();
                             },
                             icon: Text(
-                              signUpController.showText.value
+                              signUpController.showText2.value
                                   ? 'show'.tr
                                   : 'hide'.tr,
                               style: TextStyle(fontWeight: FontWeight.bold),

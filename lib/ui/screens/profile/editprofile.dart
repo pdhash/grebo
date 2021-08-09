@@ -11,9 +11,9 @@ import 'package:greboo/ui/shared/customtextfield.dart';
 
 class EditProfile extends StatelessWidget {
   final GlobalKey<FormState> globalKey = GlobalKey<FormState>();
-  TextEditingController name = TextEditingController();
-  TextEditingController email = TextEditingController();
-  TextEditingController password = TextEditingController();
+  final TextEditingController name = TextEditingController();
+  final TextEditingController email = TextEditingController();
+  final TextEditingController password = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(

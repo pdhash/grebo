@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:greboo/core/constants/app_assets.dart';
 import 'package:greboo/core/constants/appcolor.dart';
 import 'package:greboo/core/utils/config.dart';
@@ -9,9 +10,10 @@ class CustomTextField extends StatelessWidget {
   final String hintText;
   final bool obSecureText;
   final String? Function(String?)? validator;
-  Function()? onTap;
+  final Function()? onTap;
   final Widget? suffix;
   final TextInputType? keyboardType;
+  final TextCapitalization? textCapitalization;
 
   CustomTextField(
       {Key? key,
@@ -21,7 +23,8 @@ class CustomTextField extends StatelessWidget {
       this.onTap,
       this.validator,
       this.suffix,
-      this.keyboardType})
+      this.keyboardType,
+      this.textCapitalization})
       : super(key: key);
 
   @override
@@ -29,6 +32,9 @@ class CustomTextField extends StatelessWidget {
     return Container(
       height: getProportionateScreenHeight(40),
       child: TextFormField(
+        textCapitalization: textCapitalization == null
+            ? TextCapitalization.none
+            : textCapitalization as TextCapitalization,
         key: key,
         validator: validator,
         controller: controller,
@@ -77,8 +83,10 @@ class CustomTextField2 extends StatelessWidget {
                 controller: comment,
                 cursorHeight: 15,
                 decoration: InputDecoration(
-                    contentPadding:
-                        EdgeInsets.only(left: 20, right: 20, bottom: 3),
+                    contentPadding: EdgeInsets.only(
+                      left: 20,
+                      right: 20,
+                    ),
                     fillColor: Colors.transparent,
                     hintStyle:
                         TextStyle(fontSize: getProportionateScreenWidth(15)),

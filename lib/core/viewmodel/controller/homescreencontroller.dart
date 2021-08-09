@@ -1,9 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:greboo/core/viewmodel/controller/selectservicecontoller.dart';
 
 class HomeScreenController extends GetxController {
+  ServiceController serviceController = Get.put(ServiceController());
   RxBool descTextShowFlag = false.obs;
   final PageController pageController = PageController(initialPage: 0);
+  int _pageChanged = 0;
+
+  int get pageChanged => _pageChanged;
+
+  set pageChanged(int value) {
+    _pageChanged = value;
+    update();
+  }
+
   int _current = 0;
 
   int get current => _current;

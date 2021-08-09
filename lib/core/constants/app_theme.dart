@@ -12,14 +12,11 @@ class AppTheme {
     splashColor: Colors.transparent,
     highlightColor: Colors.transparent,
     appBarTheme: AppBarTheme(
-      actionsIconTheme: IconThemeData(opacity: 0),
       elevation: 0,
       color: Colors.transparent,
       brightness: Brightness.light,
-      iconTheme: IconThemeData(
-        color: Colors.black,
-      ),
       centerTitle: true,
+      actionsIconTheme: IconThemeData(size: 16, color: Colors.black),
       textTheme: TextTheme(
           headline6: TextStyle(
               color: AppColor.kDefaultFontColor,

@@ -198,14 +198,22 @@ class BusinessProfile extends StatelessWidget {
                                       text: 'open'.tr,
                                       children: [
                                         TextSpan(
-                                            text: ' : Mon,Tue,Wed,Thur,Fri,Sat',
+                                            text:
+                                                ' : Mon, Tue, Wed, Thur, Fri, Sat',
                                             style: TextStyle(
-                                                color: AppColor
-                                                    .kDefaultFontColor)),
+                                                color:
+                                                    AppColor.kDefaultFontColor,
+                                                fontFamily: 'Nexa',
+                                                fontSize:
+                                                    getProportionateScreenWidth(
+                                                        14))),
                                       ],
-                                      style:
-                                          TextStyle(color: Color(0xff075935)))),
-                              getHeightSizedBox(h: 10),
+                                      style: TextStyle(
+                                          color: Color(0xff075935),
+                                          fontFamily: 'Nexa',
+                                          fontSize: getProportionateScreenWidth(
+                                              14)))),
+                              getHeightSizedBox(h: 8),
                               RichText(
                                   text: TextSpan(
                                       text: 'closed'.tr,
@@ -213,11 +221,18 @@ class BusinessProfile extends StatelessWidget {
                                         TextSpan(
                                             text: ' : Sun',
                                             style: TextStyle(
-                                                color: AppColor
-                                                    .kDefaultFontColor)),
+                                                color:
+                                                    AppColor.kDefaultFontColor,
+                                                fontFamily: 'Nexa',
+                                                fontSize:
+                                                    getProportionateScreenWidth(
+                                                        14))),
                                       ],
-                                      style:
-                                          TextStyle(color: Color(0xffDB0505))))
+                                      style: TextStyle(
+                                          color: Color(0xffDB0505),
+                                          fontFamily: 'Nexa',
+                                          fontSize:
+                                              getProportionateScreenWidth(14))))
                             ],
                           )
                         ],
@@ -234,10 +249,13 @@ class BusinessProfile extends StatelessWidget {
                         children: [
                           buildWidget(AppImages.clock, 23, 23),
                           getHeightSizedBox(w: 10),
-                          Text(
-                            '9:00 AM-7:00 PM',
-                            style: TextStyle(
-                                fontSize: getProportionateScreenWidth(13)),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 4),
+                            child: Text(
+                              '9:00 AM-7:00 PM',
+                              style: TextStyle(
+                                  fontSize: getProportionateScreenWidth(13)),
+                            ),
                           )
                         ],
                       ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:greboo/core/constants/appSetting.dart';
 import 'package:greboo/core/constants/app_assets.dart';
@@ -6,6 +7,7 @@ import 'package:greboo/core/constants/appcolor.dart';
 import 'package:greboo/core/extension/customButtonextension.dart';
 import 'package:greboo/core/utils/config.dart';
 import 'package:greboo/core/viewmodel/controller/loginController.dart';
+import 'package:greboo/core/viewmodel/controller/selectservicecontoller.dart';
 import 'package:greboo/ui/screens/mainscreen.dart';
 import 'package:greboo/ui/screens/signup.dart';
 import 'package:greboo/ui/shared/appbar.dart';
@@ -14,21 +16,18 @@ import 'package:greboo/ui/shared/customtextfield.dart';
 
 import 'homeTab/forgotpassword.dart';
 
-class LoginScreen extends StatefulWidget {
-  @override
-  _LoginScreenState createState() => _LoginScreenState();
-}
-
-class _LoginScreenState extends State<LoginScreen> {
-  TextEditingController email = TextEditingController();
-  TextEditingController password = TextEditingController();
-  GlobalKey<FormState> globalKey = GlobalKey<FormState>();
-  LoginController loginController = Get.put(LoginController());
+class LoginScreen extends StatelessWidget {
+  final TextEditingController email = TextEditingController();
+  final TextEditingController password = TextEditingController();
+  final GlobalKey<FormState> globalKey = GlobalKey<FormState>();
+  final LoginController loginController = Get.put(LoginController());
+  final ServiceController serviceController = Get.find();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor: Colors.white,
-      appBar: appBar('user_login'.tr),
+      appBar: appBar(ServicesType.userType == serviceController.servicesType
+          ? 'user_login'.tr
+          : 'service_provider_login'.tr),
       body: Form(
         key: globalKey,
         child: SingleChildScrollView(
@@ -77,6 +76,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         () => CustomTextField(
                           hintText: 'password_example'.tr,
                           controller: password,
+                          keyboardType: TextInputType.visiblePassword,
                           obSecureText: loginController.showText.value,
                           suffix: IconButton(
                             padding: EdgeInsets.zero,
@@ -119,21 +119,26 @@ class _LoginScreenState extends State<LoginScreen> {
                           type: CustomButtonType.borderButton,
                           text: 'create_an_account'.tr,
                           onTap: () {
+                            FocusScopeNode currentFocus =
+                                FocusScope.of(context);
+                            currentFocus.unfocus();
                             Get.to(() => SignUp());
                           }),
                       getHeightSizedBox(h: 23),
-                      GestureDetector(
-                        onTap: () {},
-                        child: Center(
-                          child: Text(
-                            'continue_as_guest'.tr,
-                            style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                decoration: TextDecoration.underline,
-                                color: AppColor.kDefaultColor),
-                          ),
-                        ),
-                      ),
+                      ServicesType.userType == serviceController.servicesType
+                          ? GestureDetector(
+                              onTap: () {},
+                              child: Center(
+                                child: Text(
+                                  'continue_as_guest'.tr,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      decoration: TextDecoration.underline,
+                                      color: AppColor.kDefaultColor),
+                                ),
+                              ),
+                            )
+                          : SizedBox(),
                     ],
                   )),
               getHeightSizedBox(h: 29),

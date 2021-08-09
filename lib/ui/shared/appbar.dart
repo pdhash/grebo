@@ -3,7 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:greboo/core/constants/app_assets.dart';
 
-AppBar appBar(String title) {
+AppBar appBar(String title, [List<Widget>? actions]) {
   return AppBar(
     elevation: 0,
     centerTitle: true,
@@ -20,6 +20,7 @@ AppBar appBar(String title) {
         Get.back();
       },
     ),
+    actions: actions == null ? [] : actions,
     title: Padding(
       padding: const EdgeInsets.only(top: 5),
       child: Text(

@@ -46,7 +46,7 @@ class Settings extends StatelessWidget {
       'image': buildWidget(AppImages.logOut, 20, 20),
       'title': 'logOut'.tr,
       'onTap': () {
-        Get.to(() => OnBoarding());
+        Get.offAll(() => OnBoarding());
       }
     },
   ];

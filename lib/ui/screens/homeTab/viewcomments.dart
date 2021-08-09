@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:greboo/core/extension/customButtonextension.dart';
+import 'package:greboo/core/utils/config.dart';
 import 'package:greboo/core/viewmodel/controller/homescreencontroller.dart';
 import 'package:greboo/ui/shared/appbar.dart';
 import 'package:greboo/ui/shared/commentview.dart';
+import 'package:greboo/ui/shared/custombutton.dart';
 import 'package:greboo/ui/shared/postdetailbottom.dart';
 
 class ViewComments extends StatelessWidget {
@@ -37,10 +40,39 @@ class ViewComments extends StatelessWidget {
               bottom: 0,
               left: 0,
               right: 0,
-              child: PostDetailsBottomView(
-                comment: comment,
-                send: () {},
-              ))
+              child: true != true
+                  ? PostDetailsBottomView(
+                      comment: comment,
+                      send: () {},
+                    )
+                  : Container(
+                      color: Color(0xffF9F9F9),
+                      child: Column(
+                        children: [
+                          getHeightSizedBox(h: 26),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 60),
+                            child: Text(
+                              'like_error'.tr,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: getProportionateScreenWidth(16)),
+                            ),
+                          ),
+                          getHeightSizedBox(h: 17),
+                          SafeArea(
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 30),
+                              child: CustomButton(
+                                  type: CustomButtonType.colourButton,
+                                  text: 'view_profile'.tr,
+                                  onTap: () {}),
+                            ),
+                          ),
+                          getHeightSizedBox(h: 17),
+                        ],
+                      ),
+                    ))
         ],
       ),
     );

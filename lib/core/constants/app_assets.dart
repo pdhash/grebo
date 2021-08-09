@@ -19,6 +19,7 @@ class AppImages {
   static final home = 'assets/image/home/ic_home_inactive.svg';
   static final homeActive = 'assets/image/home/ic_home_active.svg';
   static final chat = 'assets/image/home/ic_chats_inactive.svg';
+  static final create = 'assets/image/home/ic_create.svg';
   static final chatActive = 'assets/image/home/ic_chats_active.svg';
   static final notification = 'assets/image/home/ic_notification_inactive.svg';
   static final notificationActive =
@@ -57,6 +58,11 @@ class AppImages {
   static final contactAdmin = 'assets/image/profile/ic_contact-admin.svg';
   static final faqs = 'assets/image/profile/ic_faqs.svg';
   static final logOut = 'assets/image/profile/ic_logout.svg';
+  static final error = 'assets/image/home/ic_new-post_illustration.svg';
+  static final photo = 'assets/image/home/ic_photo.svg';
+  static final video = 'assets/image/home/ic_video.svg';
+  static final dropdownOpen = 'assets/image/profile/ic_dropdown_open.svg';
+  static final dropdownClose = 'assets/image/profile/ic_dropdown_close.svg';
   static final serviceOffer =
       'assets/image/business profile/ic_services_offered.svg';
 

@@ -20,6 +20,7 @@ class Lang extends Translations {
           'how_would..': 'How would you like to\nJoin?',
           //login
           'user_login': 'User Login',
+          'service_provider_login': 'Service Provider Login',
           'get_started': 'Get Started',
           'enter_your..': 'Enter your account details for getting started.',
           'email_address': 'Email Address',
@@ -65,6 +66,16 @@ class Lang extends Translations {
           'view_all': 'View All',
           'see_all': 'See All',
           'see_less': 'See Less',
+          'like_error':
+              "Hey, You can't post & comment on news feeds until your profile is verified",
+          'go_to_profile': "Go to Profile",
+          'view_profile': 'View Profile',
+          //create Post
+          'create_post': 'Create Post',
+          'take_a_photo': 'Take a photo',
+          'take_a_video': 'Take a video',
+          'what_do_you..': 'What do you want to talk about?',
+          'post': 'Post',
           //business categories
           'apply': 'Apply',
           //post details

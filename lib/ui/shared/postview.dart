@@ -7,6 +7,7 @@ import 'package:greboo/core/viewmodel/controller/homescreencontroller.dart';
 import 'package:greboo/ui/screens/homeTab/businessprofile.dart';
 import 'package:greboo/ui/screens/homeTab/home.dart';
 import 'package:greboo/ui/screens/homeTab/postdetails.dart';
+import 'package:greboo/ui/screens/homeTab/provider/likeerror.dart';
 import 'package:readmore/readmore.dart';
 
 class PostView extends StatelessWidget {
@@ -110,7 +111,11 @@ class PostView extends StatelessWidget {
                       getHeightSizedBox(h: 6),
                       Row(
                         children: [
-                          buildWidget(AppImages.like, 15, 17),
+                          GestureDetector(
+                              onTap: () {
+                                Get.to(() => LikeError());
+                              },
+                              child: buildWidget(AppImages.like, 15, 17)),
                           getHeightSizedBox(w: 5),
                           Text(
                             '12700',
@@ -118,7 +123,9 @@ class PostView extends StatelessWidget {
                                 fontSize: getProportionateScreenWidth(12)),
                           ),
                           getHeightSizedBox(w: 23),
-                          buildWidget(AppImages.comment, 15, 16),
+                          GestureDetector(
+                              onTap: () {},
+                              child: buildWidget(AppImages.comment, 15, 16)),
                           getHeightSizedBox(w: 5),
                           Text(
                             '300',
