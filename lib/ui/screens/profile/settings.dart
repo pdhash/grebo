@@ -64,7 +64,8 @@ class Settings extends StatelessWidget {
                     children: [
                       ListTile(
                         onTap: list[index]['onTap'],
-                        contentPadding: EdgeInsets.zero.copyWith(top: 3),
+                        contentPadding: EdgeInsets.zero.copyWith(top: 2),
+                        horizontalTitleGap: 0,
                         leading: list[index]['image'],
                         title: Text(
                           list[index]['title'],
@@ -76,7 +77,7 @@ class Settings extends StatelessWidget {
                             : SizedBox(),
                       ),
                       Divider(
-                        height: 5,
+                        height: 2,
                         thickness: 1,
                       )
                     ],

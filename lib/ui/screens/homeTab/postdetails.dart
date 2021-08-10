@@ -104,7 +104,9 @@ class PostDetails extends StatelessWidget {
                 right: 0,
                 child: PostDetailsBottomView(
                   comment: comment,
+                  hintText: 'textfieldmsg1'.tr,
                   send: () {},
+                  isAddRequired: true,
                 ))
           ],
         ));

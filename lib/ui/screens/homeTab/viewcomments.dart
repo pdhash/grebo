@@ -43,6 +43,7 @@ class ViewComments extends StatelessWidget {
               child: true != true
                   ? PostDetailsBottomView(
                       comment: comment,
+                      hintText: 'textfieldmsg1'.tr,
                       send: () {},
                     )
                   : Container(

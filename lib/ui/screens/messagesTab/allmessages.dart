@@ -12,14 +12,14 @@ class AllMessages extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: ListView.builder(
-        itemCount: 10,
+        itemCount: 4,
         itemBuilder: (context, index) => Column(
           children: [
             ListTile(
               horizontalTitleGap: 12,
               contentPadding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
               leading: Stack(
-                clipBehavior: Clip.antiAlias,
+                clipBehavior: Clip.none,
                 children: [
                   buildCircleProfile(
                       image: AppImages.defaultProfile, width: 40, height: 40),

@@ -7,8 +7,15 @@ import 'customtextfield.dart';
 class PostDetailsBottomView extends StatelessWidget {
   final TextEditingController comment;
   final Function()? send;
+  final String hintText;
+  final bool isAddRequired;
 
-  const PostDetailsBottomView({Key? key, required this.comment, this.send})
+  const PostDetailsBottomView(
+      {Key? key,
+      required this.comment,
+      this.send,
+      required this.hintText,
+      this.isAddRequired = false})
       : super(key: key);
 
   @override
@@ -27,17 +34,19 @@ class PostDetailsBottomView extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: CustomTextField2(
               comment: comment,
-              hintText: 'Leave your comments here...',
+              hintText: hintText,
               send: send,
             ),
           ),
           getHeightSizedBox(h: 15),
-          Container(
-            height: 50,
-            width: Get.width,
-            color: Colors.red,
-            child: Center(child: Text('Advertisment')),
-          )
+          isAddRequired
+              ? Container(
+                  height: 50,
+                  width: Get.width,
+                  color: Colors.red,
+                  child: Center(child: Text('Advertisment')),
+                )
+              : SizedBox()
         ],
       ),
     );

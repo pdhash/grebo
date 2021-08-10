@@ -136,7 +136,7 @@ class GiveFeedback extends StatelessWidget {
                             ],
                           )
                         : Stack(
-                            clipBehavior: Clip.antiAlias,
+                            clipBehavior: Clip.none,
                             fit: StackFit.expand,
                             children: [
                               ClipRRect(

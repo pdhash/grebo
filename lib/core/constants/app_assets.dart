@@ -38,7 +38,7 @@ class AppImages {
   static final send = 'assets/image/home/ic_send.svg';
   static final noComment = 'assets/image/home/ic_comment (1).svg';
   static final calender = 'assets/image/business profile/ic_calendar.svg';
-  static final call = 'assets/image/business profile/ic_call.svg';
+  static final call = 'assets/image/business profile/ic_call (1).svg';
   static final chatNew = 'assets/image/business profile/ic_chat.svg';
   static final clock = 'assets/image/business profile/ic_clock.svg';
   static final customerReview =
@@ -62,7 +62,13 @@ class AppImages {
   static final photo = 'assets/image/home/ic_photo.svg';
   static final video = 'assets/image/home/ic_video.svg';
   static final dropdownOpen = 'assets/image/profile/ic_dropdown_open.svg';
+  static final editProfile = 'assets/image/business profile/ic_edit.svg';
+  static final callProfile = 'assets/image/business profile/ic_call.svg';
+  static final availability = 'assets/image/profile/ic_availability.svg';
+  static final aboutBusiness = 'assets/image/profile/ic_about-business.svg';
   static final dropdownClose = 'assets/image/profile/ic_dropdown_close.svg';
+  static final uploadImage =
+      'assets/image/editBusinessProfile/ic_upload_img.svg';
   static final serviceOffer =
       'assets/image/business profile/ic_services_offered.svg';
 

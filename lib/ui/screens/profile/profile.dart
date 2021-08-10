@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:greboo/core/constants/appSetting.dart';
 import 'package:greboo/core/constants/app_assets.dart';
 import 'package:greboo/core/utils/config.dart';
+import 'package:greboo/core/viewmodel/controller/homescreencontroller.dart';
+import 'package:greboo/core/viewmodel/controller/selectservicecontoller.dart';
 import 'package:greboo/ui/screens/homeTab/businessprofile.dart';
 import 'package:greboo/ui/screens/homeTab/home.dart';
 import 'package:greboo/ui/screens/profile/settings.dart';
@@ -11,6 +13,31 @@ import 'package:greboo/ui/shared/postview.dart';
 import 'editprofile.dart';
 
 class Profile extends StatelessWidget {
+  final HomeScreenController homeScreenController = Get.find();
+  final List<Map<String, dynamic>> list = [
+    {
+      'title': 'about_business'.tr,
+      'onTap': () {},
+      "image": AppImages.aboutBusiness
+    },
+    {
+      'title': 'availability'.tr,
+      'onTap': () {},
+      "image": AppImages.availability
+    },
+    {
+      'title': 'services_offered'.tr,
+      'onTap': () {},
+      "image": AppImages.serviceOffer
+    },
+    {
+      'title': 'settings'.tr,
+      'onTap': () {
+        Get.to(() => Settings());
+      },
+      "image": AppImages.setting
+    }
+  ];
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -53,14 +80,17 @@ class Profile extends StatelessWidget {
                     title: 'user_name'.tr,
                     subtitle: 'Ranjit Singh',
                   ),
-                  buildSettingTile(
-                    image: AppImages.location,
-                    height: 20,
-                    width: 14,
-                    title: 'location'.tr,
-                    subtitle:
-                        'Villaz Johns Street 11, California Johns Street 11, California',
-                  ),
+                  homeScreenController.serviceController.servicesType ==
+                          ServicesType.userType
+                      ? buildSettingTile(
+                          image: AppImages.location,
+                          height: 20,
+                          width: 14,
+                          title: 'location'.tr,
+                          subtitle:
+                              'Villaz Johns Street 11, California Johns Street 11, California',
+                        )
+                      : SizedBox(),
                   buildSettingTile(
                     image: AppImages.email,
                     height: 20,
@@ -73,13 +103,21 @@ class Profile extends StatelessWidget {
             ),
           ),
           getHeightSizedBox(h: 10),
-          buildTile(
-            'settings'.tr,
-            () {
-              Get.to(() => Settings());
-            },
-            AppImages.setting,
-          ),
+          homeScreenController.serviceController.servicesType ==
+                  ServicesType.userType
+              ? buildTile(
+                  'settings'.tr,
+                  () {
+                    Get.to(() => Settings());
+                  },
+                  AppImages.setting,
+                )
+              : Column(
+                  children: List.generate(
+                      list.length,
+                      (index) => buildTile(list[index]['title'],
+                          list[index]['onTap'], list[index]['image'])),
+                ),
           Divider(
             height: 0,
           )

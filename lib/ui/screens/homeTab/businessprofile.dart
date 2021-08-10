@@ -5,6 +5,9 @@ import 'package:greboo/core/constants/app_assets.dart';
 import 'package:greboo/core/constants/appcolor.dart';
 import 'package:greboo/core/utils/config.dart';
 import 'package:greboo/core/viewmodel/controller/businesscontroller.dart';
+import 'package:greboo/core/viewmodel/controller/homescreencontroller.dart';
+import 'package:greboo/core/viewmodel/controller/selectservicecontoller.dart';
+import 'package:greboo/ui/screens/editBusinessprofile/editeprofile.dart';
 import 'package:greboo/ui/screens/homeTab/home.dart';
 import 'package:greboo/ui/screens/homeTab/serviceoffered.dart';
 import 'package:greboo/ui/shared/alertdialogue.dart';
@@ -15,10 +18,22 @@ import 'customerreview.dart';
 
 class BusinessProfile extends StatelessWidget {
   final BusinessController businessController = Get.put(BusinessController());
+  final HomeScreenController homeScreenController = Get.find();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar('business_profile'.tr),
+      appBar: homeScreenController.serviceController.servicesType ==
+              ServicesType.userType
+          ? appBar('business_profile'.tr)
+          : appBar('about_business'.tr, [
+              IconButton(onPressed: () {}, icon: SizedBox()),
+              IconButton(
+                  padding: EdgeInsets.only(right: 25),
+                  onPressed: () {
+                    Get.to(() => EditBusinessProfile());
+                  },
+                  icon: buildWidget(AppImages.editProfile, 19, 19))
+            ]),
       body: GetBuilder(
         builder: (BusinessController controller) {
           return SingleChildScrollView(
@@ -116,28 +131,79 @@ class BusinessProfile extends StatelessWidget {
                   ),
                 ),
                 getHeightSizedBox(h: 15),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    contactButton(image: AppImages.follow, title: 'follow'.tr),
-                    contactButton(
-                        image: AppImages.call,
-                        title: 'contact'.tr,
-                        onTap: () async {
-                          if (await canLaunch('tel:8758587289')) {
-                            await launch('tel:8758587289');
-                          } else {
-                            throw 'Could not launch 8758587289';
-                          }
-                        }),
-                    contactButton(
-                        image: AppImages.chatNew, title: 'message'.tr),
-                  ],
-                ),
-                getHeightSizedBox(h: 15),
-                Divider(
-                  height: 0,
-                ),
+                homeScreenController.serviceController.servicesType ==
+                        ServicesType.userType
+                    ? Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              contactButton(
+                                  image: AppImages.follow, title: 'follow'.tr),
+                              contactButton(
+                                  image: AppImages.call,
+                                  title: 'contact'.tr,
+                                  onTap: () async {
+                                    if (await canLaunch('tel:8758587289')) {
+                                      await launch('tel:8758587289');
+                                    } else {
+                                      throw 'Could not launch 8758587289';
+                                    }
+                                  }),
+                              contactButton(
+                                  image: AppImages.chatNew,
+                                  title: 'message'.tr),
+                            ],
+                          ),
+                          getHeightSizedBox(h: 15),
+                          Divider(
+                            height: 0,
+                          ),
+                        ],
+                      )
+                    : Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: kDefaultPadding),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'basic_information'.tr,
+                              style: TextStyle(
+                                  fontSize: getProportionateScreenWidth(15)),
+                            ),
+                            getHeightSizedBox(h: 18),
+                            Row(
+                              children: [
+                                buildWidget(AppImages.callProfile, 41, 41),
+                                getHeightSizedBox(w: 8),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    getHeightSizedBox(h: 3),
+                                    Text(
+                                      'phone'.tr,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize:
+                                              getProportionateScreenWidth(16)),
+                                    ),
+                                    getHeightSizedBox(h: 3),
+                                    Text(
+                                      '+918758587289',
+                                      style: TextStyle(
+                                          color: Color(0xff6E6E6E)
+                                              .withOpacity(0.85),
+                                          fontSize:
+                                              getProportionateScreenWidth(15)),
+                                    )
+                                  ],
+                                )
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
                 getHeightSizedBox(h: 18),
                 Padding(
                   padding:
@@ -150,6 +216,7 @@ class BusinessProfile extends StatelessWidget {
                       Text(
                         'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text ever since the 1500s.',
                         style: TextStyle(
+                            height: 1.5,
                             color: AppColor.kDefaultFontColor.withOpacity(0.89),
                             fontSize: getProportionateScreenWidth(14)),
                       ),
@@ -161,7 +228,20 @@ class BusinessProfile extends StatelessWidget {
                       buildLink('www.facebook.com'),
                       getHeightSizedBox(h: 18),
                       buildLink('www.instagram.com'),
-                      getHeightSizedBox(h: 18),
+                    ],
+                  ),
+                ),
+                getHeightSizedBox(h: 18),
+                Divider(
+                  height: 0,
+                ),
+                getHeightSizedBox(h: 18),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: kDefaultPadding),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
                       header('location'.tr),
                       getHeightSizedBox(h: 11),
                       Container(
@@ -171,113 +251,162 @@ class BusinessProfile extends StatelessWidget {
                             color: Colors.red,
                             borderRadius: BorderRadius.circular(10)),
                       ),
-                      getHeightSizedBox(h: 15),
-                      Divider(
-                        height: 0,
-                      ),
-                      getHeightSizedBox(h: 18),
-                      header('availability'.tr),
-                      getHeightSizedBox(h: 11),
-                      Text(
-                        'working_days'.tr,
-                        style: TextStyle(
-                            fontFamily: 'Opensans',
-                            fontSize: getProportionateScreenWidth(15)),
-                      ),
-                      getHeightSizedBox(h: 10),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          buildWidget(AppImages.calender, 23, 26),
-                          getHeightSizedBox(w: 10),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              RichText(
-                                  text: TextSpan(
-                                      text: 'open'.tr,
-                                      children: [
-                                        TextSpan(
-                                            text:
-                                                ' : Mon, Tue, Wed, Thur, Fri, Sat',
-                                            style: TextStyle(
-                                                color:
-                                                    AppColor.kDefaultFontColor,
-                                                fontFamily: 'Nexa',
-                                                fontSize:
-                                                    getProportionateScreenWidth(
-                                                        14))),
-                                      ],
-                                      style: TextStyle(
-                                          color: Color(0xff075935),
-                                          fontFamily: 'Nexa',
-                                          fontSize: getProportionateScreenWidth(
-                                              14)))),
-                              getHeightSizedBox(h: 8),
-                              RichText(
-                                  text: TextSpan(
-                                      text: 'closed'.tr,
-                                      children: [
-                                        TextSpan(
-                                            text: ' : Sun',
-                                            style: TextStyle(
-                                                color:
-                                                    AppColor.kDefaultFontColor,
-                                                fontFamily: 'Nexa',
-                                                fontSize:
-                                                    getProportionateScreenWidth(
-                                                        14))),
-                                      ],
-                                      style: TextStyle(
-                                          color: Color(0xffDB0505),
-                                          fontFamily: 'Nexa',
-                                          fontSize:
-                                              getProportionateScreenWidth(14))))
-                            ],
-                          )
-                        ],
-                      ),
-                      getHeightSizedBox(h: 13),
-                      Text(
-                        'working_hours'.tr,
-                        style: TextStyle(
-                            fontFamily: 'Opensans',
-                            fontSize: getProportionateScreenWidth(15)),
-                      ),
-                      getHeightSizedBox(h: 10),
-                      Row(
-                        children: [
-                          buildWidget(AppImages.clock, 23, 23),
-                          getHeightSizedBox(w: 10),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 4),
-                            child: Text(
-                              '9:00 AM-7:00 PM',
-                              style: TextStyle(
-                                  fontSize: getProportionateScreenWidth(13)),
-                            ),
-                          )
-                        ],
-                      ),
-                      getHeightSizedBox(h: 15),
                     ],
                   ),
                 ),
-                Divider(
-                  height: 0,
-                ),
-                buildTile('services_offered'.tr, () {
-                  Get.to(() => ServiceOffered());
-                }, AppImages.serviceOffer),
-                Divider(
-                  height: 0,
-                ),
-                buildTile('customer_reviews'.tr, () {
-                  Get.to(() => CustomerReviewed());
-                }, AppImages.customerReview),
-                SizedBox(
-                  height: 20,
-                ),
+                getHeightSizedBox(h: 15),
+                homeScreenController.serviceController.servicesType ==
+                        ServicesType.userType
+                    ? Column(
+                        children: [
+                          Divider(
+                            height: 0,
+                          ),
+                          getHeightSizedBox(h: 18),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: kDefaultPadding),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                header('availability'.tr),
+                                getHeightSizedBox(h: 11),
+                                Text(
+                                  'working_days'.tr,
+                                  style: TextStyle(
+                                      fontFamily: 'Opensans',
+                                      fontSize:
+                                          getProportionateScreenWidth(15)),
+                                ),
+                                getHeightSizedBox(h: 10),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    buildWidget(AppImages.calender, 23, 26),
+                                    getHeightSizedBox(w: 10),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        RichText(
+                                            text: TextSpan(
+                                                text: 'open'.tr,
+                                                children: [
+                                                  TextSpan(
+                                                      text:
+                                                          ' : Mon, Tue, Wed, Thur, Fri, Sat',
+                                                      style: TextStyle(
+                                                          color: AppColor
+                                                              .kDefaultFontColor,
+                                                          fontFamily: 'Nexa',
+                                                          fontSize:
+                                                              getProportionateScreenWidth(
+                                                                  14))),
+                                                ],
+                                                style: TextStyle(
+                                                    color: Color(0xff075935),
+                                                    fontFamily: 'Nexa',
+                                                    fontSize:
+                                                        getProportionateScreenWidth(
+                                                            14)))),
+                                        getHeightSizedBox(h: 8),
+                                        RichText(
+                                            text: TextSpan(
+                                                text: 'closed'.tr,
+                                                children: [
+                                                  TextSpan(
+                                                      text: ' : Sun',
+                                                      style: TextStyle(
+                                                          color: AppColor
+                                                              .kDefaultFontColor,
+                                                          fontFamily: 'Nexa',
+                                                          fontSize:
+                                                              getProportionateScreenWidth(
+                                                                  14))),
+                                                ],
+                                                style: TextStyle(
+                                                    color: Color(0xffDB0505),
+                                                    fontFamily: 'Nexa',
+                                                    fontSize:
+                                                        getProportionateScreenWidth(
+                                                            14))))
+                                      ],
+                                    )
+                                  ],
+                                ),
+                                getHeightSizedBox(h: 13),
+                                Text(
+                                  'working_hours'.tr,
+                                  style: TextStyle(
+                                      fontFamily: 'Opensans',
+                                      fontSize:
+                                          getProportionateScreenWidth(15)),
+                                ),
+                                getHeightSizedBox(h: 10),
+                                Row(
+                                  children: [
+                                    buildWidget(AppImages.clock, 23, 23),
+                                    getHeightSizedBox(w: 10),
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 4),
+                                      child: Text(
+                                        '9:00 AM-7:00 PM',
+                                        style: TextStyle(
+                                            fontSize:
+                                                getProportionateScreenWidth(
+                                                    13)),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                          getHeightSizedBox(h: 15),
+                          Divider(
+                            height: 0,
+                          ),
+                          buildTile('services_offered'.tr, () {
+                            Get.to(() => ServiceOffered());
+                          }, AppImages.serviceOffer),
+                          Divider(
+                            height: 0,
+                          ),
+                          buildTile('customer_reviews'.tr, () {
+                            Get.to(() => CustomerReviewed());
+                          }, AppImages.customerReview),
+                          getHeightSizedBox(h: 20)
+                        ],
+                      )
+                    : Column(
+                        children: [
+                          buildTile(
+                              'customer_reviews'.tr,
+                              () {},
+                              AppImages.customerReview,
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  getHeightSizedBox(w: 5),
+                                  Icon(
+                                    Icons.star,
+                                    color: Color(0xffFFAB00),
+                                  ),
+                                  getHeightSizedBox(w: 5),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 4),
+                                    child: Text(
+                                      '3.5',
+                                      style: TextStyle(
+                                          fontSize:
+                                              getProportionateScreenWidth(15)),
+                                    ),
+                                  )
+                                ],
+                              )),
+                          getHeightSizedBox(h: 20),
+                        ],
+                      ),
               ],
             ),
           );
@@ -368,7 +497,8 @@ Widget buildImageTile(String image) {
   return Image.asset(image, fit: BoxFit.cover);
 }
 
-Widget buildTile(String title, Function()? onTap, String image) {
+Widget buildTile(String title, Function()? onTap, String image,
+    [Widget? widget]) {
   return Column(
     children: [
       getHeightSizedBox(h: 15),
@@ -381,11 +511,20 @@ Widget buildTile(String title, Function()? onTap, String image) {
             children: [
               buildWidget(image, 41, 41),
               getHeightSizedBox(w: 10),
-              Text(
-                title,
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: getProportionateScreenWidth(16)),
+              Wrap(
+                crossAxisAlignment: WrapCrossAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4),
+                    child: Text(
+                      title,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: getProportionateScreenWidth(16)),
+                    ),
+                  ),
+                  widget == null ? SizedBox() : widget
+                ],
               ),
               Spacer(),
               buildWidget(AppImages.next, 20, 10),

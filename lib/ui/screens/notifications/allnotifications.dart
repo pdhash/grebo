@@ -19,7 +19,7 @@ class AllNotification extends StatelessWidget {
               //  tileColor: Colors.blue.shade50,
               contentPadding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
               leading: Stack(
-                clipBehavior: Clip.antiAlias,
+                clipBehavior: Clip.none,
                 children: [
                   buildCircleProfile(
                       image: AppImages.defaultProfile, width: 40, height: 40),

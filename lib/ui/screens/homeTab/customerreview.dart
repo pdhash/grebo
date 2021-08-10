@@ -21,6 +21,7 @@ class CustomerReviewed extends StatelessWidget {
         fit: StackFit.expand,
         children: [
           ListView.builder(
+            itemCount: 5,
             itemBuilder: (context, index) {
               return reviewBox();
             },
@@ -96,6 +97,7 @@ class CustomerReviewed extends StatelessWidget {
                       minRating: 1,
                       direction: Axis.horizontal,
                       allowHalfRating: true,
+                      ignoreGestures: true,
                       itemCount: 5,
                       unratedColor: Color(0xffE8E8E8),
                       itemSize: 16,
@@ -104,9 +106,7 @@ class CustomerReviewed extends StatelessWidget {
                         Icons.star,
                         color: Color(0xffFAAA01),
                       ),
-                      onRatingUpdate: (rating) {
-                        print(rating);
-                      },
+                      onRatingUpdate: (double value) {},
                     )
                   ],
                 )
@@ -116,7 +116,7 @@ class CustomerReviewed extends StatelessWidget {
             Text(
               "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
               style: TextStyle(
-                fontSize: getProportionateScreenWidth(12),
+                fontSize: getProportionateScreenWidth(13),
               ),
             )
           ],

@@ -5,7 +5,7 @@ import 'appcolor.dart';
 
 class AppTheme {
   static final ThemeData defTheme = ThemeData(
-    visualDensity: VisualDensity.adaptivePlatformDensity,
+    //visualDensity: VisualDensity.adaptivePlatformDensity,
     scaffoldBackgroundColor: Colors.white,
     primaryIconTheme: IconThemeData(color: Colors.black),
     fontFamily: kAppFont,
@@ -24,11 +24,9 @@ class AppTheme {
               fontSize: 20,
               fontWeight: FontWeight.w700)),
     ),
-    // textTheme: TextTheme(
-    //     bodyText2: TextStyle(
-    //         color: AppColor.textColor, fontWeight: FontWeight.w500)),
-    // textSelectionTheme:
-    //     TextSelectionThemeData(cursorColor: AppColor.textColor),
-    // errorColor: Colors.red
+    textTheme: TextTheme(
+        bodyText2: TextStyle(
+      color: AppColor.kDefaultFontColor,
+    )),
   );
 }

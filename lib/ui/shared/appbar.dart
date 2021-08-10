@@ -20,6 +20,7 @@ AppBar appBar(String title, [List<Widget>? actions]) {
         Get.back();
       },
     ),
+    //titleSpacing: 200,
     actions: actions == null ? [] : actions,
     title: Padding(
       padding: const EdgeInsets.only(top: 5),

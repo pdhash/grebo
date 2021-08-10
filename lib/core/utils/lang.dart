@@ -76,6 +76,10 @@ class Lang extends Translations {
           'take_a_video': 'Take a video',
           'what_do_you..': 'What do you want to talk about?',
           'post': 'Post',
+          'post_msg':
+              'Hey, your post has been successfully posted on news feeds.',
+          'go_to_home': 'Go To Home',
+          'Leave your comments here...': 'Leave your comments here...',
           //business categories
           'apply': 'Apply',
           //post details
@@ -83,8 +87,11 @@ class Lang extends Translations {
           'comments': 'Comments',
           'view_all_comments': 'View All Comments',
           'no_comments': ' No Comments',
+          'textfieldmsg1': 'Leave your comments here...',
           //business profile
           'business_profile': 'Business Profile',
+          'basic_information': 'Basic Information',
+          'phone': 'Phone',
           'follow': 'Follow',
           'contact': 'Contact',
           'message': 'Message',
@@ -99,6 +106,18 @@ class Lang extends Translations {
           'services_offered': 'Services Offered',
           'customer_reviews': 'Customer Reviews',
           'warning': 'Warning',
+          //edit profile business
+          'edit_business_profile': 'Edit Business Profile',
+          'business_details': 'Business Details',
+          'business_name': 'Business Name',
+          'business_category': 'Business Category',
+          'phone_number': 'Phone Number',
+          'add': 'Add',
+          'enter_website_url': 'Enter Website Url',
+          'cancel': 'Cancel',
+
+          //messsages
+          'textfieldmsg2': 'Type here..',
           //customer review
           'give_feedback': 'Give Feedback',
           //give feedback
@@ -110,6 +129,7 @@ class Lang extends Translations {
           'submitting_review': 'Thanks you for submitting your\nreviews.',
           //profile
           'user_name': 'User Name',
+          'about_business': 'About Business',
           'settings': 'Settings',
           //edit profile
           'edit_profile': 'Edit Profile',

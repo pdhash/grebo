@@ -39,10 +39,16 @@ dependencies:
   expansion_tile_card: ^2.0.0
 
 dev_dependencies:
+  flutter_native_splash: ^1.2.1
   flutter_test:
     sdk: flutter
 
-
+flutter_native_splash:
+  android: true
+  ios: true
+  web: false
+  background_image: "assets/splash/ic_splash_bg.png"
+  image: assets/splash/standaradLogo.png
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -65,6 +71,7 @@ flutter:
     - assets/image/static/
     - assets/image/business profile/
     - assets/image/profile/
+    - assets/image/editBusinessProfile/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
