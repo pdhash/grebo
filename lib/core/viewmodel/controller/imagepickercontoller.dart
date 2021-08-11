@@ -13,70 +13,29 @@ class ImagePickerController extends GetxController {
     update();
   }
 
-  // RxList<XFile>? multiFile = <XFile>[].obs;
-  // List<Asset> _images = <Asset>[];
-  //
-  // List<Asset> get images => _images;
-  //
-  // set images(List<Asset> value) {
-  //   _images = value;
-  //   update();
-  // }
+  List? _multiFile = [];
+
+  List? get multiFile => _multiFile;
+
+  set multiFile(List? value) {
+    _multiFile = value;
+    update();
+  }
 }
 
 class AppImagePicker {
   ImagePickerController imagePickerController =
       Get.put(ImagePickerController());
   ImagePicker imagePicker = ImagePicker();
-  // Future<void> loadAssets({String? actionBatTitle, String? appBarColor}) async {
-  //   print('ghell');
-  //   List<Asset> resultList = <Asset>[];
-  //   try {
-  //     resultList = await MultiImagePicker.pickImages(
-  //       maxImages: 10,
-  //       enableCamera: true,
-  //       selectedAssets: imagePickerController.images,
-  //       cupertinoOptions: CupertinoOptions(
-  //         takePhotoIcon: "chat",
-  //         doneButtonTitle: "Fatto",
-  //       ),
-  //       materialOptions: MaterialOptions(
-  //         actionBarColor: appBarColor,
-  //         actionBarTitle: actionBatTitle,
-  //         allViewTitle: "All Photos",
-  //         useDetailsView: true,
-  //         selectCircleStrokeColor: "#000000",
-  //       ),
-  //     );
-  //   } on Exception catch (e) {
-  //     print(e);
-  //   }
-
-  //   imagePickerController.images = resultList;
-  // }
 
   browseImage(ImageSource imageSource, bool isMulti) async {
-    if (isMulti == true) {
-      // List<XFile>? multiPickedFile =
-      //     await imagePicker.pickMultiImage(imageQuality: 50);
-      // imagePickerController.multiFile!.value = multiPickedFile!;
+    if (isMulti) {
     } else {
       var pickedFile =
           await imagePicker.pickImage(source: imageSource, imageQuality: 50);
 
-      // File? file = await ImageCropper.cropImage(
-      //   sourcePath: pickedFile!.path,
-      //   aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
-      //   compressFormat: ImageCompressFormat.jpg,
-      //   compressQuality: 100,
-      //   maxHeight: 700,
-      //   maxWidth: 700,
-      //   androidUiSettings: AndroidUiSettings(
-      //     toolbarColor: Colors.white,
-      //     toolbarTitle: "Image Cropper",
-      //   ),
-      // );
       imagePickerController.image = pickedFile!.path;
+      imagePickerController.multiFile!.add(pickedFile.path);
     }
   }
 

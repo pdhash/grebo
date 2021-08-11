@@ -1,9 +1,8 @@
-import 'dart:io';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:greboo/core/constants/app_assets.dart';
+import 'package:greboo/core/models/countrymodel.dart';
 
 class EditBProfileController extends GetxController {
   int _currentPage = 0;
@@ -15,99 +14,76 @@ class EditBProfileController extends GetxController {
     update();
   }
 
-  List<String>? _imageList = [];
-
-  List<String>? get imageList => _imageList;
-
-  set imageList(List<String>? value) {
-    _imageList = value;
+  final PageController pageController = PageController(initialPage: 0);
+  late CountryModel _selectedCountry;
+  CountryModel get selectedCountry => _selectedCountry;
+  set selectedCountry(CountryModel value) {
+    _selectedCountry = value;
     update();
   }
 
-  browseImage(ImageSource imageSource, bool isVideo, index) async {
-    if (isVideo) {
-    } else {
-      ImagePicker imagePicker = ImagePicker();
-      var pickedFile =
-          await imagePicker.pickImage(source: imageSource, imageQuality: 50);
-
-      imageList!.add(pickedFile!.path);
-    }
+  List<CountryModel>? _countries;
+  List<CountryModel>? get countries => _countries;
+  set countries(List<CountryModel>? value) {
+    _countries = value;
+    update();
   }
 
-  void openBottomSheet(
-      {required BuildContext context,
-      required bool isVideo,
-      required int index}) {
-    if (Platform.isIOS)
-      showCupertinoModalPopup<void>(
-        context: context,
-        builder: (BuildContext context) => CupertinoActionSheet(
-          actions: <CupertinoActionSheetAction>[
-            CupertinoActionSheetAction(
-              child: Text(
-                'Camera',
-                style: TextStyle(color: Colors.black),
-              ),
-              onPressed: () {
-                browseImage(ImageSource.camera, isVideo, index);
+  List? _websites = [];
+  List? get websites => _websites;
+  set websites(List? value) {
+    _websites = value;
+    update();
+  }
 
-                Get.back();
-              },
-            ),
-            CupertinoActionSheetAction(
-              child: Text(
-                'Gallery',
-                style: TextStyle(color: Colors.black),
-              ),
-              onPressed: () {
-                browseImage(ImageSource.gallery, isVideo, index);
+  String _kDefaultCountry = '+91';
 
-                Get.back();
-              },
-            ),
-          ],
-          cancelButton: CupertinoActionSheetAction(
-            child: const Text(
-              'Cancel',
-              style: TextStyle(color: Colors.black),
-            ),
-            onPressed: () {
-              Get.back();
-            },
-          ),
-        ),
-      );
-    else
-      Get.bottomSheet(
-        Container(
-          child: Wrap(
-            children: [
-              ListTile(
-                leading: Icon(Icons.photo_library),
-                title: Text('Photo Library'),
-                tileColor: Colors.white,
-                onTap: () async {
-                  browseImage(ImageSource.gallery, isVideo, index);
-                  Get.back();
-                },
-              ),
-              Divider(
-                height: 0.5,
-              ),
-              ListTile(
-                leading: Icon(Icons.photo_camera),
-                title: Text('Camera'),
-                tileColor: Colors.white,
-                onTap: () async {
-                  Get.back();
-                  browseImage(ImageSource.camera, isVideo, index);
-                },
-              ),
-            ],
-          ),
-        ),
-        barrierColor: Colors.black.withOpacity(0.3),
-      );
+  String get kDefaultCountry => _kDefaultCountry;
+
+  set kDefaultCountry(String value) {
+    _kDefaultCountry = value;
+    update();
+  }
+
+  String? _selectValue;
+
+  String? get selectValue => _selectValue;
+
+  set selectValue(String? value) {
+    _selectValue = value;
+    update();
+  }
+
+  Color _defaultColor = Color(0xff8F92A3);
+
+  Color get defaultColor => _defaultColor;
+
+  set defaultColor(Color value) {
+    _defaultColor = value;
+    update();
+  }
+
+  void loadCountryJsonFile() async {
+    print("loadCountryJsonFile....");
+    var jsonText = await rootBundle.loadString(AppJson.country);
+    countries = countryModelFromJson(jsonText);
+
+    // List data = json.decode(jsonText);
+    // print(data);
+
+    // data.forEach(
+    //   (element) {
+    //     CountryModel countryModel = CountryModel.fromJson(element);
+    //     if (countryModel.name!.toLowerCase() ==
+    //         kDefaultCountry.toString().toLowerCase())
+    //       _selectedCountry = countryModel;
+    //   },
+    // );
+  }
+
+  @override
+  void onInit() {
+    loadCountryJsonFile();
+    super.onInit();
   }
 }

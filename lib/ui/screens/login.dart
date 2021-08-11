@@ -75,6 +75,7 @@ class LoginScreen extends StatelessWidget {
                       Obx(
                         () => CustomTextField(
                           hintText: 'password_example'.tr,
+                          suffixWidth: 40,
                           controller: password,
                           keyboardType: TextInputType.visiblePassword,
                           obSecureText: loginController.showText.value,

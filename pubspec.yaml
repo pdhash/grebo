@@ -37,6 +37,7 @@ dependencies:
   flutter_chat_ui: ^1.1.9
   fluttertoast: ^8.0.8
   expansion_tile_card: ^2.0.0
+  keyboard_actions: ^3.4.3
 
 dev_dependencies:
   flutter_native_splash: ^1.2.1
@@ -49,6 +50,7 @@ flutter_native_splash:
   web: false
   background_image: "assets/splash/ic_splash_bg.png"
   image: assets/splash/standaradLogo.png
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -62,6 +64,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
+    - assets/country.json
     - assets/splash/
     - assets/image/onboarding/
     - assets/image/selectservice/

@@ -90,6 +90,6 @@ class AppImages {
 //   static final welcomeLottie = "assets/lotties/welcome/4.json";
 // }
 //
-// class AppJson {
-//   static final country = "assets/country.json";
-// }
+class AppJson {
+  static final country = "assets/country.json";
+}

@@ -12,20 +12,30 @@ class CustomTextField extends StatelessWidget {
   final String? Function(String?)? validator;
   final Function()? onTap;
   final Widget? suffix;
+  final Widget? prefix;
   final TextInputType? keyboardType;
   final TextCapitalization? textCapitalization;
+  final double? textSize;
+  final Color? hintColor;
+  final FocusNode? focusNode;
+  final double? suffixWidth;
 
-  CustomTextField(
-      {Key? key,
-      required this.controller,
-      required this.hintText,
-      this.obSecureText = false,
-      this.onTap,
-      this.validator,
-      this.suffix,
-      this.keyboardType,
-      this.textCapitalization})
-      : super(key: key);
+  CustomTextField({
+    Key? key,
+    required this.controller,
+    required this.hintText,
+    this.obSecureText = false,
+    this.onTap,
+    this.validator,
+    this.suffix,
+    this.keyboardType,
+    this.textCapitalization,
+    this.textSize = 16.0,
+    this.prefix,
+    this.hintColor,
+    this.focusNode,
+    this.suffixWidth,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -38,15 +48,21 @@ class CustomTextField extends StatelessWidget {
         key: key,
         validator: validator,
         controller: controller,
+        focusNode: focusNode,
         obscureText: obSecureText,
         keyboardType: keyboardType,
         decoration: InputDecoration(
-          hintStyle: TextStyle(
-              fontSize: getProportionateScreenWidth(16),
-              color: AppColor.kDefaultFontColor.withOpacity(0.5)),
-          suffixIcon: suffix,
-          hintText: hintText,
-        ),
+            hintStyle: TextStyle(
+                fontSize: getProportionateScreenWidth(textSize!.toDouble()),
+                color: hintColor == null
+                    ? AppColor.kDefaultFontColor.withOpacity(0.5)
+                    : hintColor),
+            suffixIcon: suffix,
+            prefixIcon: prefix,
+            hintText: hintText,
+            suffixIconConstraints: BoxConstraints(
+                maxHeight: 19,
+                maxWidth: suffixWidth == null ? 40 : suffixWidth!.toDouble())),
       ),
     );
   }

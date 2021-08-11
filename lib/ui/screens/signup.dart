@@ -82,6 +82,7 @@ class SignUp extends StatelessWidget {
                       Get.height < 800 ? getHeightSizedBox(h: 10) : SizedBox(),
                       Obx(() => CustomTextField(
                             controller: password,
+                            suffixWidth: 40,
                             hintText: 'XXXXXXXX',
                             keyboardType: TextInputType.visiblePassword,
                             obSecureText: signUpController.showText.value,
@@ -110,6 +111,7 @@ class SignUp extends StatelessWidget {
                         () => CustomTextField(
                           controller: confirmPassword,
                           hintText: 'XXXXXXXX',
+                          suffixWidth: 40,
                           keyboardType: TextInputType.visiblePassword,
                           obSecureText: signUpController.showText2.value,
                           suffix: IconButton(
