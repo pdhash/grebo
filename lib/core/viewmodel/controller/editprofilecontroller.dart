@@ -5,16 +5,6 @@ import 'package:greboo/core/constants/app_assets.dart';
 import 'package:greboo/core/models/countrymodel.dart';
 
 class EditBProfileController extends GetxController {
-  int _currentPage = 0;
-
-  int get currentPage => _currentPage;
-
-  set currentPage(int value) {
-    _currentPage = value;
-    update();
-  }
-
-  final PageController pageController = PageController(initialPage: 0);
   late CountryModel _selectedCountry;
   CountryModel get selectedCountry => _selectedCountry;
   set selectedCountry(CountryModel value) {
@@ -29,13 +19,19 @@ class EditBProfileController extends GetxController {
     update();
   }
 
-  List? _websites = [];
-  List? get websites => _websites;
-  set websites(List? value) {
-    _websites = value;
+  ///--------------------------------------websites add
+  List<String> websites = <String>[];
+  void addWebsite(String str) {
+    websites.add(str);
     update();
   }
 
+  void removeWebsite(val) {
+    websites.remove(val);
+    update();
+  }
+
+  ///---------------------------------------------------country update
   String _kDefaultCountry = '+91';
 
   String get kDefaultCountry => _kDefaultCountry;
@@ -44,6 +40,8 @@ class EditBProfileController extends GetxController {
     _kDefaultCountry = value;
     update();
   }
+
+  ///-------------------------------------------------
 
   String? _selectValue;
 

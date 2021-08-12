@@ -48,6 +48,7 @@ class AppImages {
   static final next = 'assets/image/business profile/ic_next.svg';
   static final uploadReview = 'assets/image/business profile/ic_upload.svg';
   static final close = 'assets/image/business profile/ic_close.svg';
+  static final closeGreen = 'assets/image/editBusinessProfile/closeGreen.svg';
   static final edit = 'assets/image/profile/ic_edit.svg';
   static final user = 'assets/image/profile/ic_username.svg';
   static final email = 'assets/image/profile/ic_email.svg';
@@ -67,6 +68,8 @@ class AppImages {
   static final availability = 'assets/image/profile/ic_availability.svg';
   static final aboutBusiness = 'assets/image/profile/ic_about-business.svg';
   static final dropdownClose = 'assets/image/profile/ic_dropdown_close.svg';
+  static final dropdownCloseBlack =
+      'assets/image/editBusinessProfile/ic_dropdown.svg';
   static final uploadImage =
       'assets/image/editBusinessProfile/ic_upload_img.svg';
   static final serviceOffer =

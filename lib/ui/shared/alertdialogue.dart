@@ -9,7 +9,8 @@ Future<void> showCustomDialog({
   required BuildContext context,
   required double height,
   String? title,
-  required Widget content,
+  required String content,
+  required double contentSize,
   required Function()? onTap,
   required Color color,
   required String okText,
@@ -24,46 +25,51 @@ Future<void> showCustomDialog({
             borderRadius: BorderRadius.circular(15.0)), //this right here
         child: ClipRRect(
           borderRadius: BorderRadius.circular(15.0),
-          child: Container(
-            height: height,
-            child: Column(
-              children: [
-                Spacer(
-                  flex: 2,
-                ),
-                title == null
-                    ? SizedBox()
-                    : Text(
-                        title,
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: getProportionateScreenWidth(16)),
-                      ),
-                Spacer(),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: content,
-                ),
-                Spacer(
-                  flex: 2,
-                ),
-                SizedBox(
-                  height: getProportionateScreenWidth(45),
-                  width: double.infinity,
-                  child: MaterialButton(
-                    clipBehavior: Clip.antiAliasWithSaveLayer,
-                    onPressed: onTap,
+          child: FittedBox(
+            child: Container(
+              width: Get.width,
+              child: Column(
+                children: [
+                  getHeightSizedBox(h: 20),
+                  title == null
+                      ? SizedBox()
+                      : Text(
+                          title,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: getProportionateScreenWidth(17)),
+                        ),
+                  getHeightSizedBox(h: 16),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25),
                     child: Text(
-                      okText,
+                      content,
+                      textAlign: TextAlign.center,
                       style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: getProportionateScreenWidth(15)),
+                        height: 1.4,
+                        fontSize: getProportionateScreenWidth(contentSize),
+                      ),
                     ),
-                    color: color,
                   ),
-                ),
-              ],
+                  getHeightSizedBox(h: 39),
+                  SizedBox(
+                    height: getProportionateScreenWidth(45),
+                    width: double.infinity,
+                    child: MaterialButton(
+                      clipBehavior: Clip.antiAliasWithSaveLayer,
+                      onPressed: onTap,
+                      child: Text(
+                        okText,
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: getProportionateScreenWidth(15)),
+                      ),
+                      color: color,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -78,15 +84,14 @@ Future<void> dialogueOpen(
     Function()? onOk,
     Function()? onCancel,
     required TextEditingController controller}) async {
-  Widget getButtons(
-      {Function()? onTap,
-      required String text,
-      Color color = AppColor.kDefaultColor}) {
+  Widget getButtons({Function()? onTap, required String text, Color? color}) {
     return GestureDetector(
       onTap: onTap,
       child: Text(
         text,
-        style: TextStyle(fontSize: getProportionateScreenWidth(15)),
+        style: TextStyle(
+            fontSize: getProportionateScreenWidth(15),
+            color: color == null ? AppColor.kDefaultFontColor : color),
       ),
     );
   }
@@ -101,12 +106,13 @@ Future<void> dialogueOpen(
           width: Get.width,
           decoration: BoxDecoration(borderRadius: BorderRadius.circular(5.0)),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 23),
+            padding: const EdgeInsets.symmetric(horizontal: 23, vertical: 23),
             child: Column(
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    getHeightSizedBox(h: 5),
                     Text(
                       'enter_website_url'.tr,
                       style:
@@ -114,17 +120,25 @@ Future<void> dialogueOpen(
                     ),
                     getHeightSizedBox(h: 20),
                     CustomTextField(
-                        controller: controller,
-                        hintText: 'www.businessurl.com'),
+                      controller: controller,
+                      hintText: 'www.businessurl.com',
+                      inputBorder: UnderlineInputBorder(
+                          borderSide:
+                              BorderSide(color: AppColor.kDefaultFontColor)),
+                      textSize: 16,
+                    ),
                   ],
                 ),
                 getHeightSizedBox(h: 40),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    getButtons(text: 'ok'.tr, onTap: onOk),
+                    getButtons(
+                        text: 'cancel'.tr,
+                        onTap: onCancel,
+                        color: AppColor.kDefaultFontColor.withOpacity(0.66)),
                     getHeightSizedBox(w: 30),
-                    getButtons(text: 'cancel'.tr, onTap: onCancel),
+                    getButtons(text: 'add'.tr, onTap: onOk),
                   ],
                 ),
               ],

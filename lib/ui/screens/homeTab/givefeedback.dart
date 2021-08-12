@@ -171,12 +171,8 @@ class GiveFeedback extends StatelessWidget {
                       showCustomDialog(
                           context: context,
                           height: 150,
-                          content: Text(
-                            'submitting_review'.tr,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: getProportionateScreenWidth(18)),
-                          ),
+                          content: 'submitting_review'.tr,
+                          contentSize: 18,
                           color: AppColor.kDefaultColor,
                           okText: 'ok'.tr,
                           onTap: () {

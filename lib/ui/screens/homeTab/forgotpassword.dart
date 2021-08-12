@@ -54,12 +54,8 @@ class ForgotPassword extends StatelessWidget {
                           showCustomDialog(
                               context: context,
                               color: AppColor.kDefaultColor,
-                              content: Text(
-                                'a_link_to..'.tr,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontSize: getProportionateScreenWidth(16)),
-                              ),
+                              content: 'a_link_to..'.tr,
+                              contentSize: 16,
                               okText: 'save'.tr,
                               onTap: () {
                                 Get.back();

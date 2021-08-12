@@ -7,7 +7,7 @@ import 'package:greboo/core/utils/config.dart';
 import 'package:greboo/core/viewmodel/controller/businesscontroller.dart';
 import 'package:greboo/core/viewmodel/controller/homescreencontroller.dart';
 import 'package:greboo/core/viewmodel/controller/selectservicecontoller.dart';
-import 'package:greboo/ui/screens/editBusinessprofile/editeprofile.dart';
+import 'package:greboo/ui/screens/editBusinessprofile/details1.dart';
 import 'package:greboo/ui/screens/homeTab/home.dart';
 import 'package:greboo/ui/screens/homeTab/serviceoffered.dart';
 import 'package:greboo/ui/shared/alertdialogue.dart';
@@ -30,7 +30,7 @@ class BusinessProfile extends StatelessWidget {
               IconButton(
                   padding: EdgeInsets.only(right: 25),
                   onPressed: () {
-                    Get.to(() => EditBusinessProfile());
+                    Get.to(() => DetailsPage1());
                   },
                   icon: buildWidget(AppImages.editProfile, 19, 19))
             ]),
@@ -98,18 +98,11 @@ class BusinessProfile extends StatelessWidget {
                                           Get.back();
                                         },
                                         title: 'warning'.tr,
-                                        content: Text(
-                                          "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting.",
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontSize:
-                                                  getProportionateScreenWidth(
-                                                      13),
-                                              color: AppColor.kDefaultFontColor
-                                                  .withOpacity(0.80)),
-                                        ),
+                                        content:
+                                            "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting.",
                                         height:
-                                            getProportionateScreenWidth(260));
+                                            getProportionateScreenWidth(260),
+                                        contentSize: 14);
                                   },
                                   child:
                                       buildWidget(AppImages.verified, 23, 24))

@@ -29,12 +29,8 @@ class CreatePost extends StatelessWidget {
                     showCustomDialog(
                         context: context,
                         height: 160,
-                        content: Text(
-                          'post_msg'.tr,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: getProportionateScreenWidth(15)),
-                        ),
+                        content: 'post_msg'.tr,
+                        contentSize: 15,
                         onTap: () {
                           Get.back();
                         },

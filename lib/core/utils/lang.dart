@@ -45,7 +45,7 @@ class Lang extends Translations {
           'submit': 'Submit',
           'save': 'Save',
           'a_link_to..':
-              'A link to reset your password has been sent to your registered\nemail account.',
+              'A link to reset your password has been sent to your registered email account.',
           //register
           'name': 'Name',
           'confirm_password': 'Confirm Password',
@@ -115,6 +115,12 @@ class Lang extends Translations {
           'add': 'Add',
           'enter_website_url': 'Enter Website Url',
           'cancel': 'Cancel',
+          //set availability
+          'set_availability': 'Set Availability',
+          'select_working_days': 'Select Working Days',
+          'select_working_hours': 'Select Working Hours',
+          'opening_hour': 'Opening Hour',
+          'closing_hour': 'Closing Hour',
 
           //messsages
           'textfieldmsg2': 'Type here..',
@@ -126,7 +132,7 @@ class Lang extends Translations {
           'write_your..': 'Write your review',
           'upload_photo': 'Upload photo',
           'click_here': 'Click here to upload',
-          'submitting_review': 'Thanks you for submitting your\nreviews.',
+          'submitting_review': 'Thanks you for submitting your reviews.',
           //profile
           'user_name': 'User Name',
           'about_business': 'About Business',
@@ -150,7 +156,7 @@ class Lang extends Translations {
           //Contact Admin
           'how_can_we_help': 'How can we help?',
           'dialog_msg':
-              'Thanks you for submitting your\nrequest. we will surely help you.'
+              'Thanks you for submitting your request. we will surely help you.'
         },
       };
 }

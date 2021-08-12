@@ -13,12 +13,10 @@ class ImagePickerController extends GetxController {
     update();
   }
 
-  List? _multiFile = [];
+  List<String> multiFile = <String>[];
 
-  List? get multiFile => _multiFile;
-
-  set multiFile(List? value) {
-    _multiFile = value;
+  void removeImage(int index) {
+    multiFile.removeAt(index);
     update();
   }
 }
@@ -35,7 +33,7 @@ class AppImagePicker {
           await imagePicker.pickImage(source: imageSource, imageQuality: 50);
 
       imagePickerController.image = pickedFile!.path;
-      imagePickerController.multiFile!.add(pickedFile.path);
+      imagePickerController.multiFile.add(pickedFile.path);
     }
   }
 

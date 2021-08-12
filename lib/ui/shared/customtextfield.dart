@@ -19,6 +19,7 @@ class CustomTextField extends StatelessWidget {
   final Color? hintColor;
   final FocusNode? focusNode;
   final double? suffixWidth;
+  final InputBorder? inputBorder;
 
   CustomTextField({
     Key? key,
@@ -35,6 +36,7 @@ class CustomTextField extends StatelessWidget {
     this.hintColor,
     this.focusNode,
     this.suffixWidth,
+    this.inputBorder,
   }) : super(key: key);
 
   @override
@@ -52,6 +54,7 @@ class CustomTextField extends StatelessWidget {
         obscureText: obSecureText,
         keyboardType: keyboardType,
         decoration: InputDecoration(
+            disabledBorder: inputBorder,
             hintStyle: TextStyle(
                 fontSize: getProportionateScreenWidth(textSize!.toDouble()),
                 color: hintColor == null

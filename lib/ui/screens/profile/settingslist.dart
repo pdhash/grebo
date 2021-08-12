@@ -76,11 +76,8 @@ class ContactAdmin extends StatelessWidget {
                   showCustomDialog(
                       context: context,
                       height: 150,
-                      content: Text(
-                        'dialog_msg'.tr,
-                        style: TextStyle(
-                            fontSize: getProportionateScreenWidth(15)),
-                      ),
+                      content: 'dialog_msg'.tr,
+                      contentSize: 15,
                       onTap: () {},
                       color: AppColor.kDefaultColor,
                       okText: 'ok'.tr);
@@ -147,7 +144,7 @@ class _FaqsState extends State<Faqs> {
                                 style: TextStyle(
                                     fontSize: getProportionateScreenWidth(14),
                                     color: AppColor.kDefaultFontColor
-                                        .withOpacity(0.82)), 
+                                        .withOpacity(0.82)),
                               ),
                             ],
                           )
