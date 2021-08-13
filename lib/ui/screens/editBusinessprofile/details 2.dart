@@ -14,10 +14,14 @@ import 'package:greboo/ui/shared/custombutton.dart';
 import 'package:keyboard_actions/external/platform_check/platform_check.dart';
 
 import 'details1.dart';
+import 'details3.dart';
 
 class DetailsPage2 extends StatelessWidget {
+  final bool showEdit;
   final AvailabilityController availabilityController =
       Get.put(AvailabilityController());
+
+  DetailsPage2({Key? key, this.showEdit = true}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,18 +31,17 @@ class DetailsPage2 extends StatelessWidget {
           appBar: appBar(
             'set_availability'.tr,
             [
-              MaterialButton(
-                onPressed: () {},
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 4),
-                  child: Text(
-                    '2 of 3',
-                    style: TextStyle(
-                        color: Colors.black.withOpacity(0.72),
-                        fontSize: getProportionateScreenWidth(15)),
-                  ),
-                ),
-              ),
+              showEdit
+                  ? Padding(
+                      padding: const EdgeInsets.only(top: 22, right: 25),
+                      child: Text(
+                        '2 of 3',
+                        style: TextStyle(
+                            color: AppColor.kDefaultFontColor.withOpacity(0.72),
+                            fontSize: 15),
+                      ),
+                    )
+                  : SizedBox()
             ],
           ),
           body: Padding(
@@ -127,7 +130,9 @@ class DetailsPage2 extends StatelessWidget {
                 SafeArea(
                     child: CustomButton(
                   text: 'next'.tr,
-                  onTap: () {},
+                  onTap: () {
+                    Get.to(() => DetailsPage3());
+                  },
                   type: CustomButtonType.colourButton,
                 )),
                 getHeightSizedBox(h: 20),

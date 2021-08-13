@@ -28,7 +28,7 @@ class BusinessProfile extends StatelessWidget {
           : appBar('about_business'.tr, [
               IconButton(onPressed: () {}, icon: SizedBox()),
               IconButton(
-                  padding: EdgeInsets.only(right: 25),
+                  padding: EdgeInsets.only(right: 22),
                   onPressed: () {
                     Get.to(() => DetailsPage1());
                   },

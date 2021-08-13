@@ -13,14 +13,23 @@ class PostController extends GetxController {
     update();
   }
 
+  bool? isImage;
+
   browseImage(ImageSource imageSource, bool isVideo) async {
+    ImagePicker imagePicker = ImagePicker();
     if (isVideo) {
+      isImage = false;
+      var pickedVideo = await imagePicker.pickVideo(source: imageSource);
+      _image = pickedVideo!.path;
+      update();
     } else {
-      ImagePicker imagePicker = ImagePicker();
+      isImage = true;
+
       var pickedFile =
           await imagePicker.pickImage(source: imageSource, imageQuality: 50);
 
       image = pickedFile!.path;
+      update();
     }
   }
 
@@ -39,6 +48,7 @@ class PostController extends GetxController {
                 browseImage(ImageSource.camera, isVideo);
 
                 Get.back();
+                image = null;
               },
             ),
             CupertinoActionSheetAction(
@@ -50,6 +60,7 @@ class PostController extends GetxController {
                 browseImage(ImageSource.gallery, isVideo);
 
                 Get.back();
+                image = null;
               },
             ),
           ],
@@ -75,6 +86,7 @@ class PostController extends GetxController {
                 tileColor: Colors.white,
                 onTap: () async {
                   browseImage(ImageSource.gallery, isVideo);
+
                   Get.back();
                 },
               ),
@@ -86,8 +98,8 @@ class PostController extends GetxController {
                 title: Text('Camera'),
                 tileColor: Colors.white,
                 onTap: () async {
-                  Get.back();
                   browseImage(ImageSource.camera, isVideo);
+                  Get.back();
                 },
               ),
             ],

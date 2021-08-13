@@ -68,10 +68,15 @@ class AppImages {
   static final availability = 'assets/image/profile/ic_availability.svg';
   static final aboutBusiness = 'assets/image/profile/ic_about-business.svg';
   static final dropdownClose = 'assets/image/profile/ic_dropdown_close.svg';
+  static final workingDays =
+      'assets/image/editBusinessProfile/ic_working-days_icon.svg';
+  static final workingHours =
+      'assets/image/editBusinessProfile/ic_working-hours_icon.svg';
   static final dropdownCloseBlack =
       'assets/image/editBusinessProfile/ic_dropdown.svg';
   static final uploadImage =
       'assets/image/editBusinessProfile/ic_upload_img.svg';
+  static final uploadImage2 = 'assets/image/editBusinessProfile/upload2.svg';
   static final serviceOffer =
       'assets/image/business profile/ic_services_offered.svg';
 

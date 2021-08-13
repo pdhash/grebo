@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:greboo/core/constants/appSetting.dart';
@@ -11,10 +12,18 @@ import 'package:greboo/ui/screens/homeTab/home.dart';
 import 'package:greboo/ui/shared/alertdialogue.dart';
 import 'package:greboo/ui/shared/appbar.dart';
 import 'package:greboo/ui/shared/postview.dart';
+import 'package:video_player/video_player.dart';
 
-class CreatePost extends StatelessWidget {
+class CreatePost extends StatefulWidget {
+  @override
+  _CreatePostState createState() => _CreatePostState();
+}
+
+class _CreatePostState extends State<CreatePost> {
   final PostController postController = Get.put(PostController());
+
   final TextEditingController postCaption = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder(
@@ -127,10 +136,14 @@ class CreatePost extends StatelessWidget {
                             child: Container(
                               width: getProportionateScreenWidth(325),
                               height: getProportionateScreenWidth(130),
-                              child: Image.file(
-                                File(controller.image.toString()),
-                                fit: BoxFit.cover,
-                              ),
+                              child: controller.isImage == true
+                                  ? Image.file(
+                                      File(controller.image.toString()),
+                                      fit: BoxFit.cover,
+                                    )
+                                  : VideoDisplay(
+                                      path: controller.image.toString(),
+                                    ),
                             ),
                           ),
                           Positioned(
@@ -171,7 +184,7 @@ class CreatePost extends StatelessWidget {
                     imageButtons(
                         title: 'take_a_video'.tr,
                         image: AppImages.video,
-                        onTap: () {
+                        onTap: () async {
                           postController.openBottomSheet(
                               context: context, isVideo: true);
                         }),
@@ -206,4 +219,32 @@ Widget imageButtons(
       ],
     ),
   );
+}
+
+class VideoDisplay extends StatefulWidget {
+  final String path;
+
+  const VideoDisplay({Key? key, required this.path}) : super(key: key);
+
+  @override
+  _VideoDisplayState createState() => _VideoDisplayState();
+}
+
+class _VideoDisplayState extends State<VideoDisplay> {
+  late final VideoPlayerController videoPlayerController;
+
+  @override
+  void initState() {
+    videoPlayerController = VideoPlayerController.file(File(widget.path))
+      ..initialize().then((_) {
+        setState(() {});
+        videoPlayerController.play();
+      });
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return VideoPlayer(videoPlayerController);
+  }
 }

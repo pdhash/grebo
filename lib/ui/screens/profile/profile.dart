@@ -7,6 +7,8 @@ import 'package:greboo/core/viewmodel/controller/homescreencontroller.dart';
 import 'package:greboo/core/viewmodel/controller/selectservicecontoller.dart';
 import 'package:greboo/ui/screens/homeTab/businessprofile.dart';
 import 'package:greboo/ui/screens/homeTab/home.dart';
+import 'package:greboo/ui/screens/homeTab/serviceoffered.dart';
+import 'package:greboo/ui/screens/profile/provider/availability.dart';
 import 'package:greboo/ui/screens/profile/settings.dart';
 import 'package:greboo/ui/shared/postview.dart';
 
@@ -17,17 +19,25 @@ class Profile extends StatelessWidget {
   final List<Map<String, dynamic>> list = [
     {
       'title': 'about_business'.tr,
-      'onTap': () {},
+      'onTap': () {
+        Get.to(() => BusinessProfile());
+      },
       "image": AppImages.aboutBusiness
     },
     {
       'title': 'availability'.tr,
-      'onTap': () {},
+      'onTap': () {
+        Get.to(() => Availability());
+      },
       "image": AppImages.availability
     },
     {
       'title': 'services_offered'.tr,
-      'onTap': () {},
+      'onTap': () {
+        Get.to(() => ServiceOffered(
+              isEdit: true,
+            ));
+      },
       "image": AppImages.serviceOffer
     },
     {

@@ -20,6 +20,8 @@ class CustomTextField extends StatelessWidget {
   final FocusNode? focusNode;
   final double? suffixWidth;
   final InputBorder? inputBorder;
+  final TextInputAction? textInputAction;
+  final int? maxLength;
 
   CustomTextField({
     Key? key,
@@ -37,6 +39,8 @@ class CustomTextField extends StatelessWidget {
     this.focusNode,
     this.suffixWidth,
     this.inputBorder,
+    this.textInputAction,
+    this.maxLength,
   }) : super(key: key);
 
   @override
@@ -50,9 +54,16 @@ class CustomTextField extends StatelessWidget {
         key: key,
         validator: validator,
         controller: controller,
+        maxLength: maxLength,
         focusNode: focusNode,
+        textInputAction: textInputAction,
         obscureText: obSecureText,
         keyboardType: keyboardType,
+        buildCounter: (BuildContext context,
+                {required int currentLength,
+                required bool isFocused,
+                required int? maxLength}) =>
+            null,
         decoration: InputDecoration(
             disabledBorder: inputBorder,
             hintStyle: TextStyle(

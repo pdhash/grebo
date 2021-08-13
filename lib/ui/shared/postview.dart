@@ -112,26 +112,35 @@ class PostView extends StatelessWidget {
                       Row(
                         children: [
                           GestureDetector(
-                              onTap: () {
-                                Get.to(() => LikeError());
-                              },
-                              child: buildWidget(AppImages.like, 15, 17)),
-                          getHeightSizedBox(w: 5),
-                          Text(
-                            '12700',
-                            style: TextStyle(
-                                fontSize: getProportionateScreenWidth(12)),
+                            onTap: () {
+                              Get.to(() => LikeError());
+                            },
+                            child: Row(
+                              children: [
+                                buildWidget(AppImages.like, 15, 17),
+                                getHeightSizedBox(w: 5),
+                                Text(
+                                  '12700',
+                                  style: TextStyle(
+                                      fontSize:
+                                          getProportionateScreenWidth(12)),
+                                ),
+                              ],
+                            ),
                           ),
                           getHeightSizedBox(w: 23),
                           GestureDetector(
-                              onTap: () {},
-                              child: buildWidget(AppImages.comment, 15, 16)),
-                          getHeightSizedBox(w: 5),
-                          Text(
-                            '300',
-                            style: TextStyle(
-                                fontSize: getProportionateScreenWidth(12)),
-                          ),
+                              child: Row(
+                            children: [
+                              buildWidget(AppImages.comment, 15, 16),
+                              getHeightSizedBox(w: 5),
+                              Text(
+                                '300',
+                                style: TextStyle(
+                                    fontSize: getProportionateScreenWidth(12)),
+                              ),
+                            ],
+                          )),
                         ],
                       ),
                       getHeightSizedBox(h: 10),

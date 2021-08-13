@@ -27,7 +27,7 @@ AppBar appBar(String title, [List<Widget>? actions]) {
       child: Text(
         title,
         style: TextStyle(
-            color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
+            color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
       ),
     ),
     backgroundColor: Colors.white,

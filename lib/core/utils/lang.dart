@@ -121,6 +121,14 @@ class Lang extends Translations {
           'select_working_hours': 'Select Working Hours',
           'opening_hour': 'Opening Hour',
           'closing_hour': 'Closing Hour',
+          'starts': 'Start',
+          'end': 'End',
+          //add services offered
+          'add_services_offered': 'Add Services Offered',
+          'name_of_service': 'Name of service',
+          'add_more_service': 'Add More Services',
+          'dialogue_msg':
+              'Thank you for registering with business app. once admin will verify your business profile. you will be notified.',
 
           //messsages
           'textfieldmsg2': 'Type here..',
@@ -140,6 +148,7 @@ class Lang extends Translations {
           //edit profile
           'edit_profile': 'Edit Profile',
           'change_image': 'Change Image',
+
           //settings
           'about_us': 'About Us',
           'terms': 'Terms & Conditions',

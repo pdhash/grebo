@@ -41,7 +41,7 @@ Future<void> showCustomDialog({
                         ),
                   getHeightSizedBox(h: 16),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25),
+                    padding: const EdgeInsets.symmetric(horizontal: 30),
                     child: Text(
                       content,
                       textAlign: TextAlign.center,

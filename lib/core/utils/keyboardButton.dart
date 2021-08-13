@@ -5,14 +5,12 @@ import 'package:keyboard_actions/keyboard_actions.dart';
 class KeyBoardSettings extends StatelessWidget {
   final Widget child;
   final FocusNode focusNode1;
-  final FocusNode focusNode2;
 
-  KeyBoardSettings(
-      {Key? key,
-      required this.child,
-      required this.focusNode1,
-      required this.focusNode2})
-      : super(key: key);
+  KeyBoardSettings({
+    Key? key,
+    required this.child,
+    required this.focusNode1,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -37,22 +35,6 @@ class KeyBoardSettings extends StatelessWidget {
                     );
                   },
                 ]),
-            KeyboardActionsItem(
-                focusNode: focusNode2,
-                displayArrows: false,
-                toolbarButtons: [
-                  (node) {
-                    return CupertinoButton(
-                      padding: EdgeInsets.zero.copyWith(right: 20),
-                      onPressed: () => node.unfocus(),
-                      child: Text(
-                        'Done',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600, fontSize: 15),
-                      ),
-                    );
-                  },
-                ])
           ]),
       child: child,
     );

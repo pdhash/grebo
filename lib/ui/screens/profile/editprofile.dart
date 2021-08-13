@@ -4,6 +4,8 @@ import 'package:greboo/core/constants/appSetting.dart';
 import 'package:greboo/core/constants/app_assets.dart';
 import 'package:greboo/core/extension/customButtonextension.dart';
 import 'package:greboo/core/utils/config.dart';
+import 'package:greboo/core/viewmodel/controller/homescreencontroller.dart';
+import 'package:greboo/core/viewmodel/controller/selectservicecontoller.dart';
 import 'package:greboo/ui/screens/homeTab/home.dart';
 import 'package:greboo/ui/shared/appbar.dart';
 import 'package:greboo/ui/shared/custombutton.dart';
@@ -14,6 +16,8 @@ class EditProfile extends StatelessWidget {
   final TextEditingController name = TextEditingController();
   final TextEditingController email = TextEditingController();
   final TextEditingController password = TextEditingController();
+  final HomeScreenController homeScreenController =
+      Get.find<HomeScreenController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,22 +67,31 @@ class EditProfile extends StatelessWidget {
                 CustomTextField(
                     controller: email, hintText: 'johnsmith@gmail.com'),
                 getHeightSizedBox(h: 18),
-                Text(
-                  'location'.tr,
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: getProportionateScreenWidth(16)),
-                ),
-                Get.height < 800 ? getHeightSizedBox(h: 10) : SizedBox(),
-                CustomTextField(
-                  controller: email,
-                  hintText: 'johnsmith@gmail.com',
-                  suffix: IconButton(
-                    icon: buildWidget(AppImages.gps, 21, 21),
-                    onPressed: () {},
-                  ),
-                ),
-                getHeightSizedBox(h: 250),
+                homeScreenController.serviceController.servicesType ==
+                        ServicesType.userType
+                    ? Column(
+                        children: [
+                          Text(
+                            'location'.tr,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: getProportionateScreenWidth(16)),
+                          ),
+                          Get.height < 800
+                              ? getHeightSizedBox(h: 10)
+                              : SizedBox(),
+                          CustomTextField(
+                            controller: email,
+                            hintText: 'johnsmith@gmail.com',
+                            suffix: IconButton(
+                              icon: buildWidget(AppImages.gps, 21, 21),
+                              onPressed: () {},
+                            ),
+                          ),
+                        ],
+                      )
+                    : SizedBox(),
+                getHeightSizedBox(h: 280),
                 SafeArea(
                   child: CustomButton(
                       type: CustomButtonType.colourButton,

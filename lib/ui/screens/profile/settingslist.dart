@@ -57,8 +57,13 @@ class ContactAdmin extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(color: Color(0xffC4C4C4))),
             child: TextField(
+              textInputAction: TextInputAction.go,
+              textCapitalization: TextCapitalization.sentences,
+              keyboardType: TextInputType.multiline,
+              maxLines: null,
               decoration: InputDecoration(
-                  contentPadding: EdgeInsets.symmetric(horizontal: 15),
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                   hintText: 'how_can_we_help'.tr,
                   border: InputBorder.none,
                   hintStyle: TextStyle(

@@ -120,9 +120,7 @@ class LoginScreen extends StatelessWidget {
                           type: CustomButtonType.borderButton,
                           text: 'create_an_account'.tr,
                           onTap: () {
-                            FocusScopeNode currentFocus =
-                                FocusScope.of(context);
-                            currentFocus.unfocus();
+                            disposeKeyboard();
                             Get.to(() => SignUp());
                           }),
                       getHeightSizedBox(h: 23),

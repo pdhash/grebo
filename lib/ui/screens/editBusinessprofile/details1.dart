@@ -31,33 +31,28 @@ class DetailsPage1 extends StatelessWidget {
   final EditBProfileController editProfileController =
       Get.put(EditBProfileController());
   final FocusNode _nodeText1 = FocusNode();
-  final FocusNode _nodeText2 = FocusNode();
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder(
       builder: (EditBProfileController controller) {
         return Scaffold(
-          appBar: appBar(
-            'business_details'.tr,
-            [
-              MaterialButton(
-                onPressed: () {},
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 4),
+            appBar: appBar(
+              'business_details'.tr,
+              [
+                Padding(
+                  padding: const EdgeInsets.only(top: 22, right: 25),
                   child: Text(
                     '1 of 3',
                     style: TextStyle(
-                        color: Colors.black.withOpacity(0.72),
-                        fontSize: getProportionateScreenWidth(15)),
+                        color: AppColor.kDefaultFontColor.withOpacity(0.72),
+                        fontSize: 15),
                   ),
-                ),
-              ),
-            ],
-          ),
-          body: KeyBoardSettings(
+                )
+              ],
+            ),
+            body: KeyBoardSettings(
               focusNode1: _nodeText1,
-              focusNode2: _nodeText2,
               child: SingleChildScrollView(
                   padding:
                       EdgeInsets.symmetric(horizontal: kDefaultPadding - 5),
@@ -118,7 +113,7 @@ class DetailsPage1 extends StatelessWidget {
                                             onTap: () {
                                               appImagePicker.openBottomSheet(
                                                 context: context,
-                                                multiple: false,
+                                                multiple: true,
                                               );
                                             },
                                             child: buildWidget(
@@ -171,6 +166,8 @@ class DetailsPage1 extends StatelessWidget {
                         controller: mobileNumber,
                         hintText: '987654321',
                         focusNode: _nodeText1,
+                        maxLength: 10,
+                        textInputAction: TextInputAction.done,
                         keyboardType: TextInputType.phone,
                         textSize: 14,
                         prefix: controller.countries == null
@@ -224,7 +221,7 @@ class DetailsPage1 extends StatelessWidget {
                       header('description'.tr),
                       TextFormField(
                         controller: description,
-                        focusNode: _nodeText2,
+                        textInputAction: TextInputAction.done,
                         textCapitalization: TextCapitalization.sentences,
                         maxLines: 2,
                         minLines: 1,
@@ -373,12 +370,13 @@ class DetailsPage1 extends StatelessWidget {
                           type: CustomButtonType.colourButton,
                           text: 'save'.tr,
                           onTap: () {
+                            imagePickerController.resetImage();
                             Get.to(() => DetailsPage2());
                           }),
                       getHeightSizedBox(h: 40),
                     ],
-                  ))),
-        );
+                  )),
+            ));
       },
     );
   }

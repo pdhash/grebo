@@ -34,12 +34,11 @@ dependencies:
   url_launcher: ^6.0.9
   flutter_rating_bar: ^4.0.0
   image_picker: ^0.8.3
-  flutter_chat_ui: ^1.1.9
   fluttertoast: ^8.0.8
-  expansion_tile_card: ^2.0.0
   keyboard_actions: ^3.4.3
   flutter_datetime_picker: ^1.5.1
   intl: ^0.17.0
+  video_player: ^2.1.12
 
 dev_dependencies:
   flutter_native_splash: ^1.2.1

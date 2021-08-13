@@ -3,15 +3,29 @@ import 'package:get/get.dart';
 import 'package:greboo/core/constants/appSetting.dart';
 import 'package:greboo/core/constants/app_assets.dart';
 import 'package:greboo/core/utils/config.dart';
+import 'package:greboo/ui/screens/editBusinessprofile/details3.dart';
 import 'package:greboo/ui/shared/appbar.dart';
 
+import 'home.dart';
+
 class ServiceOffered extends StatelessWidget {
-  const ServiceOffered({Key? key}) : super(key: key);
+  final bool isEdit;
+
+  const ServiceOffered({Key? key, this.isEdit = false}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: appBar('services_offered'.tr),
+        appBar: appBar('services_offered'.tr, [
+          isEdit
+              ? IconButton(
+                  padding: EdgeInsets.only(right: 22),
+                  onPressed: () {
+                    Get.to(() => DetailsPage3());
+                  },
+                  icon: buildWidget(AppImages.editProfile, 19, 19))
+              : SizedBox()
+        ]),
         body: ListView.builder(
           itemBuilder: (context, index) {
             return buildListTile(

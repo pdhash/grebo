@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 const kDefaultPadding = 25.0;
@@ -6,3 +7,6 @@ const kFontSize = 20.0;
 const kBorderRadius = 15.0;
 const kAppFont = "Nexa";
 final dateFormat = DateFormat("h:mm a");
+void disposeKeyboard() {
+  FocusManager.instance.primaryFocus?.unfocus();
+}
