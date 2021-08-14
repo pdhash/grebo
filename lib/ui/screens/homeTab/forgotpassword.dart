@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:greboo/core/constants/appSetting.dart';
-import 'package:greboo/core/constants/appcolor.dart';
-import 'package:greboo/core/extension/customButtonextension.dart';
-import 'package:greboo/core/utils/config.dart';
-import 'package:greboo/ui/shared/alertdialogue.dart';
-import 'package:greboo/ui/shared/appbar.dart';
-import 'package:greboo/ui/shared/custombutton.dart';
-import 'package:greboo/ui/shared/customtextfield.dart';
+import 'package:grebo/core/constants/appSetting.dart';
+import 'package:grebo/core/constants/appcolor.dart';
+import 'package:grebo/core/extension/customButtonextension.dart';
+import 'package:grebo/core/utils/config.dart';
+import 'package:grebo/ui/shared/alertdialogue.dart';
+import 'package:grebo/ui/shared/appbar.dart';
+import 'package:grebo/ui/shared/custombutton.dart';
+import 'package:grebo/ui/shared/customtextfield.dart';
 
 class ForgotPassword extends StatelessWidget {
   final TextEditingController email = TextEditingController();

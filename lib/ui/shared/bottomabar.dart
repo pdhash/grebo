@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
-import 'package:greboo/core/constants/app_assets.dart';
-import 'package:greboo/core/constants/appcolor.dart';
-import 'package:greboo/core/viewmodel/controller/homescreencontroller.dart';
-import 'package:greboo/ui/screens/homeTab/home.dart';
+import 'package:grebo/core/constants/app_assets.dart';
+import 'package:grebo/core/constants/appcolor.dart';
+import 'package:grebo/core/viewmodel/controller/homescreencontroller.dart';
+import 'package:grebo/ui/screens/homeTab/home.dart';
 
 class BuildBottomBar extends StatelessWidget {
   @override

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:greboo/core/viewmodel/controller/selectservicecontoller.dart';
+import 'package:grebo/core/viewmodel/controller/selectservicecontoller.dart';
 
 class HomeScreenController extends GetxController {
-  ServiceController serviceController = Get.put(ServiceController());
+  ServiceController serviceController = Get.find<ServiceController>();
   RxBool descTextShowFlag = false.obs;
   final PageController pageController = PageController(initialPage: 0);
   int _pageChanged = 0;

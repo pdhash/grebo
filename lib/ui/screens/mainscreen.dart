@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:greboo/core/constants/app_assets.dart';
-import 'package:greboo/core/viewmodel/controller/homescreencontroller.dart';
-import 'package:greboo/ui/screens/profile/profile.dart';
-import 'package:greboo/ui/shared/bottomabar.dart';
+import 'package:grebo/core/constants/app_assets.dart';
+import 'package:grebo/core/viewmodel/controller/homescreencontroller.dart';
+import 'package:grebo/ui/screens/profile/profile.dart';
+import 'package:grebo/ui/shared/bottomabar.dart';
 
 import 'homeTab/home.dart';
 import 'homeTab/provider/createpost.dart';

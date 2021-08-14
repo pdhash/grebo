@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:greboo/core/constants/app_theme.dart';
-import 'package:greboo/ui/screens/onbording.dart';
+import 'package:grebo/core/constants/app_theme.dart';
+import 'package:grebo/ui/screens/onbording.dart';
 
 import 'core/utils/lang.dart';
 

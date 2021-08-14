@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:greboo/core/constants/appSetting.dart';
-import 'package:greboo/core/constants/app_assets.dart';
-import 'package:greboo/core/constants/appcolor.dart';
-import 'package:greboo/core/utils/config.dart';
-import 'package:greboo/ui/shared/postview.dart';
+import 'package:grebo/core/constants/appSetting.dart';
+import 'package:grebo/core/constants/app_assets.dart';
+import 'package:grebo/core/constants/appcolor.dart';
+import 'package:grebo/core/utils/config.dart';
+import 'package:grebo/ui/shared/postview.dart';
 
 class AllNotification extends StatelessWidget {
   @override

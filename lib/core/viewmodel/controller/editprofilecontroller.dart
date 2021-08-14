@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:greboo/core/constants/app_assets.dart';
-import 'package:greboo/core/models/countrymodel.dart';
+import 'package:grebo/core/constants/app_assets.dart';
+import 'package:grebo/core/models/countrymodel.dart';
 
 class EditBProfileController extends GetxController {
   late CountryModel _selectedCountry;

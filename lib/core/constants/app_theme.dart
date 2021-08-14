@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:greboo/core/constants/appSetting.dart';
+import 'package:grebo/core/constants/appSetting.dart';
 
 import 'appcolor.dart';
 

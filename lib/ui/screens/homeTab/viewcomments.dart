@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:greboo/core/extension/customButtonextension.dart';
-import 'package:greboo/core/utils/config.dart';
-import 'package:greboo/core/viewmodel/controller/homescreencontroller.dart';
-import 'package:greboo/ui/shared/appbar.dart';
-import 'package:greboo/ui/shared/commentview.dart';
-import 'package:greboo/ui/shared/custombutton.dart';
-import 'package:greboo/ui/shared/postdetailbottom.dart';
+import 'package:grebo/core/extension/customButtonextension.dart';
+import 'package:grebo/core/utils/config.dart';
+import 'package:grebo/core/viewmodel/controller/homescreencontroller.dart';
+import 'package:grebo/ui/shared/appbar.dart';
+import 'package:grebo/ui/shared/commentview.dart';
+import 'package:grebo/ui/shared/custombutton.dart';
+import 'package:grebo/ui/shared/postdetailbottom.dart';
 
 class ViewComments extends StatelessWidget {
   final int currentPost;

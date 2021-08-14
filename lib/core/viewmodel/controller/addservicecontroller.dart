@@ -1,27 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:grebo/core/viewmodel/controller/imagepickercontoller.dart';
 
 class AddServicesModel {
-  final String image, title;
+  final String? image;
+  final String? title;
 
-  AddServicesModel({required this.image, required this.title});
+  AddServicesModel({required this.image, this.title});
 }
 
 class AddServiceController extends GetxController {
+  ImagePickerController imagePickerController =
+      Get.find<ImagePickerController>();
   List<TextEditingController> textControllers = <TextEditingController>[];
-  List<AddServicesModel> serviceMultiFile = [];
+  List<AddServicesModel> serviceMultiFile = <AddServicesModel>[];
 
-  void addDetails(String str, String image) {
-    serviceMultiFile.add(AddServicesModel(image: image, title: str));
-    update();
-  }
-
-  bool _addServiceBox = false;
-
-  bool get addServiceBox => _addServiceBox;
-
-  set addServiceBox(bool value) {
-    _addServiceBox = value;
+  addDetails(index) {
+    serviceMultiFile.add(AddServicesModel(
+      image: imagePickerController.image.toString(),
+    ));
     update();
   }
 

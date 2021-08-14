@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:greboo/core/constants/appSetting.dart';
-import 'package:greboo/core/constants/appcolor.dart';
-import 'package:greboo/core/utils/config.dart';
-import 'package:greboo/core/viewmodel/controller/homescreencontroller.dart';
-import 'package:greboo/ui/shared/postview.dart';
+import 'package:grebo/core/constants/appSetting.dart';
+import 'package:grebo/core/constants/appcolor.dart';
+import 'package:grebo/core/utils/config.dart';
+import 'package:grebo/core/viewmodel/controller/homescreencontroller.dart';
+import 'package:grebo/ui/shared/postview.dart';
 
 class CommentView extends StatelessWidget {
   final HomeScreenController homeScreenController = Get.find();

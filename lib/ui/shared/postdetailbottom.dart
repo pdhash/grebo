@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:greboo/core/utils/config.dart';
+import 'package:grebo/core/utils/config.dart';
 
 import 'customtextfield.dart';
 

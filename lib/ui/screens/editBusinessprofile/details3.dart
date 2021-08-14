@@ -2,19 +2,19 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:greboo/core/constants/appSetting.dart';
-import 'package:greboo/core/constants/app_assets.dart';
-import 'package:greboo/core/constants/appcolor.dart';
-import 'package:greboo/core/utils/config.dart';
-import 'package:greboo/core/viewmodel/controller/addservicecontroller.dart';
-import 'package:greboo/core/viewmodel/controller/imagepickercontoller.dart';
-import 'package:greboo/ui/screens/editBusinessprofile/details1.dart';
-import 'package:greboo/ui/screens/homeTab/home.dart';
-import 'package:greboo/ui/shared/appbar.dart';
-import 'package:greboo/ui/shared/custombutton.dart';
+import 'package:grebo/core/constants/appSetting.dart';
+import 'package:grebo/core/constants/app_assets.dart';
+import 'package:grebo/core/constants/appcolor.dart';
+import 'package:grebo/core/extension/customButtonextension.dart';
+import 'package:grebo/core/utils/config.dart';
+import 'package:grebo/core/viewmodel/controller/addservicecontroller.dart';
+import 'package:grebo/core/viewmodel/controller/imagepickercontoller.dart';
+import 'package:grebo/ui/screens/editBusinessprofile/details1.dart';
+import 'package:grebo/ui/screens/homeTab/home.dart';
+import 'package:grebo/ui/shared/appbar.dart';
+import 'package:grebo/ui/shared/custombutton.dart';
 
 class DetailsPage3 extends StatelessWidget {
-  final TextEditingController service = TextEditingController();
   final AppImagePicker appImagePicker = AppImagePicker();
   final ImagePickerController imagePickerController =
       Get.find<ImagePickerController>();
@@ -48,114 +48,125 @@ class DetailsPage3 extends StatelessWidget {
                     children: List.generate(controller.defaultField, (index) {
                       controller.textControllers
                           .add(new TextEditingController());
-                      return BuildTile(
-                        index: index,
-                        service: controller.textControllers[index],
+                      return GetBuilder(
+                        builder: (ImagePickerController con) {
+                          return Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: kDefaultPadding),
+                                child: Row(
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () async {
+                                        print('========$index');
+                                        appImagePicker.openBottomSheet(
+                                            context: context, multiple: false);
+
+                                        controller.addDetails(index);
+                                      },
+                                      child: controller
+                                                  .serviceMultiFile.length >
+                                              index
+                                          ? ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(15),
+                                              child: Container(
+                                                height:
+                                                    getProportionateScreenWidth(
+                                                        66),
+                                                width:
+                                                    getProportionateScreenWidth(
+                                                        66),
+                                                decoration: BoxDecoration(
+                                                    color: Colors.black,
+                                                    image: DecorationImage(
+                                                        colorFilter:
+                                                            ColorFilter.mode(
+                                                                Colors.black
+                                                                    .withOpacity(
+                                                                        0.55),
+                                                                BlendMode
+                                                                    .dstATop),
+                                                        image: FileImage(
+                                                          File(controller
+                                                              .serviceMultiFile[
+                                                                  index]
+                                                              .image
+                                                              .toString()),
+                                                        ),
+                                                        fit: BoxFit.cover)),
+                                              ),
+                                            )
+                                          : buildWidget(
+                                              AppImages.uploadImage2, 66, 66),
+                                    ),
+                                    getHeightSizedBox(w: 10),
+                                    Expanded(
+                                        child: TextField(
+                                      minLines: 1,
+                                      maxLines: 2,
+                                      textInputAction: TextInputAction.done,
+                                      style: TextStyle(
+                                        fontSize:
+                                            getProportionateScreenWidth(15),
+                                      ),
+                                      controller:
+                                          controller.textControllers[index],
+                                      cursorHeight: 15,
+                                      textCapitalization:
+                                          TextCapitalization.sentences,
+                                      decoration: InputDecoration(
+                                          border: InputBorder.none,
+                                          hintText: 'name_of_service'.tr,
+                                          hintStyle: TextStyle(
+                                              fontSize:
+                                                  getProportionateScreenWidth(
+                                                      15),
+                                              color: AppColor.kDefaultFontColor
+                                                  .withOpacity(0.49))),
+                                    )),
+                                    getHeightSizedBox(w: 10),
+                                    GestureDetector(
+                                      onTap: () {
+                                        controller.textControllers[index]
+                                            .clear();
+                                        controller.defaultField--;
+                                      },
+                                      child: buildWidget(
+                                          AppImages.closeGreen, 24, 24),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              getHeightSizedBox(h: 15),
+                              Divider(
+                                height: 0,
+                              ),
+                              getHeightSizedBox(h: 23),
+                            ],
+                          );
+                        },
                       );
                     }),
                   ),
                   GestureDetector(
                     onTap: () {
+                      //  print(controller.defaultField);
                       controller.defaultField++;
+                      // print(controller.defaultField);
                     },
                     child: header('add_more_service'.tr),
                   ),
-                  CustomButton(type: Cust, text: text, onTap: onTap)
+                  CustomButton(
+                      type: CustomButtonType.colourButton,
+                      text: 'save'.tr,
+                      onTap: () {})
                 ],
               ),
             );
           },
         ));
-  }
-}
-
-class BuildTile extends StatefulWidget {
-  final int index;
-  final TextEditingController service;
-
-  const BuildTile({Key? key, required this.index, required this.service})
-      : super(key: key);
-  @override
-  _BuildTileState createState() => _BuildTileState();
-}
-
-class _BuildTileState extends State<BuildTile> {
-  AppImagePicker appImagePicker = AppImagePicker();
-
-  @override
-  Widget build(BuildContext context) {
-    return GetBuilder(
-      builder: (ImagePickerController con) {
-        return Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
-              child: Row(
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      appImagePicker.openBottomSheet(
-                          context: context, multiple: false);
-                    },
-                    child: con.image == null
-                        ? buildWidget(AppImages.uploadImage2, 66, 66)
-                        : ClipRRect(
-                            borderRadius: BorderRadius.circular(15),
-                            child: Container(
-                              height: getProportionateScreenWidth(66),
-                              width: getProportionateScreenWidth(66),
-                              decoration: BoxDecoration(
-                                  color: Colors.black,
-                                  image: DecorationImage(
-                                      colorFilter: ColorFilter.mode(
-                                          Colors.black.withOpacity(0.55),
-                                          BlendMode.dstATop),
-                                      image: FileImage(
-                                        File(con.image.toString()),
-                                      ),
-                                      fit: BoxFit.cover)),
-                            ),
-                          ),
-                  ),
-                  getHeightSizedBox(w: 10),
-                  Expanded(
-                      child: TextField(
-                    minLines: 1,
-                    maxLines: 2,
-                    textInputAction: TextInputAction.done,
-                    style: TextStyle(
-                      fontSize: getProportionateScreenWidth(15),
-                    ),
-                    controller: widget.service,
-                    cursorHeight: 15,
-                    textCapitalization: TextCapitalization.sentences,
-                    decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: 'name_of_service'.tr,
-                        hintStyle: TextStyle(
-                            fontSize: getProportionateScreenWidth(15),
-                            color:
-                                AppColor.kDefaultFontColor.withOpacity(0.49))),
-                  )),
-                  getHeightSizedBox(w: 10),
-                  GestureDetector(
-                    onTap: () {
-                      widget.service.clear();
-                    },
-                    child: buildWidget(AppImages.closeGreen, 24, 24),
-                  ),
-                ],
-              ),
-            ),
-            getHeightSizedBox(h: 15),
-            Divider(
-              height: 0,
-            ),
-            getHeightSizedBox(h: 23),
-          ],
-        );
-      },
-    );
   }
 }
 

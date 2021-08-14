@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:greboo/core/constants/appSetting.dart';
-import 'package:greboo/core/constants/app_assets.dart';
-import 'package:greboo/core/utils/config.dart';
-import 'package:greboo/ui/screens/editBusinessprofile/details3.dart';
-import 'package:greboo/ui/shared/appbar.dart';
+import 'package:grebo/core/constants/appSetting.dart';
+import 'package:grebo/core/constants/app_assets.dart';
+import 'package:grebo/core/utils/config.dart';
+import 'package:grebo/ui/screens/editBusinessprofile/details3.dart';
+import 'package:grebo/ui/shared/appbar.dart';
 
 import 'home.dart';
 

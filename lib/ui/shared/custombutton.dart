@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:greboo/core/extension/customButtonextension.dart';
-import 'package:greboo/core/utils/config.dart';
+import 'package:grebo/core/extension/customButtonextension.dart';
+import 'package:grebo/core/utils/config.dart';
 
 class ButtonProps {
   double height;

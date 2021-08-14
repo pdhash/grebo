@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:greboo/core/constants/appSetting.dart';
-import 'package:greboo/core/constants/app_assets.dart';
-import 'package:greboo/core/utils/config.dart';
-import 'package:greboo/ui/screens/homeTab/home.dart';
-import 'package:greboo/ui/screens/onbording.dart';
-import 'package:greboo/ui/screens/profile/settingslist.dart';
-import 'package:greboo/ui/shared/appbar.dart';
+import 'package:grebo/core/constants/appSetting.dart';
+import 'package:grebo/core/constants/app_assets.dart';
+import 'package:grebo/core/utils/config.dart';
+import 'package:grebo/ui/screens/homeTab/home.dart';
+import 'package:grebo/ui/screens/onbording.dart';
+import 'package:grebo/ui/screens/profile/settingslist.dart';
+import 'package:grebo/ui/shared/appbar.dart';
 
 class Settings extends StatelessWidget {
   final List<Map<String, dynamic>> list = [

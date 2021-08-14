@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:greboo/core/constants/appSetting.dart';
-import 'package:greboo/core/constants/app_assets.dart';
-import 'package:greboo/core/constants/appcolor.dart';
-import 'package:greboo/core/utils/config.dart';
-import 'package:greboo/core/viewmodel/controller/homescreencontroller.dart';
-import 'package:greboo/ui/screens/editBusinessprofile/details%202.dart';
-import 'package:greboo/ui/screens/editBusinessprofile/details1.dart';
-import 'package:greboo/ui/screens/homeTab/home.dart';
-import 'package:greboo/ui/shared/appbar.dart';
+import 'package:grebo/core/constants/appSetting.dart';
+import 'package:grebo/core/constants/app_assets.dart';
+import 'package:grebo/core/constants/appcolor.dart';
+import 'package:grebo/core/utils/config.dart';
+import 'package:grebo/core/viewmodel/controller/homescreencontroller.dart';
+import 'package:grebo/ui/screens/editBusinessprofile/details%202.dart';
+import 'package:grebo/ui/screens/editBusinessprofile/details1.dart';
+import 'package:grebo/ui/screens/homeTab/home.dart';
+import 'package:grebo/ui/shared/appbar.dart';
 
 class Availability extends StatelessWidget {
   final HomeScreenController homeScreenController =

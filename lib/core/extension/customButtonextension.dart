@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:greboo/core/constants/appcolor.dart';
-import 'package:greboo/core/utils/config.dart';
-import 'package:greboo/ui/shared/custombutton.dart';
+import 'package:grebo/core/constants/appcolor.dart';
+import 'package:grebo/core/utils/config.dart';
+import 'package:grebo/ui/shared/custombutton.dart';
 
 enum CustomButtonType {
   colourButton,

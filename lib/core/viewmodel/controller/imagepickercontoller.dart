@@ -33,6 +33,7 @@ class ImagePickerController extends GetxController {
 class AppImagePicker {
   ImagePickerController imagePickerController =
       Get.put(ImagePickerController());
+
   ImagePicker imagePicker = ImagePicker();
 
   browseImage(ImageSource imageSource, bool isMulti) async {

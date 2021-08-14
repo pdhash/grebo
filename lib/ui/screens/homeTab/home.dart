@@ -2,18 +2,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:greboo/core/constants/appSetting.dart';
-import 'package:greboo/core/constants/app_assets.dart';
-import 'package:greboo/core/constants/appcolor.dart';
-import 'package:greboo/core/utils/config.dart';
-import 'package:greboo/core/viewmodel/controller/homescreencontroller.dart';
-import 'package:greboo/core/viewmodel/controller/selectservicecontoller.dart';
-import 'package:greboo/ui/screens/homeTab/viewAllCategories.dart';
-import 'package:greboo/ui/shared/custombutton.dart';
-import 'package:greboo/ui/shared/postview.dart';
+import 'package:grebo/core/constants/appSetting.dart';
+import 'package:grebo/core/constants/app_assets.dart';
+import 'package:grebo/core/constants/appcolor.dart';
+import 'package:grebo/core/utils/config.dart';
+import 'package:grebo/core/viewmodel/controller/homescreencontroller.dart';
+import 'package:grebo/core/viewmodel/controller/selectservicecontoller.dart';
+import 'package:grebo/ui/screens/homeTab/viewAllCategories.dart';
+import 'package:grebo/ui/shared/custombutton.dart';
+import 'package:grebo/ui/shared/postview.dart';
 
 class Homes extends StatelessWidget {
-  final HomeScreenController homeScreenController = Get.find();
+  final HomeScreenController homeScreenController =
+      Get.find<HomeScreenController>();
 
   @override
   Widget build(BuildContext context) {

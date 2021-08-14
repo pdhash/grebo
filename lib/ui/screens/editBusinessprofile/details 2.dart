@@ -2,15 +2,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:get/get.dart';
-import 'package:greboo/core/constants/appSetting.dart';
-import 'package:greboo/core/constants/app_assets.dart';
-import 'package:greboo/core/constants/appcolor.dart';
-import 'package:greboo/core/extension/customButtonextension.dart';
-import 'package:greboo/core/utils/config.dart';
-import 'package:greboo/core/viewmodel/controller/availabilitycontroller.dart';
-import 'package:greboo/ui/screens/homeTab/home.dart';
-import 'package:greboo/ui/shared/appbar.dart';
-import 'package:greboo/ui/shared/custombutton.dart';
+import 'package:grebo/core/constants/appSetting.dart';
+import 'package:grebo/core/constants/app_assets.dart';
+import 'package:grebo/core/constants/appcolor.dart';
+import 'package:grebo/core/extension/customButtonextension.dart';
+import 'package:grebo/core/utils/config.dart';
+import 'package:grebo/core/viewmodel/controller/availabilitycontroller.dart';
+import 'package:grebo/ui/screens/homeTab/home.dart';
+import 'package:grebo/ui/shared/appbar.dart';
+import 'package:grebo/ui/shared/custombutton.dart';
 import 'package:keyboard_actions/external/platform_check/platform_check.dart';
 
 import 'details1.dart';
@@ -105,13 +105,39 @@ class DetailsPage2 extends StatelessWidget {
                 header('select_working_hours'.tr),
                 getHeightSizedBox(h: 20),
                 Row(
-                  //crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     timeBox(
                       text: 'opening_hour'.tr,
                       context: context,
-                      doneSelectTime: (date) {
-                        controller.defaultTime = dateFormat.format(date);
+                      onTap: () {
+                        if (PlatformCheck.isIOS) {
+                          DatePicker.showTime12hPicker(
+                            context,
+                            showTitleActions: true,
+                            onChanged: (date) {},
+                            onConfirm: (date) {
+                              controller.defaultTime = dateFormat.format(date);
+                            },
+                          );
+                        } else {
+                          showTimePicker(
+                            context: context,
+                            initialTime: TimeOfDay.now(),
+                            builder: (context, widget) {
+                              return MediaQuery(
+                                data: MediaQuery.of(context)
+                                    .copyWith(alwaysUse24HourFormat: false),
+                                child: widget as Widget,
+                              );
+                            },
+                          )..then((value) {
+                              final localizations =
+                                  MaterialLocalizations.of(context);
+                              final formattedTimeOfDay =
+                                  localizations.formatTimeOfDay(value!);
+                              controller.defaultTime = formattedTimeOfDay;
+                            });
+                        }
                       },
                       timeText: controller.defaultTime,
                     ),
@@ -119,8 +145,35 @@ class DetailsPage2 extends StatelessWidget {
                     timeBox(
                       text: 'closing_hour'.tr,
                       context: context,
-                      doneSelectTime: (date) {
-                        controller.defaultTimeEnd = dateFormat.format(date);
+                      onTap: () {
+                        if (PlatformCheck.isIOS) {
+                          DatePicker.showTime12hPicker(
+                            context,
+                            showTitleActions: true,
+                            onChanged: (date) {},
+                            onConfirm: (date) {
+                              controller.defaultTime = dateFormat.format(date);
+                            },
+                          );
+                        } else {
+                          showTimePicker(
+                            context: context,
+                            initialTime: TimeOfDay.now(),
+                            builder: (context, widget) {
+                              return MediaQuery(
+                                data: MediaQuery.of(context)
+                                    .copyWith(alwaysUse24HourFormat: false),
+                                child: widget as Widget,
+                              );
+                            },
+                          )..then((value) {
+                              final localizations =
+                                  MaterialLocalizations.of(context);
+                              final formattedTimeOfDay =
+                                  localizations.formatTimeOfDay(value!);
+                              controller.defaultTimeEnd = formattedTimeOfDay;
+                            });
+                        }
                       },
                       timeText: controller.defaultTimeEnd,
                     )
@@ -147,7 +200,7 @@ class DetailsPage2 extends StatelessWidget {
 
 Widget timeBox(
     {required String text,
-    required Function(DateTime)? doneSelectTime,
+    required Function()? onTap,
     required BuildContext context,
     required String timeText}) {
   return Column(
@@ -160,19 +213,7 @@ Widget timeBox(
             fontSize: getProportionateScreenWidth(14)),
       ),
       GestureDetector(
-          onTap: () {
-            if (PlatformCheck.isIOS) {
-              DatePicker.showTime12hPicker(context,
-                  showTitleActions: true,
-                  onChanged: (date) {},
-                  onConfirm: doneSelectTime);
-            } else {
-              showTimePicker(
-                  context: context,
-                  initialTime: TimeOfDay.now(),
-                  initialEntryMode: TimePickerEntryMode.dial);
-            }
-          },
+          onTap: onTap,
           child: SizedBox(
             width: 110,
             height: 40,

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:greboo/core/constants/app_assets.dart';
-import 'package:greboo/core/extension/customButtonextension.dart';
-import 'package:greboo/core/utils/config.dart';
-import 'package:greboo/core/viewmodel/controller/categoriescontroller.dart';
-import 'package:greboo/ui/screens/homeTab/home.dart';
-import 'package:greboo/ui/shared/appbar.dart';
-import 'package:greboo/ui/shared/custombutton.dart';
+import 'package:grebo/core/constants/app_assets.dart';
+import 'package:grebo/core/extension/customButtonextension.dart';
+import 'package:grebo/core/utils/config.dart';
+import 'package:grebo/core/viewmodel/controller/categoriescontroller.dart';
+import 'package:grebo/ui/screens/homeTab/home.dart';
+import 'package:grebo/ui/shared/appbar.dart';
+import 'package:grebo/ui/shared/custombutton.dart';
 
 class ViewAll extends StatelessWidget {
   final CategoriesController categoriesController =
