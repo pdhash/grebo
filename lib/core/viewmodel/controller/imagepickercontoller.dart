@@ -3,9 +3,21 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ImagePickerController extends GetxController {
+  // setImage(String url) async {
+  //   if (url != "") {
+  //     if (!url.startsWith("http"))
+  //       _image = File(url);
+  //     else {
+  //       _image = await urlToFile(url);
+  //     }
+  //     update();
+  //   }
+  // }
+
   String? _image;
   String? get image => _image;
   set image(String? value) {
@@ -31,18 +43,47 @@ class ImagePickerController extends GetxController {
 }
 
 class AppImagePicker {
-  ImagePickerController imagePickerController =
-      Get.put(ImagePickerController());
-
   ImagePicker imagePicker = ImagePicker();
+  String? tag;
+  late ImagePickerController _imagePickerController;
+  ImagePickerController get imagePickerController =>
+      Get.find<ImagePickerController>(tag: tag);
 
+  AppImagePicker({String? tag}) {
+    this.tag = tag;
+    _imagePickerController = Get.put(ImagePickerController(), tag: tag);
+  }
   browseImage(ImageSource imageSource, bool isMulti) async {
     var pickedFile =
         await imagePicker.pickImage(source: imageSource, imageQuality: 50);
     if (isMulti == true) {
-      imagePickerController.multiAddImages(pickedFile!.path);
+      File? file = await ImageCropper.cropImage(
+        sourcePath: pickedFile!.path,
+        aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
+        compressQuality: 100,
+        maxHeight: 700,
+        maxWidth: 700,
+        compressFormat: ImageCompressFormat.jpg,
+        androidUiSettings: AndroidUiSettings(
+          toolbarColor: Colors.white,
+          toolbarTitle: "Image Cropper",
+        ),
+      );
+      imagePickerController.multiAddImages(file!.path);
     } else {
-      imagePickerController.image = pickedFile!.path;
+      File? file = await ImageCropper.cropImage(
+        sourcePath: pickedFile!.path,
+        aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
+        compressQuality: 100,
+        maxHeight: 700,
+        maxWidth: 700,
+        compressFormat: ImageCompressFormat.jpg,
+        androidUiSettings: AndroidUiSettings(
+          toolbarColor: Colors.white,
+          toolbarTitle: "Image Cropper",
+        ),
+      );
+      imagePickerController.image = file!.path;
     }
   }
 

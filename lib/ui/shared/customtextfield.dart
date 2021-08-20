@@ -10,7 +10,7 @@ class CustomTextField extends StatelessWidget {
   final String hintText;
   final bool obSecureText;
   final String? Function(String?)? validator;
-  final Function()? onTap;
+  final Function()? onTap, onFieldTap;
   final Widget? suffix;
   final Widget? prefix;
   final TextInputType? keyboardType;
@@ -22,6 +22,7 @@ class CustomTextField extends StatelessWidget {
   final InputBorder? inputBorder;
   final TextInputAction? textInputAction;
   final int? maxLength;
+  final bool? enabled;
 
   CustomTextField({
     Key? key,
@@ -41,42 +42,52 @@ class CustomTextField extends StatelessWidget {
     this.inputBorder,
     this.textInputAction,
     this.maxLength,
+    this.enabled,
+    this.onFieldTap,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: getProportionateScreenHeight(40),
-      child: TextFormField(
-        textCapitalization: textCapitalization == null
-            ? TextCapitalization.none
-            : textCapitalization as TextCapitalization,
-        key: key,
-        validator: validator,
-        controller: controller,
-        maxLength: maxLength,
-        focusNode: focusNode,
-        textInputAction: textInputAction,
-        obscureText: obSecureText,
-        keyboardType: keyboardType,
-        buildCounter: (BuildContext context,
-                {required int currentLength,
-                required bool isFocused,
-                required int? maxLength}) =>
-            null,
-        decoration: InputDecoration(
-            disabledBorder: inputBorder,
-            hintStyle: TextStyle(
-                fontSize: getProportionateScreenWidth(textSize!.toDouble()),
-                color: hintColor == null
-                    ? AppColor.kDefaultFontColor.withOpacity(0.5)
-                    : hintColor),
-            suffixIcon: suffix,
-            prefixIcon: prefix,
-            hintText: hintText,
-            suffixIconConstraints: BoxConstraints(
-                maxHeight: 19,
-                maxWidth: suffixWidth == null ? 40 : suffixWidth!.toDouble())),
+    return GestureDetector(
+      onTap: onFieldTap,
+      child: Container(
+        height: getProportionateScreenHeight(40),
+        child: TextFormField(
+          textCapitalization: textCapitalization == null
+              ? TextCapitalization.none
+              : textCapitalization as TextCapitalization,
+          key: key,
+          validator: validator,
+          controller: controller,
+          maxLength: maxLength,
+          enabled: enabled,
+          focusNode: focusNode,
+          textInputAction: textInputAction,
+          obscureText: obSecureText,
+          onTap: onFieldTap,
+          keyboardType: keyboardType,
+          buildCounter: (BuildContext context,
+                  {required int currentLength,
+                  required bool isFocused,
+                  required int? maxLength}) =>
+              null,
+          decoration: InputDecoration(
+
+              // border:
+              //     UnderlineInputBorder(borderSide: BorderSide(color: Color())),
+              hintStyle: TextStyle(
+                  fontSize: getProportionateScreenWidth(textSize!.toDouble()),
+                  color: hintColor == null
+                      ? AppColor.kDefaultFontColor.withOpacity(0.5)
+                      : hintColor),
+              suffixIcon: suffix,
+              prefixIcon: prefix,
+              hintText: hintText,
+              suffixIconConstraints: BoxConstraints(
+                  maxHeight: 19,
+                  maxWidth:
+                      suffixWidth == null ? 40 : suffixWidth!.toDouble())),
+        ),
       ),
     );
   }
@@ -111,7 +122,6 @@ class CustomTextField2 extends StatelessWidget {
             Expanded(
               child: TextFormField(
                 controller: comment,
-                cursorHeight: 15,
                 decoration: InputDecoration(
                     contentPadding: EdgeInsets.only(
                       left: 20,

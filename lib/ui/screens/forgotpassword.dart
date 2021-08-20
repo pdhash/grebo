@@ -42,9 +42,11 @@ class ForgotPassword extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                           fontSize: getProportionateScreenWidth(16)),
                     ),
+                    Get.height < 800 ? getHeightSizedBox(h: 10) : SizedBox(),
                     CustomTextField(
                       controller: email,
                       hintText: 'email_example'.tr,
+                      keyboardType: TextInputType.emailAddress,
                     ),
                     getHeightSizedBox(h: 50),
                     CustomButton(
@@ -58,6 +60,7 @@ class ForgotPassword extends StatelessWidget {
                               contentSize: 16,
                               okText: 'save'.tr,
                               onTap: () {
+                                Get.back();
                                 Get.back();
                               },
                               height: getProportionateScreenWidth(180));

@@ -81,6 +81,7 @@ class AppImages {
       'assets/image/business profile/ic_services_offered.svg';
 
   /// default profile
+  static final userOfflineImage = 'assets/image/static/ic_image_upload@3x.png';
   static final defaultProfile = 'assets/image/static/ic_user-img@3x.png';
   static final serviceOffered = 'assets/image/static/ic_services_img-1.png';
 }

@@ -135,29 +135,51 @@ class SignUp extends StatelessWidget {
                           onTap: () {
                             controller.emailVer = false;
                           }),
-                      getHeightSizedBox(h: 18),
+                      getHeightSizedBox(h: 20),
                       Center(
-                        child: RichText(
-                            text: TextSpan(
-                                children: [
-                              TextSpan(
-                                  text: 'login'.tr,
-                                  style: TextStyle(
-                                      fontFamily: 'Nexa',
-                                      color: AppColor.kDefaultFontColor,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize:
-                                          getProportionateScreenWidth(15)))
-                            ],
-                                text: 'already_have'.tr,
+                        child: Wrap(
+                          children: [
+                            Text('already_have'.tr,
                                 style: TextStyle(
-                                    fontFamily: 'Nexa',
                                     color: AppColor.kDefaultFontColor
                                         .withOpacity(0.4),
                                     fontWeight: FontWeight.bold,
-                                    fontSize:
-                                        getProportionateScreenWidth(15)))),
+                                    fontSize: getProportionateScreenWidth(15))),
+                            GestureDetector(
+                              onTap: () {
+                                Get.back();
+                              },
+                              child: Text('login'.tr,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize:
+                                          getProportionateScreenWidth(15))),
+                            )
+                          ],
+                        ),
                       ),
+                      //Center(
+                      //   child: RichText(
+                      //       text: TextSpan(
+                      //           children: [
+                      //         TextSpan(
+                      //             text: 'login'.tr,
+                      //             style: TextStyle(
+                      //                 fontFamily: 'Nexa',
+                      //                 color: AppColor.kDefaultFontColor,
+                      //                 fontWeight: FontWeight.bold,
+                      //                 fontSize:
+                      //                     getProportionateScreenWidth(15)))
+                      //       ],
+                      //           text: 'already_have'.tr,
+                      //           style: TextStyle(
+                      //               fontFamily: 'Nexa',
+                      //               color: AppColor.kDefaultFontColor
+                      //                   .withOpacity(0.4),
+                      //               fontWeight: FontWeight.bold,
+                      //               fontSize:
+                      //                   getProportionateScreenWidth(15)))),
+                      // ),
                       getHeightSizedBox(h: 40)
                     ],
                   ),
@@ -189,9 +211,10 @@ class SignUp extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
+                        height: 1.2,
                         fontSize: getProportionateScreenWidth(20)),
                   ),
-                  getHeightSizedBox(h: 26),
+                  getHeightSizedBox(h: 30),
                   CustomButton(
                       type: CustomButtonType.colourButton,
                       text: 'ok'.tr,

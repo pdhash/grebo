@@ -27,7 +27,7 @@ extension CustomButtonExtension on CustomButtonType {
         return ButtonProps(
           height: 50,
           radius: 56 / 2,
-          border: Border.all(color: AppColor.kDefaultColor, width: 1),
+          border: Border.all(color: Color(0xff009345), width: 1),
           textStyle: TextStyle(
             color: Colors.black,
             fontSize: getProportionateScreenWidth(15),

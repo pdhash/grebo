@@ -13,6 +13,7 @@ class AllMessages extends StatelessWidget {
     return Container(
       child: ListView.builder(
         itemCount: 4,
+        physics: BouncingScrollPhysics(),
         itemBuilder: (context, index) => Column(
           children: [
             ListTile(

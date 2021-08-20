@@ -42,6 +42,7 @@ class _CreatePostState extends State<CreatePost> {
                         contentSize: 15,
                         onTap: () {
                           Get.back();
+                          Get.back();
                         },
                         color: AppColor.kDefaultColor,
                         okText: 'go_to_home'.tr);

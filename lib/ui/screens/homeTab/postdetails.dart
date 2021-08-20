@@ -47,6 +47,7 @@ class PostDetails extends StatelessWidget {
                                 ? SizedBox()
                                 : GestureDetector(
                                     onTap: () {
+                                      disposeKeyboard();
                                       Get.to(() =>
                                           ViewComments(currentPost: indexx));
                                     },
@@ -105,7 +106,9 @@ class PostDetails extends StatelessWidget {
                 child: PostDetailsBottomView(
                   comment: comment,
                   hintText: 'textfieldmsg1'.tr,
-                  send: () {},
+                  send: () {
+                    disposeKeyboard();
+                  },
                   isAddRequired: true,
                 ))
           ],

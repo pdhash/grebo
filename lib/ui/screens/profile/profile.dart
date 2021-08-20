@@ -15,12 +15,16 @@ import 'package:grebo/ui/shared/postview.dart';
 import 'editprofile.dart';
 
 class Profile extends StatelessWidget {
-  final HomeScreenController homeScreenController = Get.find();
+  final HomeScreenController homeScreenController =
+      Get.find<HomeScreenController>();
+
   final List<Map<String, dynamic>> list = [
     {
       'title': 'about_business'.tr,
       'onTap': () {
-        Get.to(() => BusinessProfile());
+        Get.to(() => BusinessProfile(
+              isShow: true,
+            ));
       },
       "image": AppImages.aboutBusiness
     },

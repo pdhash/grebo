@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:grebo/core/constants/appSetting.dart';
 import 'package:grebo/core/constants/app_assets.dart';
 import 'package:grebo/core/constants/appcolor.dart';
 import 'package:grebo/core/utils/config.dart';
@@ -8,6 +9,7 @@ import 'package:grebo/ui/screens/homeTab/businessprofile.dart';
 import 'package:grebo/ui/screens/homeTab/home.dart';
 import 'package:grebo/ui/screens/homeTab/postdetails.dart';
 import 'package:grebo/ui/screens/homeTab/provider/likeerror.dart';
+import 'package:grebo/ui/screens/homeTab/viewcomments.dart';
 import 'package:readmore/readmore.dart';
 
 class PostView extends StatelessWidget {
@@ -48,11 +50,16 @@ class PostView extends StatelessWidget {
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          Text(
-                            'Business Name',
-                            style: TextStyle(
-                                fontSize: getProportionateScreenWidth(16),
-                                fontWeight: FontWeight.bold),
+                          GestureDetector(
+                            onTap: () {
+                              Get.to(() => BusinessProfile());
+                            },
+                            child: Text(
+                              'Business Name',
+                              style: TextStyle(
+                                  fontSize: getProportionateScreenWidth(16),
+                                  fontWeight: FontWeight.bold),
+                            ),
                           ),
                           getHeightSizedBox(w: 5),
                           buildWidget(AppImages.warning, 20, 20)
@@ -96,10 +103,9 @@ class PostView extends StatelessWidget {
                                     .withOpacity(0.89),
                               ),
                               lessStyle: TextStyle(
-                                color: AppColor.kDefaultFontColor,
-                                fontSize: getProportionateScreenWidth(14),
-                              ),
-                              colorClickableText: Colors.pink,
+                                  color: AppColor.kDefaultFontColor,
+                                  fontSize: getProportionateScreenWidth(14),
+                                  fontWeight: FontWeight.bold),
                               trimMode: TrimMode.Line,
                               trimCollapsedText: 'see_all'.tr,
                               trimExpandedText: 'see_less'.tr,
@@ -113,6 +119,7 @@ class PostView extends StatelessWidget {
                         children: [
                           GestureDetector(
                             onTap: () {
+                              disposeKeyboard();
                               Get.to(() => LikeError());
                             },
                             child: Row(
@@ -130,17 +137,22 @@ class PostView extends StatelessWidget {
                           ),
                           getHeightSizedBox(w: 23),
                           GestureDetector(
+                              onTap: () {
+                                disposeKeyboard();
+                                Get.to(() => ViewComments(currentPost: index));
+                              },
                               child: Row(
-                            children: [
-                              buildWidget(AppImages.comment, 15, 16),
-                              getHeightSizedBox(w: 5),
-                              Text(
-                                '300',
-                                style: TextStyle(
-                                    fontSize: getProportionateScreenWidth(12)),
-                              ),
-                            ],
-                          )),
+                                children: [
+                                  buildWidget(AppImages.comment, 15, 16),
+                                  getHeightSizedBox(w: 5),
+                                  Text(
+                                    '300',
+                                    style: TextStyle(
+                                        fontSize:
+                                            getProportionateScreenWidth(12)),
+                                  ),
+                                ],
+                              )),
                         ],
                       ),
                       getHeightSizedBox(h: 10),
@@ -164,6 +176,6 @@ Widget buildCircleProfile(
     width: getProportionateScreenWidth(width),
     decoration: BoxDecoration(
         shape: BoxShape.circle,
-        image: DecorationImage(image: AssetImage(image))),
+        image: DecorationImage(image: AssetImage(image), fit: BoxFit.cover)),
   );
 }

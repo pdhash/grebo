@@ -20,17 +20,21 @@ import 'package:grebo/ui/shared/customtextfield.dart';
 import 'details 2.dart';
 
 class DetailsPage1 extends StatelessWidget {
+  final bool isNext;
   final AppImagePicker appImagePicker = AppImagePicker();
   final TextEditingController businessName = TextEditingController();
   final TextEditingController businessCategory = TextEditingController();
   final TextEditingController mobileNumber = TextEditingController();
   final TextEditingController description = TextEditingController();
+  final TextEditingController location = TextEditingController();
   final TextEditingController weblinks = TextEditingController();
   final ImagePickerController imagePickerController =
       Get.find<ImagePickerController>();
   final EditBProfileController editProfileController =
       Get.put(EditBProfileController());
   final FocusNode _nodeText1 = FocusNode();
+
+  DetailsPage1({Key? key, this.isNext = true}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -40,15 +44,18 @@ class DetailsPage1 extends StatelessWidget {
             appBar: appBar(
               'business_details'.tr,
               [
-                Padding(
-                  padding: const EdgeInsets.only(top: 22, right: 25),
-                  child: Text(
-                    '1 of 3',
-                    style: TextStyle(
-                        color: AppColor.kDefaultFontColor.withOpacity(0.72),
-                        fontSize: 15),
-                  ),
-                )
+                isNext
+                    ? Padding(
+                        padding: const EdgeInsets.only(top: 22, right: 25),
+                        child: Text(
+                          '1 of 3',
+                          style: TextStyle(
+                              color:
+                                  AppColor.kDefaultFontColor.withOpacity(0.72),
+                              fontSize: 15),
+                        ),
+                      )
+                    : SizedBox()
               ],
             ),
             body: KeyBoardSettings(
@@ -126,6 +133,7 @@ class DetailsPage1 extends StatelessWidget {
                       Get.height < 800 ? getHeightSizedBox(h: 10) : SizedBox(),
                       CustomTextField(
                         controller: businessName,
+                        textCapitalization: TextCapitalization.sentences,
                         hintText: 'Smith Hospitality',
                         textSize: 14,
                       ),
@@ -138,6 +146,9 @@ class DetailsPage1 extends StatelessWidget {
                               border: UnderlineInputBorder(
                                   borderSide: BorderSide(color: Colors.white))),
                           value: 2,
+                          onTap: () {
+                            disposeKeyboard();
+                          },
                           icon: buildWidget(AppImages.dropdownClose, 10, 20),
                           onChanged: (val) {},
                           items: <DropdownMenuItem<int>>[
@@ -236,7 +247,11 @@ class DetailsPage1 extends StatelessWidget {
                       header('location'.tr),
                       Get.height < 800 ? getHeightSizedBox(h: 10) : SizedBox(),
                       CustomTextField(
-                          controller: businessName,
+                          controller: location,
+                          enabled: false,
+                          onFieldTap: () {
+                            print('hello');
+                          },
                           hintText: 'Villaz Johns Street 11, California..',
                           textSize: 14,
                           suffixWidth: 19,
@@ -370,8 +385,13 @@ class DetailsPage1 extends StatelessWidget {
                           type: CustomButtonType.colourButton,
                           text: 'save'.tr,
                           onTap: () {
-                            imagePickerController.resetImage();
-                            Get.to(() => DetailsPage2());
+                            if (isNext) {
+                              imagePickerController.resetImage();
+                              Get.to(() => DetailsPage2());
+                            } else {
+                              imagePickerController.resetImage();
+                              Get.back();
+                            }
                           }),
                       getHeightSizedBox(h: 40),
                     ],

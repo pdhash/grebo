@@ -15,6 +15,7 @@ import 'package:grebo/ui/shared/postview.dart';
 class Homes extends StatelessWidget {
   final HomeScreenController homeScreenController =
       Get.find<HomeScreenController>();
+  //final ServiceController serviceController = Get.put(ServiceController());
 
   @override
   Widget build(BuildContext context) {
@@ -85,6 +86,7 @@ class Homes extends StatelessWidget {
                   getHeightSizedBox(h: 12),
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
+                    physics: BouncingScrollPhysics(),
                     child: Padding(
                       padding: EdgeInsets.only(left: kDefaultPadding),
                       child: Row(

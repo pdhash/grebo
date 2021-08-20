@@ -20,7 +20,6 @@ class _OnBoardingState extends State<OnBoarding> {
   PageController pageController = PageController(initialPage: 0);
   @override
   Widget build(BuildContext context) {
-    //animationController.forward(from: 0);
     return Scaffold(
         backgroundColor: Colors.white,
         body: Stack(
@@ -70,11 +69,19 @@ class _OnBoardingState extends State<OnBoarding> {
                               onTap: () {
                                 Get.to(() => ChooseServices());
                               },
-                              child: Text(
-                                'skip'.tr,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: getProportionateScreenWidth(15)),
+                              child: Container(
+                                height: 40,
+                                width: 50,
+                                //  color: Colors.red,
+                                child: Center(
+                                  child: Text(
+                                    'skip'.tr,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize:
+                                            getProportionateScreenWidth(15)),
+                                  ),
+                                ),
                               )),
                           Spacer(),
                           CustomButton(

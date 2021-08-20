@@ -18,7 +18,13 @@ import 'customerreview.dart';
 
 class BusinessProfile extends StatelessWidget {
   final BusinessController businessController = Get.put(BusinessController());
-  final HomeScreenController homeScreenController = Get.find();
+  final HomeScreenController homeScreenController =
+      Get.find<HomeScreenController>();
+  final isShow;
+
+  BusinessProfile({Key? key, this.isShow = false}) : super(key: key);
+  //final ServiceController serviceController = Get.find<ServiceController>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,13 +32,16 @@ class BusinessProfile extends StatelessWidget {
               ServicesType.userType
           ? appBar('business_profile'.tr)
           : appBar('about_business'.tr, [
-              IconButton(onPressed: () {}, icon: SizedBox()),
-              IconButton(
-                  padding: EdgeInsets.only(right: 22),
-                  onPressed: () {
-                    Get.to(() => DetailsPage1());
-                  },
-                  icon: buildWidget(AppImages.editProfile, 19, 19))
+              isShow
+                  ? IconButton(
+                      padding: EdgeInsets.only(right: 22),
+                      onPressed: () {
+                        Get.to(() => DetailsPage1(
+                              isNext: false,
+                            ));
+                      },
+                      icon: buildWidget(AppImages.editProfile, 19, 19))
+                  : SizedBox()
             ]),
       body: GetBuilder(
         builder: (BusinessController controller) {
@@ -373,9 +382,9 @@ class BusinessProfile extends StatelessWidget {
                       )
                     : Column(
                         children: [
-                          buildTile(
-                              'customer_reviews'.tr,
-                              () {},
+                          buildTile('customer_reviews'.tr, () {
+                            Get.to(() => CustomerReviewed());
+                          },
                               AppImages.customerReview,
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -427,9 +436,6 @@ class BusinessProfile extends StatelessWidget {
             if (await canLaunch('https://$link')) {
               await launch(
                 'https://$link',
-                forceSafariVC: true,
-                forceWebView: true,
-                enableJavaScript: true,
               );
             } else {
               throw 'could not lunch';

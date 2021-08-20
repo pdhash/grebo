@@ -20,11 +20,19 @@ class CustomerReviewed extends StatelessWidget {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          ListView.builder(
-            itemCount: 5,
-            itemBuilder: (context, index) {
-              return reviewBox();
-            },
+          Column(
+            children: [
+              Expanded(
+                child: ListView.builder(
+                  physics: BouncingScrollPhysics(),
+                  itemCount: 5,
+                  itemBuilder: (context, index) {
+                    return reviewBox();
+                  },
+                ),
+              ),
+              getHeightSizedBox(h: 90),
+            ],
           ),
           Positioned(
               bottom: 0,

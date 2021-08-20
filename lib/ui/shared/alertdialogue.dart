@@ -7,7 +7,7 @@ import 'customtextfield.dart';
 
 Future<void> showCustomDialog({
   required BuildContext context,
-  required double height,
+  double? height,
   String? title,
   required String content,
   required double contentSize,
@@ -17,7 +17,7 @@ Future<void> showCustomDialog({
 }) async {
   return showDialog<void>(
     context: context,
-    barrierDismissible: true, // user must tap button!
+    barrierDismissible: false, // user must tap button!
     builder: (BuildContext context) {
       return Dialog(
         insetPadding: EdgeInsets.symmetric(horizontal: 20),
@@ -53,7 +53,7 @@ Future<void> showCustomDialog({
                   ),
                   getHeightSizedBox(h: 39),
                   SizedBox(
-                    height: getProportionateScreenWidth(45),
+                    height: 50,
                     width: double.infinity,
                     child: MaterialButton(
                       clipBehavior: Clip.antiAliasWithSaveLayer,

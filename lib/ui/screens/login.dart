@@ -6,26 +6,29 @@ import 'package:grebo/core/constants/app_assets.dart';
 import 'package:grebo/core/constants/appcolor.dart';
 import 'package:grebo/core/extension/customButtonextension.dart';
 import 'package:grebo/core/utils/config.dart';
+import 'package:grebo/core/viewmodel/controller/homescreencontroller.dart';
 import 'package:grebo/core/viewmodel/controller/loginController.dart';
 import 'package:grebo/core/viewmodel/controller/selectservicecontoller.dart';
-import 'package:grebo/ui/screens/mainscreen.dart';
 import 'package:grebo/ui/screens/signup.dart';
 import 'package:grebo/ui/shared/appbar.dart';
 import 'package:grebo/ui/shared/custombutton.dart';
 import 'package:grebo/ui/shared/customtextfield.dart';
 
-import 'homeTab/forgotpassword.dart';
+import 'forgotpassword.dart';
+import 'mainscreen.dart';
 
 class LoginScreen extends StatelessWidget {
   final TextEditingController email = TextEditingController();
   final TextEditingController password = TextEditingController();
   final GlobalKey<FormState> globalKey = GlobalKey<FormState>();
   final LoginController loginController = Get.put(LoginController());
-  final ServiceController serviceController = Get.find();
+  final HomeScreenController homeScreenController =
+      Get.put(HomeScreenController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar(ServicesType.userType == serviceController.servicesType
+      appBar: appBar(ServicesType.userType ==
+              homeScreenController.serviceController.servicesType
           ? 'user_login'.tr
           : 'service_provider_login'.tr),
       body: Form(
@@ -59,6 +62,7 @@ class LoginScreen extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                             fontSize: getProportionateScreenWidth(18)),
                       ),
+                      Get.height < 800 ? getHeightSizedBox(h: 10) : SizedBox(),
                       CustomTextField(
                           controller: email,
                           hintText: 'email_example'.tr,
@@ -72,6 +76,7 @@ class LoginScreen extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                             fontSize: getProportionateScreenWidth(18)),
                       ),
+                      Get.height < 800 ? getHeightSizedBox(h: 10) : SizedBox(),
                       Obx(
                         () => CustomTextField(
                           hintText: 'password_example'.tr,
@@ -97,6 +102,8 @@ class LoginScreen extends StatelessWidget {
                       getHeightSizedBox(h: 21),
                       GestureDetector(
                         onTap: () {
+                          disposeKeyboard();
+
                           Get.to(() => ForgotPassword());
                         },
                         child: Center(
@@ -112,7 +119,14 @@ class LoginScreen extends StatelessWidget {
                           type: CustomButtonType.colourButton,
                           text: 'login'.tr,
                           onTap: () {
+                            disposeKeyboard();
                             Get.offAll(() => HomeScreen());
+                            // if (homeScreenController
+                            //         .serviceController.servicesType ==
+                            //     ServicesType.userType)
+                            //   Get.offAll(() => HomeScreen());
+                            // else
+                            //   Get.offAll(() => DetailsPage1());
                           }),
                       getHeightSizedBox(h: 20),
                       CustomButton(
@@ -124,9 +138,13 @@ class LoginScreen extends StatelessWidget {
                             Get.to(() => SignUp());
                           }),
                       getHeightSizedBox(h: 23),
-                      ServicesType.userType == serviceController.servicesType
+                      ServicesType.userType ==
+                              homeScreenController
+                                  .serviceController.servicesType
                           ? GestureDetector(
-                              onTap: () {},
+                              onTap: () {
+                                disposeKeyboard();
+                              },
                               child: Center(
                                 child: Text(
                                   'continue_as_guest'.tr,
@@ -172,9 +190,15 @@ class LoginScreen extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    socialButton(AppImages.facebook, () {}),
-                    socialButton(AppImages.google, () {}),
-                    socialButton(AppImages.apple, () {}),
+                    socialButton(AppImages.facebook, () {
+                      disposeKeyboard();
+                    }),
+                    socialButton(AppImages.google, () {
+                      disposeKeyboard();
+                    }),
+                    socialButton(AppImages.apple, () {
+                      disposeKeyboard();
+                    }),
                   ],
                 ),
               ),

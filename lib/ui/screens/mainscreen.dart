@@ -13,7 +13,6 @@ import 'notifications/allnotifications.dart';
 class HomeScreen extends StatelessWidget {
   final HomeScreenController homeScreenController =
       Get.put(HomeScreenController());
-
   @override
   Widget build(BuildContext context) {
     List<String> text = [

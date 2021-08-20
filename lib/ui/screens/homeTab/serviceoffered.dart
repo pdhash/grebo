@@ -21,12 +21,15 @@ class ServiceOffered extends StatelessWidget {
               ? IconButton(
                   padding: EdgeInsets.only(right: 22),
                   onPressed: () {
-                    Get.to(() => DetailsPage3());
+                    Get.to(() => DetailsPage3(
+                          isShow: false,
+                        ));
                   },
                   icon: buildWidget(AppImages.editProfile, 19, 19))
               : SizedBox()
         ]),
         body: ListView.builder(
+          itemCount: 7,
           itemBuilder: (context, index) {
             return buildListTile(
                 image: AppImages.serviceOffered, text: 'Volunteer Care');

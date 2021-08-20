@@ -25,7 +25,12 @@ class ViewAll extends StatelessWidget {
                   itemBuilder: (context, index) => Column(
                     children: [
                       ListTile(
-                        title: Text('Hello'),
+                        title: Text(
+                          'Hello',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: getProportionateScreenWidth(15)),
+                        ),
                         contentPadding: EdgeInsets.symmetric(horizontal: 25),
                         trailing: GestureDetector(
                             onTap: () {},

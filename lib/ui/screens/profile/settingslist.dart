@@ -30,6 +30,7 @@ class AboutUsAndTAndC extends StatelessWidget {
               ? 'aboutusdes'.tr
               : 'termsandconditiondes'.tr,
           style: TextStyle(
+              height: 1.3,
               color: AppColor.kDefaultFontColor.withOpacity(0.81),
               fontSize: getProportionateScreenWidth(15)),
         ),
@@ -78,12 +79,16 @@ class ContactAdmin extends StatelessWidget {
                 type: CustomButtonType.colourButton,
                 text: 'save'.tr,
                 onTap: () {
+                  disposeKeyboard();
                   showCustomDialog(
                       context: context,
                       height: 150,
                       content: 'dialog_msg'.tr,
                       contentSize: 15,
-                      onTap: () {},
+                      onTap: () {
+                        Get.back();
+                        Get.back();
+                      },
                       color: AppColor.kDefaultColor,
                       okText: 'ok'.tr);
                 }),
@@ -148,6 +153,7 @@ class _FaqsState extends State<Faqs> {
                                 "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.",
                                 style: TextStyle(
                                     fontSize: getProportionateScreenWidth(14),
+                                    height: 1.3,
                                     color: AppColor.kDefaultFontColor
                                         .withOpacity(0.82)),
                               ),
