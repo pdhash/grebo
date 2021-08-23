@@ -6,10 +6,12 @@ import 'package:grebo/core/constants/app_assets.dart';
 import 'package:grebo/core/constants/appcolor.dart';
 import 'package:grebo/core/extension/customButtonextension.dart';
 import 'package:grebo/core/utils/config.dart';
+import 'package:grebo/core/viewmodel/controller/imagepickercontoller.dart';
 import 'package:grebo/core/viewmodel/controller/signupcontroller.dart';
 import 'package:grebo/ui/shared/appbar.dart';
 import 'package:grebo/ui/shared/custombutton.dart';
 import 'package:grebo/ui/shared/customtextfield.dart';
+import 'package:grebo/ui/shared/postview.dart';
 
 class SignUp extends StatelessWidget {
   final GlobalKey<FormState> globalKey = GlobalKey<FormState>();
@@ -18,6 +20,9 @@ class SignUp extends StatelessWidget {
   final TextEditingController password = TextEditingController();
   final TextEditingController confirmPassword = TextEditingController();
   final SignUpController signUpController = Get.put(SignUpController());
+  final ImagePickerController imagePickerController =
+      Get.put(ImagePickerController());
+  final AppImagePicker appImagePicker = AppImagePicker();
   @override
   Widget build(BuildContext context) {
     return GetBuilder(
@@ -33,19 +38,35 @@ class SignUp extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Center(
-                        child: Container(
-                          height: getProportionateScreenWidth(91),
-                          width: getProportionateScreenWidth(94),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                          ),
-                          child: SvgPicture.asset(
-                            AppImages.upload,
-                            fit: BoxFit.fill,
-                          ),
-                        ),
+                      GetBuilder(
+                        builder: (ImagePickerController controller) {
+                          return Center(
+                            child: GestureDetector(
+                              onTap: () {
+                                disposeKeyboard();
+                                appImagePicker.openBottomSheet(
+                                    context: context, multiple: false);
+                              },
+                              child:
+                                  appImagePicker.imagePickerController.image ==
+                                          null
+                                      ? Container(
+                                          height: 94,
+                                          width: 94,
+                                          child: SvgPicture.asset(
+                                            AppImages.upload,
+                                            fit: BoxFit.fill,
+                                          ),
+                                        )
+                                      : uploadProfile(
+                                          image: controller.image.toString(),
+                                          height: 94,
+                                          width: 94),
+                            ),
+                          );
+                        },
                       ),
+
                       getHeightSizedBox(h: 28),
                       Text(
                         'name'.tr,
@@ -128,7 +149,7 @@ class SignUp extends StatelessWidget {
                           ),
                         ),
                       ),
-                      getHeightSizedBox(h: 170),
+                      getHeightSizedBox(h: 200),
                       CustomButton(
                           type: CustomButtonType.colourButton,
                           text: 'Signup'.tr,

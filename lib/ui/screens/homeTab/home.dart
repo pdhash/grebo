@@ -117,6 +117,7 @@ class Homes extends StatelessWidget {
         Expanded(
           child: ListView.builder(
             itemCount: homeScreenController.list.length,
+            physics: BouncingScrollPhysics(),
             itemBuilder: (context, index) {
               return PostView(index: index);
             },

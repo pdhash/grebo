@@ -37,7 +37,7 @@ class BusinessProfile extends StatelessWidget {
                       padding: EdgeInsets.only(right: 22),
                       onPressed: () {
                         Get.to(() => DetailsPage1(
-                              isNext: false,
+                            //  isNext: false,
                             ));
                       },
                       icon: buildWidget(AppImages.editProfile, 19, 19))

@@ -41,6 +41,7 @@ class EditProfile extends StatelessWidget {
                     return Center(
                       child: GestureDetector(
                         onTap: () {
+                          disposeKeyboard();
                           appImagePicker.openBottomSheet(
                               context: context, multiple: false);
                         },
@@ -55,7 +56,7 @@ class EditProfile extends StatelessWidget {
                                             image: AssetImage(
                                                 AppImages.userOfflineImage))),
                                   )
-                                : buildCircleProfile(
+                                : uploadProfile(
                                     image: controller.image.toString(),
                                     height: 94,
                                     width: 94),

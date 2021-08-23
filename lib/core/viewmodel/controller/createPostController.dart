@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
 class PostController extends GetxController {
@@ -20,6 +21,7 @@ class PostController extends GetxController {
     if (isVideo) {
       isImage = false;
       var pickedVideo = await imagePicker.pickVideo(source: imageSource);
+
       _image = pickedVideo!.path;
       update();
     } else {
@@ -27,8 +29,19 @@ class PostController extends GetxController {
 
       var pickedFile =
           await imagePicker.pickImage(source: imageSource, imageQuality: 50);
-
-      image = pickedFile!.path;
+      File? file = await ImageCropper.cropImage(
+        sourcePath: pickedFile!.path,
+        aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
+        compressQuality: 100,
+        maxHeight: 700,
+        maxWidth: 700,
+        compressFormat: ImageCompressFormat.jpg,
+        androidUiSettings: AndroidUiSettings(
+          toolbarColor: Colors.white,
+          toolbarTitle: "Image Cropper",
+        ),
+      );
+      image = file!.path;
       update();
     }
   }

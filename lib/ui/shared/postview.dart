@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:grebo/core/constants/appSetting.dart';
@@ -177,5 +179,17 @@ Widget buildCircleProfile(
     decoration: BoxDecoration(
         shape: BoxShape.circle,
         image: DecorationImage(image: AssetImage(image), fit: BoxFit.cover)),
+  );
+}
+
+Widget uploadProfile(
+    {required String image, required double height, required double width}) {
+  return Container(
+    height: getProportionateScreenWidth(height),
+    width: getProportionateScreenWidth(width),
+    decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        image:
+            DecorationImage(image: FileImage(File(image)), fit: BoxFit.cover)),
   );
 }

@@ -9,7 +9,6 @@ import 'package:grebo/ui/shared/alertdialogue.dart';
 import 'package:grebo/ui/shared/appbar.dart';
 import 'package:grebo/ui/shared/custombutton.dart';
 
-import '../mainscreen.dart';
 import 'details1.dart';
 
 class DetailsPage3 extends StatelessWidget {
@@ -89,7 +88,10 @@ class DetailsPage3 extends StatelessWidget {
                                     content: 'dialogue_msg'.tr,
                                     contentSize: 15,
                                     onTap: () {
-                                      Get.offAll(() => HomeScreen());
+                                      Get.back();
+                                      Get.back();
+                                      Get.back();
+                                      Get.back();
                                     },
                                     color: AppColor.kDefaultColor,
                                     okText: 'ok'.tr);

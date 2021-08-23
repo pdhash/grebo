@@ -26,7 +26,7 @@ extension CustomButtonExtension on CustomButtonType {
       case CustomButtonType.borderButton:
         return ButtonProps(
           height: 50,
-          radius: 56 / 2,
+          radius: 50,
           border: Border.all(color: Color(0xff009345), width: 1),
           textStyle: TextStyle(
             color: Colors.black,

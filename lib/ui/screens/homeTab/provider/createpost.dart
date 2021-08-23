@@ -35,6 +35,7 @@ class _CreatePostState extends State<CreatePost> {
               child: IconButton(
                   padding: EdgeInsets.zero,
                   onPressed: () {
+                    disposeKeyboard();
                     showCustomDialog(
                         context: context,
                         height: 160,
@@ -111,6 +112,7 @@ class _CreatePostState extends State<CreatePost> {
                       const EdgeInsets.symmetric(horizontal: kDefaultPadding),
                   child: TextFormField(
                     controller: postCaption,
+                    textInputAction: TextInputAction.done,
                     minLines: 1,
                     maxLines: 5,
                     style: TextStyle(
@@ -148,8 +150,8 @@ class _CreatePostState extends State<CreatePost> {
                             ),
                           ),
                           Positioned(
-                              right: -7,
-                              top: -7,
+                              right: -5,
+                              top: -5,
                               child: GestureDetector(
                                   onTap: () {
                                     controller.image = null;
@@ -224,28 +226,32 @@ Widget imageButtons(
 
 class VideoDisplay extends StatefulWidget {
   final String path;
+  late final VideoPlayerController videoPlayerController;
 
-  const VideoDisplay({Key? key, required this.path}) : super(key: key);
+  VideoDisplay({Key? key, required this.path}) : super(key: key);
 
   @override
   _VideoDisplayState createState() => _VideoDisplayState();
 }
 
 class _VideoDisplayState extends State<VideoDisplay> {
-  late final VideoPlayerController videoPlayerController;
-
   @override
   void initState() {
-    videoPlayerController = VideoPlayerController.file(File(widget.path))
+    widget.videoPlayerController = VideoPlayerController.file(File(widget.path))
       ..initialize().then((_) {
         setState(() {});
-        videoPlayerController.play();
       });
     super.initState();
   }
 
   @override
+  void dispose() {
+    widget.videoPlayerController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return VideoPlayer(videoPlayerController);
+    return VideoPlayer(widget.videoPlayerController);
   }
 }
