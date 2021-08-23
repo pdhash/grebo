@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:greboo/core/constants/app_theme.dart';
-import 'package:greboo/ui/screens/mainscreen.dart';
+import 'package:grebo/core/constants/app_theme.dart';
+import 'package:grebo/ui/screens/onbording.dart';
 
 import 'core/utils/lang.dart';
 
@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Grebo',
-      home: HomeScreen(),
+      home: OnBoarding(),
       translations: Lang(),
       theme: AppTheme.defTheme,
       locale: Locale('en', 'US'), //Localizations.localeOf(context),

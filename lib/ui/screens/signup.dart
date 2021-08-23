@@ -1,23 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:greboo/core/constants/appSetting.dart';
-import 'package:greboo/core/constants/app_assets.dart';
-import 'package:greboo/core/constants/appcolor.dart';
-import 'package:greboo/core/extension/customButtonextension.dart';
-import 'package:greboo/core/utils/config.dart';
-import 'package:greboo/core/viewmodel/controller/signupcontroller.dart';
-import 'package:greboo/ui/shared/appbar.dart';
-import 'package:greboo/ui/shared/custombutton.dart';
-import 'package:greboo/ui/shared/customtextfield.dart';
+import 'package:grebo/core/constants/appSetting.dart';
+import 'package:grebo/core/constants/app_assets.dart';
+import 'package:grebo/core/constants/appcolor.dart';
+import 'package:grebo/core/extension/customButtonextension.dart';
+import 'package:grebo/core/utils/config.dart';
+import 'package:grebo/core/viewmodel/controller/imagepickercontoller.dart';
+import 'package:grebo/core/viewmodel/controller/signupcontroller.dart';
+import 'package:grebo/ui/shared/appbar.dart';
+import 'package:grebo/ui/shared/custombutton.dart';
+import 'package:grebo/ui/shared/customtextfield.dart';
+import 'package:grebo/ui/shared/postview.dart';
 
 class SignUp extends StatelessWidget {
   final GlobalKey<FormState> globalKey = GlobalKey<FormState>();
-  TextEditingController name = TextEditingController();
-  TextEditingController email = TextEditingController();
-  TextEditingController password = TextEditingController();
-  TextEditingController confirmPassword = TextEditingController();
-  SignUpController signUpController = Get.put(SignUpController());
+  final TextEditingController name = TextEditingController();
+  final TextEditingController email = TextEditingController();
+  final TextEditingController password = TextEditingController();
+  final TextEditingController confirmPassword = TextEditingController();
+  final SignUpController signUpController = Get.put(SignUpController());
+  final ImagePickerController imagePickerController =
+      Get.put(ImagePickerController());
+  final AppImagePicker appImagePicker = AppImagePicker();
   @override
   Widget build(BuildContext context) {
     return GetBuilder(
@@ -33,19 +38,35 @@ class SignUp extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Center(
-                        child: Container(
-                          height: getProportionateScreenWidth(91),
-                          width: getProportionateScreenWidth(94),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                          ),
-                          child: SvgPicture.asset(
-                            AppImages.upload,
-                            fit: BoxFit.fill,
-                          ),
-                        ),
+                      GetBuilder(
+                        builder: (ImagePickerController controller) {
+                          return Center(
+                            child: GestureDetector(
+                              onTap: () {
+                                disposeKeyboard();
+                                appImagePicker.openBottomSheet(
+                                    context: context, multiple: false);
+                              },
+                              child:
+                                  appImagePicker.imagePickerController.image ==
+                                          null
+                                      ? Container(
+                                          height: 94,
+                                          width: 94,
+                                          child: SvgPicture.asset(
+                                            AppImages.upload,
+                                            fit: BoxFit.fill,
+                                          ),
+                                        )
+                                      : uploadProfile(
+                                          image: controller.image.toString(),
+                                          height: 94,
+                                          width: 94),
+                            ),
+                          );
+                        },
                       ),
+
                       getHeightSizedBox(h: 28),
                       Text(
                         'name'.tr,
@@ -54,7 +75,11 @@ class SignUp extends StatelessWidget {
                             fontSize: getProportionateScreenWidth(16)),
                       ),
                       Get.height < 800 ? getHeightSizedBox(h: 10) : SizedBox(),
-                      CustomTextField(controller: name, hintText: 'John smith'),
+                      CustomTextField(
+                        controller: name,
+                        hintText: 'John smith',
+                        textCapitalization: TextCapitalization.sentences,
+                      ),
                       getHeightSizedBox(h: 18),
                       Text(
                         'email'.tr,
@@ -64,7 +89,10 @@ class SignUp extends StatelessWidget {
                       ),
                       Get.height < 800 ? getHeightSizedBox(h: 10) : SizedBox(),
                       CustomTextField(
-                          controller: email, hintText: 'johnsmith@gmail.com'),
+                          keyboardType: TextInputType.emailAddress,
+                          textCapitalization: TextCapitalization.none,
+                          controller: email,
+                          hintText: 'johnsmith@gmail.com'),
                       getHeightSizedBox(h: 18),
                       Text(
                         'password'.tr,
@@ -75,7 +103,9 @@ class SignUp extends StatelessWidget {
                       Get.height < 800 ? getHeightSizedBox(h: 10) : SizedBox(),
                       Obx(() => CustomTextField(
                             controller: password,
+                            suffixWidth: 40,
                             hintText: 'XXXXXXXX',
+                            keyboardType: TextInputType.visiblePassword,
                             obSecureText: signUpController.showText.value,
                             suffix: IconButton(
                               padding: EdgeInsets.zero,
@@ -92,7 +122,7 @@ class SignUp extends StatelessWidget {
                           )),
                       getHeightSizedBox(h: 18),
                       Text(
-                        'confirm_Password'.tr,
+                        'confirm_password'.tr,
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: getProportionateScreenWidth(16)),
@@ -102,14 +132,16 @@ class SignUp extends StatelessWidget {
                         () => CustomTextField(
                           controller: confirmPassword,
                           hintText: 'XXXXXXXX',
-                          obSecureText: signUpController.showText.value,
+                          suffixWidth: 40,
+                          keyboardType: TextInputType.visiblePassword,
+                          obSecureText: signUpController.showText2.value,
                           suffix: IconButton(
                             padding: EdgeInsets.zero,
                             onPressed: () {
-                              signUpController.showText.toggle();
+                              signUpController.showText2.toggle();
                             },
                             icon: Text(
-                              signUpController.showText.value
+                              signUpController.showText2.value
                                   ? 'show'.tr
                                   : 'hide'.tr,
                               style: TextStyle(fontWeight: FontWeight.bold),
@@ -117,36 +149,58 @@ class SignUp extends StatelessWidget {
                           ),
                         ),
                       ),
-                      getHeightSizedBox(h: 170),
+                      getHeightSizedBox(h: 200),
                       CustomButton(
                           type: CustomButtonType.colourButton,
                           text: 'Signup'.tr,
                           onTap: () {
                             controller.emailVer = false;
                           }),
-                      getHeightSizedBox(h: 18),
+                      getHeightSizedBox(h: 20),
                       Center(
-                        child: RichText(
-                            text: TextSpan(
-                                children: [
-                              TextSpan(
-                                  text: 'login'.tr,
-                                  style: TextStyle(
-                                      fontFamily: 'Nexa',
-                                      color: AppColor.kDefaultFontColor,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize:
-                                          getProportionateScreenWidth(15)))
-                            ],
-                                text: 'already_have'.tr,
+                        child: Wrap(
+                          children: [
+                            Text('already_have'.tr,
                                 style: TextStyle(
-                                    fontFamily: 'Nexa',
                                     color: AppColor.kDefaultFontColor
                                         .withOpacity(0.4),
                                     fontWeight: FontWeight.bold,
-                                    fontSize:
-                                        getProportionateScreenWidth(15)))),
+                                    fontSize: getProportionateScreenWidth(15))),
+                            GestureDetector(
+                              onTap: () {
+                                Get.back();
+                              },
+                              child: Text('login'.tr,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize:
+                                          getProportionateScreenWidth(15))),
+                            )
+                          ],
+                        ),
                       ),
+                      //Center(
+                      //   child: RichText(
+                      //       text: TextSpan(
+                      //           children: [
+                      //         TextSpan(
+                      //             text: 'login'.tr,
+                      //             style: TextStyle(
+                      //                 fontFamily: 'Nexa',
+                      //                 color: AppColor.kDefaultFontColor,
+                      //                 fontWeight: FontWeight.bold,
+                      //                 fontSize:
+                      //                     getProportionateScreenWidth(15)))
+                      //       ],
+                      //           text: 'already_have'.tr,
+                      //           style: TextStyle(
+                      //               fontFamily: 'Nexa',
+                      //               color: AppColor.kDefaultFontColor
+                      //                   .withOpacity(0.4),
+                      //               fontWeight: FontWeight.bold,
+                      //               fontSize:
+                      //                   getProportionateScreenWidth(15)))),
+                      // ),
                       getHeightSizedBox(h: 40)
                     ],
                   ),
@@ -178,9 +232,10 @@ class SignUp extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
+                        height: 1.2,
                         fontSize: getProportionateScreenWidth(20)),
                   ),
-                  getHeightSizedBox(h: 26),
+                  getHeightSizedBox(h: 30),
                   CustomButton(
                       type: CustomButtonType.colourButton,
                       text: 'ok'.tr,

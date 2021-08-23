@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:greboo/core/constants/appSetting.dart';
-import 'package:greboo/core/constants/app_assets.dart';
-import 'package:greboo/core/constants/appcolor.dart';
-import 'package:greboo/core/extension/customButtonextension.dart';
-import 'package:greboo/core/utils/config.dart';
-import 'package:greboo/core/viewmodel/controller/onboadingController.dart';
-import 'package:greboo/ui/screens/selectservice.dart';
-import 'package:greboo/ui/shared/custombutton.dart';
+import 'package:grebo/core/constants/appSetting.dart';
+import 'package:grebo/core/constants/app_assets.dart';
+import 'package:grebo/core/constants/appcolor.dart';
+import 'package:grebo/core/extension/customButtonextension.dart';
+import 'package:grebo/core/utils/config.dart';
+import 'package:grebo/core/viewmodel/controller/onboadingController.dart';
+import 'package:grebo/ui/screens/selectservice.dart';
+import 'package:grebo/ui/shared/custombutton.dart';
 
 class OnBoarding extends StatefulWidget {
   @override
@@ -20,7 +20,6 @@ class _OnBoardingState extends State<OnBoarding> {
   PageController pageController = PageController(initialPage: 0);
   @override
   Widget build(BuildContext context) {
-    //animationController.forward(from: 0);
     return Scaffold(
         backgroundColor: Colors.white,
         body: Stack(
@@ -70,11 +69,19 @@ class _OnBoardingState extends State<OnBoarding> {
                               onTap: () {
                                 Get.to(() => ChooseServices());
                               },
-                              child: Text(
-                                'skip'.tr,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: getProportionateScreenWidth(15)),
+                              child: Container(
+                                height: 40,
+                                width: 50,
+                                //  color: Colors.red,
+                                child: Center(
+                                  child: Text(
+                                    'skip'.tr,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize:
+                                            getProportionateScreenWidth(15)),
+                                  ),
+                                ),
                               )),
                           Spacer(),
                           CustomButton(

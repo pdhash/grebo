@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
-import 'package:greboo/core/constants/app_assets.dart';
-import 'package:greboo/core/constants/appcolor.dart';
-import 'package:greboo/core/utils/config.dart';
-import 'package:greboo/core/viewmodel/controller/homescreencontroller.dart';
+import 'package:grebo/core/constants/app_assets.dart';
+import 'package:grebo/core/constants/appcolor.dart';
+import 'package:grebo/core/viewmodel/controller/homescreencontroller.dart';
+import 'package:grebo/ui/screens/homeTab/home.dart';
 
 class BuildBottomBar extends StatelessWidget {
   @override
@@ -12,15 +11,25 @@ class BuildBottomBar extends StatelessWidget {
     return GetBuilder(builder: (HomeScreenController controller) {
       List<Widget> iconData = [
         buildWidget(
-            controller.current == 0 ? AppImages.homeActive : AppImages.home),
+            controller.current == 0 ? AppImages.homeActive : AppImages.home,
+            20.59,
+            20.59),
         buildWidget(
-            controller.current == 1 ? AppImages.chatActive : AppImages.chat),
-        buildWidget(controller.current == 2
-            ? AppImages.notificationActive
-            : AppImages.notification),
-        buildWidget(controller.current == 3
-            ? AppImages.profileActive
-            : AppImages.profile),
+            controller.current == 1 ? AppImages.chatActive : AppImages.chat,
+            20.59,
+            23.39),
+        buildWidget(
+            controller.current == 2
+                ? AppImages.notificationActive
+                : AppImages.notification,
+            20.41,
+            17.01),
+        buildWidget(
+            controller.current == 3
+                ? AppImages.profileActive
+                : AppImages.profile,
+            20,
+            17),
       ];
       return BottomAppBar(
         elevation: 0,
@@ -36,27 +45,16 @@ class BuildBottomBar extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: List.generate(
                   4,
-                  (index) => GestureDetector(
-                      onTap: () {
+                  (index) => IconButton(
+                      onPressed: () {
                         controller.pageController.animateToPage(index,
                             duration: Duration(microseconds: 1),
                             curve: Curves.ease);
                         controller.current = index;
                       },
-                      child: iconData[index])),
+                      icon: iconData[index])),
             )),
       );
     });
-  }
-
-  Widget buildWidget(String image) {
-    return Container(
-      height: getProportionateScreenWidth(20.5),
-      width: getProportionateScreenWidth(20.5),
-      child: SvgPicture.asset(
-        image,
-        fit: BoxFit.fill,
-      ),
-    );
   }
 }

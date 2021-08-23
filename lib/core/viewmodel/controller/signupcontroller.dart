@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 
 class SignUpController extends GetxController {
   RxBool showText = true.obs;
+  RxBool showText2 = true.obs;
 
   bool _emailVer = true;
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:greboo/core/constants/appcolor.dart';
-import 'package:greboo/core/utils/config.dart';
-import 'package:greboo/ui/shared/custombutton.dart';
+import 'package:grebo/core/constants/appcolor.dart';
+import 'package:grebo/core/utils/config.dart';
+import 'package:grebo/ui/shared/custombutton.dart';
 
 enum CustomButtonType {
   colourButton,
@@ -26,8 +26,8 @@ extension CustomButtonExtension on CustomButtonType {
       case CustomButtonType.borderButton:
         return ButtonProps(
           height: 50,
-          radius: 56 / 2,
-          border: Border.all(color: AppColor.kDefaultColor, width: 1),
+          radius: 50,
+          border: Border.all(color: Color(0xff009345), width: 1),
           textStyle: TextStyle(
             color: Colors.black,
             fontSize: getProportionateScreenWidth(15),
