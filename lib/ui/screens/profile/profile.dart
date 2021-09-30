@@ -3,8 +3,7 @@ import 'package:get/get.dart';
 import 'package:grebo/core/constants/appSetting.dart';
 import 'package:grebo/core/constants/app_assets.dart';
 import 'package:grebo/core/utils/config.dart';
-import 'package:grebo/core/viewmodel/controller/homescreencontroller.dart';
-import 'package:grebo/core/viewmodel/controller/selectservicecontoller.dart';
+import 'package:grebo/core/viewmodel/controller/homeController.dart';
 import 'package:grebo/ui/screens/homeTab/businessprofile.dart';
 import 'package:grebo/ui/screens/homeTab/home.dart';
 import 'package:grebo/ui/screens/homeTab/serviceoffered.dart';
@@ -12,11 +11,11 @@ import 'package:grebo/ui/screens/profile/provider/availability.dart';
 import 'package:grebo/ui/screens/profile/settings.dart';
 import 'package:grebo/ui/shared/postview.dart';
 
+import '../../../main.dart';
 import 'editprofile.dart';
 
 class Profile extends StatelessWidget {
-  final HomeScreenController homeScreenController =
-      Get.find<HomeScreenController>();
+  final HomeController homeScreenController = Get.find<HomeController>();
 
   final List<Map<String, dynamic>> list = [
     {
@@ -94,8 +93,7 @@ class Profile extends StatelessWidget {
                     title: 'user_name'.tr,
                     subtitle: 'Ranjit Singh',
                   ),
-                  homeScreenController.serviceController.servicesType ==
-                          ServicesType.userType
+                  userController.user.userType == 1
                       ? buildSettingTile(
                           image: AppImages.location,
                           height: 20,
@@ -117,8 +115,7 @@ class Profile extends StatelessWidget {
             ),
           ),
           getHeightSizedBox(h: 10),
-          homeScreenController.serviceController.servicesType ==
-                  ServicesType.userType
+          userController.user.userType == 1
               ? buildTile(
                   'settings'.tr,
                   () {

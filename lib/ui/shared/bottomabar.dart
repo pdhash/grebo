@@ -2,30 +2,30 @@ import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
 import 'package:grebo/core/constants/app_assets.dart';
 import 'package:grebo/core/constants/appcolor.dart';
-import 'package:grebo/core/viewmodel/controller/homescreencontroller.dart';
+import 'package:grebo/ui/screens/baseScreen/controller/baseController.dart';
 import 'package:grebo/ui/screens/homeTab/home.dart';
 
 class BuildBottomBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return GetBuilder(builder: (HomeScreenController controller) {
+    return GetBuilder(builder: (BaseController controller) {
       List<Widget> iconData = [
         buildWidget(
-            controller.current == 0 ? AppImages.homeActive : AppImages.home,
+            controller.currentTab == 0 ? AppImages.homeActive : AppImages.home,
             20.59,
             20.59),
         buildWidget(
-            controller.current == 1 ? AppImages.chatActive : AppImages.chat,
+            controller.currentTab == 1 ? AppImages.chatActive : AppImages.chat,
             20.59,
             23.39),
         buildWidget(
-            controller.current == 2
+            controller.currentTab == 2
                 ? AppImages.notificationActive
                 : AppImages.notification,
             20.41,
             17.01),
         buildWidget(
-            controller.current == 3
+            controller.currentTab == 3
                 ? AppImages.profileActive
                 : AppImages.profile,
             20,
@@ -47,10 +47,7 @@ class BuildBottomBar extends StatelessWidget {
                   4,
                   (index) => IconButton(
                       onPressed: () {
-                        controller.pageController.animateToPage(index,
-                            duration: Duration(microseconds: 1),
-                            curve: Curves.ease);
-                        controller.current = index;
+                        controller.currentTab = index;
                       },
                       icon: iconData[index])),
             )),

@@ -1,27 +1,28 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:grebo/core/constants/appSetting.dart';
 import 'package:grebo/core/constants/app_assets.dart';
 import 'package:grebo/core/extension/customButtonextension.dart';
+import 'package:grebo/core/service/apiRoutes.dart';
 import 'package:grebo/core/utils/config.dart';
-import 'package:grebo/core/viewmodel/controller/homescreencontroller.dart';
+import 'package:grebo/core/viewmodel/controller/homeController.dart';
 import 'package:grebo/core/viewmodel/controller/imagepickercontoller.dart';
-import 'package:grebo/core/viewmodel/controller/selectservicecontoller.dart';
 import 'package:grebo/ui/screens/homeTab/home.dart';
 import 'package:grebo/ui/shared/appbar.dart';
 import 'package:grebo/ui/shared/custombutton.dart';
 import 'package:grebo/ui/shared/customtextfield.dart';
-import 'package:grebo/ui/shared/postview.dart';
+
+import '../../../main.dart';
 
 class EditProfile extends StatelessWidget {
   final GlobalKey<FormState> globalKey = GlobalKey<FormState>();
   final TextEditingController name = TextEditingController();
   final TextEditingController email = TextEditingController();
   final TextEditingController location = TextEditingController();
-  final HomeScreenController homeScreenController =
-      Get.find<HomeScreenController>();
-  final ImagePickerController imagePickerController =
-      Get.put(ImagePickerController());
+  final HomeController homeScreenController = Get.find<HomeController>();
+
   final AppImagePicker appImagePicker = AppImagePicker();
 
   @override
@@ -45,21 +46,21 @@ class EditProfile extends StatelessWidget {
                           appImagePicker.openBottomSheet(
                               context: context, multiple: false);
                         },
-                        child:
-                            appImagePicker.imagePickerController.image == null
-                                ? Container(
-                                    height: getProportionateScreenWidth(94),
-                                    width: getProportionateScreenWidth(94),
-                                    decoration: BoxDecoration(
-                                        // shape: BoxShape.circle,
-                                        image: DecorationImage(
-                                            image: AssetImage(
-                                                AppImages.userOfflineImage))),
-                                  )
-                                : uploadProfile(
-                                    image: controller.image.toString(),
-                                    height: 94,
-                                    width: 94),
+                        child: Container(
+                          height: getProportionateScreenWidth(94),
+                          width: getProportionateScreenWidth(94),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: controller.image == null
+                                ? DecorationImage(
+                                    image: NetworkImage(
+                                        imageUrl + userController.user.picture),
+                                    fit: BoxFit.cover)
+                                : DecorationImage(
+                                    image: FileImage(controller.image as File),
+                                    fit: BoxFit.cover),
+                          ),
+                        ),
                       ),
                     );
                   },
@@ -94,8 +95,7 @@ class EditProfile extends StatelessWidget {
                   enabled: false,
                 ),
                 getHeightSizedBox(h: 18),
-                homeScreenController.serviceController.servicesType ==
-                        ServicesType.userType
+                userController.user.userType == 1
                     ? Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -138,7 +138,7 @@ class EditProfile extends StatelessWidget {
                       type: CustomButtonType.colourButton,
                       text: 'save'.tr,
                       onTap: () {
-                        Get.back();
+                        
                       }),
                 ),
                 getHeightSizedBox(h: 15)

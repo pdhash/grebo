@@ -17,7 +17,7 @@ class CurrentUserModel {
 
   int code;
   String message;
-  Data data;
+  Datum data;
   String format;
   String timestamp;
 
@@ -25,7 +25,7 @@ class CurrentUserModel {
       CurrentUserModel(
         code: json["code"] ?? 0,
         message: json["message"] ?? "",
-        data: Data.fromJson(json["data"] ?? DateTime.now()),
+        data: Datum.fromJson(json["data"] ?? DateTime.now()),
         format: json["format"] ?? "",
         timestamp: json["timestamp"] ?? "",
       );
@@ -39,8 +39,8 @@ class CurrentUserModel {
       };
 }
 
-class Data {
-  Data({
+class Datum {
+  Datum({
     required this.accessToken,
     required this.user,
   });
@@ -48,7 +48,7 @@ class Data {
   String accessToken;
   User user;
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
+  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
         accessToken: json["accessToken"] ?? "",
         user: User.fromJson(json["user"]),
       );

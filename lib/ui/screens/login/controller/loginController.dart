@@ -24,6 +24,6 @@ class LoginController extends GetxController {
     LoadingOverlay.of().hide();
 
     currentUserModel = currentUserModelFromJson(response);
-    saveUserDetails(currentUserModel!.data.user);
+    saveUserDetails(currentUserModel!.data);
   }
 }

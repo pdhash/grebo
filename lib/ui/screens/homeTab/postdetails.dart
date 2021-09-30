@@ -4,7 +4,7 @@ import 'package:grebo/core/constants/appSetting.dart';
 import 'package:grebo/core/constants/app_assets.dart';
 import 'package:grebo/core/constants/appcolor.dart';
 import 'package:grebo/core/utils/config.dart';
-import 'package:grebo/core/viewmodel/controller/homescreencontroller.dart';
+import 'package:grebo/core/viewmodel/controller/homeController.dart';
 import 'package:grebo/ui/screens/homeTab/home.dart';
 import 'package:grebo/ui/screens/homeTab/viewcomments.dart';
 import 'package:grebo/ui/shared/appbar.dart';
@@ -14,7 +14,7 @@ import 'package:grebo/ui/shared/postview.dart';
 
 class PostDetails extends StatelessWidget {
   final int indexx;
-  final HomeScreenController homeScreenController = Get.find();
+  final HomeController homeScreenController = Get.find();
   final TextEditingController comment = TextEditingController();
   PostDetails({Key? key, required this.indexx}) : super(key: key);
   @override
@@ -43,7 +43,7 @@ class PostDetails extends StatelessWidget {
                                   fontSize: getProportionateScreenWidth(16)),
                             ),
                             Spacer(),
-                            homeScreenController.list[indexx]['comment'] == null
+                            list[indexx]['comment'] == null
                                 ? SizedBox()
                                 : GestureDetector(
                                     onTap: () {
@@ -66,7 +66,7 @@ class PostDetails extends StatelessWidget {
                     ),
                   ),
                   getHeightSizedBox(h: 5),
-                  homeScreenController.list[indexx]['comment'] == null
+                  list[indexx]['comment'] == null
                       ? Container(
                           height: 200,
                           width: 200,
@@ -86,8 +86,7 @@ class PostDetails extends StatelessWidget {
                         )
                       : Column(
                           children: List.generate(
-                              homeScreenController
-                                  .list[indexx]['comment'].length,
+                              list[indexx]['comment'].length,
                               (index) => CommentView(
                                     currentPost: indexx,
                                     index: index,

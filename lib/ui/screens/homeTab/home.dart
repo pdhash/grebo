@@ -6,23 +6,20 @@ import 'package:grebo/core/constants/appSetting.dart';
 import 'package:grebo/core/constants/app_assets.dart';
 import 'package:grebo/core/constants/appcolor.dart';
 import 'package:grebo/core/utils/config.dart';
-import 'package:grebo/core/viewmodel/controller/homescreencontroller.dart';
-import 'package:grebo/core/viewmodel/controller/selectservicecontoller.dart';
+import 'package:grebo/core/viewmodel/controller/homeController.dart';
 import 'package:grebo/ui/screens/homeTab/viewAllCategories.dart';
 import 'package:grebo/ui/shared/custombutton.dart';
 import 'package:grebo/ui/shared/postview.dart';
 
-class Homes extends StatelessWidget {
-  final HomeScreenController homeScreenController =
-      Get.find<HomeScreenController>();
-  //final ServiceController serviceController = Get.put(ServiceController());
+import '../../../main.dart';
 
+class Homes extends StatelessWidget {
+  final HomeController homeController = Get.put(HomeController());
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        homeScreenController.serviceController.servicesType ==
-                ServicesType.userType
+        userController.user.userType == 1
             ? Column(
                 children: [
                   Padding(
@@ -90,7 +87,7 @@ class Homes extends StatelessWidget {
                     child: Padding(
                       padding: EdgeInsets.only(left: kDefaultPadding),
                       child: Row(
-                        children: homeScreenController.categories
+                        children: categories
                             .map((e) => BusinessCategories(
                                   text: e,
                                   textStyle: TextStyle(
@@ -116,7 +113,7 @@ class Homes extends StatelessWidget {
             : SizedBox(),
         Expanded(
           child: ListView.builder(
-            itemCount: homeScreenController.list.length,
+            itemCount: list.length,
             physics: BouncingScrollPhysics(),
             itemBuilder: (context, index) {
               return PostView(index: index);

@@ -3,20 +3,19 @@ import 'package:get/get.dart';
 import 'package:grebo/core/constants/app_assets.dart';
 import 'package:grebo/core/extension/customButtonextension.dart';
 import 'package:grebo/core/utils/config.dart';
-import 'package:grebo/core/viewmodel/controller/homescreencontroller.dart';
-import 'package:grebo/core/viewmodel/controller/selectservicecontoller.dart';
+import 'package:grebo/core/viewmodel/controller/homeController.dart';
 import 'package:grebo/ui/shared/appbar.dart';
 import 'package:grebo/ui/shared/commentview.dart';
 import 'package:grebo/ui/shared/custombutton.dart';
 import 'package:grebo/ui/shared/postdetailbottom.dart';
 
+import '../../../main.dart';
 import 'home.dart';
 
 class ViewComments extends StatelessWidget {
   final int currentPost;
   final TextEditingController comment = TextEditingController();
-  final HomeScreenController homeScreenController =
-      Get.find<HomeScreenController>();
+  final HomeController homeScreenController = Get.find<HomeController>();
   // final ServiceController serviceController = Get.find<ServiceController>();
 
   ViewComments({Key? key, required this.currentPost}) : super(key: key);
@@ -28,7 +27,7 @@ class ViewComments extends StatelessWidget {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          homeScreenController.list[currentPost]['comment'] == null
+          list[currentPost]['comment'] == null
               ? Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -56,8 +55,7 @@ class ViewComments extends StatelessWidget {
                     children: [
                       Column(
                         children: List.generate(
-                            homeScreenController
-                                .list[currentPost]['comment'].length,
+                            list[currentPost]['comment'].length,
                             (index) => CommentView(
                                 currentPost: currentPost, index: index)),
                       ),
@@ -71,8 +69,7 @@ class ViewComments extends StatelessWidget {
               bottom: 0,
               left: 0,
               right: 0,
-              child: homeScreenController.serviceController.servicesType ==
-                      ServicesType.userType
+              child: userController.user.userType == 1
                   ? PostDetailsBottomView(
                       comment: comment,
                       hintText: 'textfieldmsg1'.tr,

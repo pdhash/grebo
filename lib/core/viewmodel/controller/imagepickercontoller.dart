@@ -18,9 +18,9 @@ class ImagePickerController extends GetxController {
   //   }
   // }
 
-  String? _image;
-  String? get image => _image;
-  set image(String? value) {
+  File? _image;
+  File? get image => _image;
+  set image(File? value) {
     _image = value;
     update();
   }
@@ -83,7 +83,7 @@ class AppImagePicker {
           toolbarTitle: "Image Cropper",
         ),
       );
-      imagePickerController.image = file!.path;
+      imagePickerController.image = file;
     }
   }
 

@@ -5,8 +5,8 @@ import 'package:grebo/core/constants/app_assets.dart';
 import 'package:grebo/core/constants/appcolor.dart';
 import 'package:grebo/core/utils/config.dart';
 import 'package:grebo/core/viewmodel/controller/businesscontroller.dart';
-import 'package:grebo/core/viewmodel/controller/homescreencontroller.dart';
-import 'package:grebo/core/viewmodel/controller/selectservicecontoller.dart';
+import 'package:grebo/core/viewmodel/controller/homeController.dart';
+import 'package:grebo/main.dart';
 import 'package:grebo/ui/screens/editBusinessprofile/details1.dart';
 import 'package:grebo/ui/screens/homeTab/home.dart';
 import 'package:grebo/ui/screens/homeTab/serviceoffered.dart';
@@ -18,8 +18,7 @@ import 'customerreview.dart';
 
 class BusinessProfile extends StatelessWidget {
   final BusinessController businessController = Get.put(BusinessController());
-  final HomeScreenController homeScreenController =
-      Get.find<HomeScreenController>();
+  final HomeController homeScreenController = Get.find<HomeController>();
   final isShow;
 
   BusinessProfile({Key? key, this.isShow = false}) : super(key: key);
@@ -28,8 +27,7 @@ class BusinessProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: homeScreenController.serviceController.servicesType ==
-              ServicesType.userType
+      appBar: userController.user.userType == 1
           ? appBar('business_profile'.tr)
           : appBar('about_business'.tr, [
               isShow
@@ -133,8 +131,7 @@ class BusinessProfile extends StatelessWidget {
                   ),
                 ),
                 getHeightSizedBox(h: 15),
-                homeScreenController.serviceController.servicesType ==
-                        ServicesType.userType
+                userController.user.userType == 1
                     ? Column(
                         children: [
                           Row(
@@ -257,8 +254,7 @@ class BusinessProfile extends StatelessWidget {
                   ),
                 ),
                 getHeightSizedBox(h: 15),
-                homeScreenController.serviceController.servicesType ==
-                        ServicesType.userType
+                userController.user.userType == 1
                     ? Column(
                         children: [
                           Divider(

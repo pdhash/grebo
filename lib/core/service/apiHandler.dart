@@ -1,8 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:get/get.dart';
+import 'package:grebo/core/service/apiRoutes.dart';
 import 'package:grebo/core/utils/appFunctions.dart';
 import 'package:http/http.dart' as http;
+import 'package:path/path.dart' as path;
 
 enum RequestType { Get, Post }
 
@@ -44,5 +47,16 @@ class API {
     } catch (e) {
       print("ERROR FROM API CLASS $e");
     }
+  }
+
+  static Future fileHandler({required File file}) async {
+    var request = http.MultipartRequest('POST', Uri.parse(APIRoutes.imageAdd));
+    var multipartFile =
+        await http.MultipartFile.fromPath(file.path, path.basename(file.path));
+
+    // add file to multipart
+    request.files.add(multipartFile);
+    var response = await request.send();
+    print(response.statusCode);
   }
 }

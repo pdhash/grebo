@@ -4,15 +4,15 @@ import 'package:grebo/core/constants/appSetting.dart';
 import 'package:grebo/core/constants/app_assets.dart';
 import 'package:grebo/core/constants/appcolor.dart';
 import 'package:grebo/core/utils/config.dart';
-import 'package:grebo/core/viewmodel/controller/homescreencontroller.dart';
+import 'package:grebo/core/viewmodel/controller/homeController.dart';
 import 'package:grebo/ui/screens/editBusinessprofile/details%202.dart';
 import 'package:grebo/ui/screens/editBusinessprofile/details1.dart';
 import 'package:grebo/ui/screens/homeTab/home.dart';
 import 'package:grebo/ui/shared/appbar.dart';
 
 class Availability extends StatelessWidget {
-  final HomeScreenController homeScreenController =
-      Get.find<HomeScreenController>();
+  final HomeController homeScreenController =
+      Get.find<HomeController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(

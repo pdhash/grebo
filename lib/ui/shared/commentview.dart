@@ -3,11 +3,11 @@ import 'package:get/get.dart';
 import 'package:grebo/core/constants/appSetting.dart';
 import 'package:grebo/core/constants/appcolor.dart';
 import 'package:grebo/core/utils/config.dart';
-import 'package:grebo/core/viewmodel/controller/homescreencontroller.dart';
+import 'package:grebo/core/viewmodel/controller/homeController.dart';
 import 'package:grebo/ui/shared/postview.dart';
 
 class CommentView extends StatelessWidget {
-  final HomeScreenController homeScreenController = Get.find();
+  final HomeController homeScreenController = Get.find<HomeController>();
   final int currentPost;
   final int index;
 
@@ -37,8 +37,7 @@ class CommentView extends StatelessWidget {
                 Row(
                   children: [
                     buildCircleProfile(
-                        image: homeScreenController.list[currentPost]['comment']
-                            [index]['profile'],
+                        image: list[currentPost]['comment'][index]['profile'],
                         height: 40,
                         width: 40),
                     getHeightSizedBox(w: 9),
@@ -48,16 +47,14 @@ class CommentView extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            homeScreenController.list[currentPost]['comment']
-                                [index]['name'],
+                            list[currentPost]['comment'][index]['name'],
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: getProportionateScreenWidth(16)),
                           ),
                           getHeightSizedBox(h: 5),
                           Text(
-                            homeScreenController.list[currentPost]['comment']
-                                [index]['time'],
+                            list[currentPost]['comment'][index]['time'],
                             style: TextStyle(
                                 color: AppColor.kDefaultFontColor
                                     .withOpacity(0.57),
@@ -70,8 +67,7 @@ class CommentView extends StatelessWidget {
                 ),
                 getHeightSizedBox(h: 7),
                 Text(
-                  homeScreenController.list[currentPost]['comment'][index]
-                      ['title'],
+                  list[currentPost]['comment'][index]['title'],
                   style: TextStyle(
                       color: AppColor.kDefaultFontColor.withOpacity(0.89),
                       fontSize: getProportionateScreenWidth(14)),

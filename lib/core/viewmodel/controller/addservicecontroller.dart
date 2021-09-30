@@ -96,7 +96,7 @@ class _AddServiceViewState extends State<AddServiceView> {
     return GetBuilder<ImagePickerController>(
       tag: widget.tag,
       builder: (controller) {
-        String? image = widget.appImagePicker.imagePickerController.image;
+        File? image = widget.appImagePicker.imagePickerController.image;
         return Column(
           children: [
             Padding(
@@ -121,7 +121,7 @@ class _AddServiceViewState extends State<AddServiceView> {
                                             Colors.black.withOpacity(0.55),
                                             BlendMode.dstATop),
                                         image: FileImage(
-                                          File(image),
+                                          image,
                                         ),
                                         fit: BoxFit.cover)),
                                 child: Center(
