@@ -10,6 +10,11 @@ saveUserDetails(Datum data) {
   sharedPreference.write("UserToken", data.accessToken);
 }
 
+removerUserDetail() {
+  sharedPreference.remove("GreboUser");
+  sharedPreference.remove("UserToken");
+}
+
 bool getUserDetail() {
   var userData = sharedPreference.read("GreboUser");
   var userToken = sharedPreference.read("UserToken");

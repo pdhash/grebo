@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:grebo/core/constants/app_assets.dart';
 import 'package:grebo/core/viewmodel/controller/homeController.dart';
-import 'package:grebo/ui/global.dart';
 import 'package:grebo/ui/screens/baseScreen/controller/baseController.dart';
 import 'package:grebo/ui/shared/bottomabar.dart';
 
+import '../../global.dart';
 import '../homeTab/home.dart';
 import '../homeTab/provider/createpost.dart';
 
@@ -17,10 +17,8 @@ class BaseScreen extends StatelessWidget {
     return Scaffold(
       appBar: buildAppBar(),
       body: GetBuilder(
-          builder: (BaseController controller) => IndexedStack(
-                children: tabNavigation,
-                index: controller.currentTab,
-              )),
+          builder: (BaseController controller) =>
+              tabNavigation[controller.currentTab]),
       bottomNavigationBar: BuildBottomBar(),
       floatingActionButton: floatingAction(),
     );

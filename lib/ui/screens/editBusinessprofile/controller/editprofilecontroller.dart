@@ -5,7 +5,12 @@ import 'package:grebo/core/constants/app_assets.dart';
 import 'package:grebo/core/models/countrymodel.dart';
 
 class EditBProfileController extends GetxController {
-  Future sendBusinessDetail() async {}
+  final TextEditingController businessName = TextEditingController();
+  final TextEditingController businessCategory = TextEditingController();
+  final TextEditingController mobileNumber = TextEditingController();
+  final TextEditingController description = TextEditingController();
+  final TextEditingController location = TextEditingController();
+  final TextEditingController weblinks = TextEditingController();
 
   late CountryModel _selectedCountry;
   CountryModel get selectedCountry => _selectedCountry;
@@ -21,7 +26,7 @@ class EditBProfileController extends GetxController {
     update();
   }
 
-  ///--------------------------------------websites add
+  //add websites
   List<String> websites = <String>[];
   void addWebsite(String str) {
     websites.add(str);
@@ -33,7 +38,7 @@ class EditBProfileController extends GetxController {
     update();
   }
 
-  ///---------------------------------------------------country update
+  //country update
   String _kDefaultCountry = '+91';
 
   String get kDefaultCountry => _kDefaultCountry;

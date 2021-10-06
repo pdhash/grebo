@@ -188,7 +188,7 @@ class SignUp extends StatelessWidget {
         ));
   }
 
-  CustomTextField emailField() {
+  emailField() {
     return CustomTextField(
         keyboardType: TextInputType.emailAddress,
         textCapitalization: TextCapitalization.none,
@@ -196,7 +196,7 @@ class SignUp extends StatelessWidget {
         hintText: 'johnsmith@gmail.com');
   }
 
-  CustomTextField nameField() {
+  nameField() {
     return CustomTextField(
       controller: signUpController.name,
       hintText: 'John smith',
@@ -204,7 +204,7 @@ class SignUp extends StatelessWidget {
     );
   }
 
-  GetBuilder<ImagePickerController> profileUpload(BuildContext context) {
+  profileUpload(BuildContext context) {
     return GetBuilder(
       builder: (ImagePickerController controller) {
         return Center(

@@ -23,7 +23,7 @@ class SignUpController extends GetxController {
     update();
   }
 
-  Future userLogin() async {
+  Future userSignUp() async {
     LoadingOverlay.of().show();
     var response = await UserRepo.userSignUp(
         email: email.text.trim(),

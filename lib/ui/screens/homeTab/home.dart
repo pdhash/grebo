@@ -5,21 +5,24 @@ import 'package:get/get.dart';
 import 'package:grebo/core/constants/appSetting.dart';
 import 'package:grebo/core/constants/app_assets.dart';
 import 'package:grebo/core/constants/appcolor.dart';
+import 'package:grebo/core/service/repo/userRepo.dart';
 import 'package:grebo/core/utils/config.dart';
 import 'package:grebo/core/viewmodel/controller/homeController.dart';
+import 'package:grebo/core/viewmodel/controller/selectservicecontoller.dart';
 import 'package:grebo/ui/screens/homeTab/viewAllCategories.dart';
 import 'package:grebo/ui/shared/custombutton.dart';
 import 'package:grebo/ui/shared/postview.dart';
 
 import '../../../main.dart';
 
-class Homes extends StatelessWidget {
+class Home extends StatelessWidget {
   final HomeController homeController = Get.put(HomeController());
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        userController.user.userType == 1
+        userController.user.userType ==
+                getServiceTypeCode(ServicesType.userType)
             ? Column(
                 children: [
                   Padding(

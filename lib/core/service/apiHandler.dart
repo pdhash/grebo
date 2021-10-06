@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:get/get.dart';
 import 'package:grebo/core/service/apiRoutes.dart';
 import 'package:grebo/core/utils/appFunctions.dart';
+import 'package:grebo/ui/shared/loader.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as path;
 
@@ -19,8 +20,11 @@ class API {
     dynamic body,
   }) async {
     try {
-      bool connection = await checkConnection();
-      if (connection) {
+      if (await checkConnection()) {
+        LoadingOverlay.of().show();
+        print("URl ===> $url");
+        print("HEADER ===> $header");
+        print("BODY ===> $body");
         if (requestType == RequestType.Get) {
           response = await http.get(
             Uri.parse(url),
@@ -30,20 +34,25 @@ class API {
           response =
               await http.post(Uri.parse(url), headers: header, body: body);
         }
-
         if (response.body.isNotEmpty) {
+          print("RESPONSE BODY CREATE");
           var res = jsonDecode(response.body);
+          LoadingOverlay.of().hide();
+
           if (res["code"] == 100) {
             return response.body;
           } else {
             flutterToast(res["message"]);
           }
         } else {
+          LoadingOverlay.of().hide();
+
           return null;
         }
-      } else
+      } else {
         flutterToast('check_your_connection'.tr);
-      return null;
+        return null;
+      }
     } catch (e) {
       print("ERROR FROM API CLASS $e");
     }

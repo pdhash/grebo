@@ -11,4 +11,17 @@ class APIRoutes {
   static const String businessDetail = url + "user/update";
   static const String imageAdd = url + "image/add";
   static const String imageDelete = url + "image/delete";
+  static const String emailVerification = url + "user/resendVerification";
+}
+
+enum ContentType { jsonType }
+
+String contentType(ContentType contentType) {
+  String type;
+  switch (contentType) {
+    case ContentType.jsonType:
+      type = "application/json";
+      break;
+  }
+  return type;
 }

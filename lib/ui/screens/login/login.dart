@@ -136,15 +136,16 @@ class LoginScreen extends StatelessWidget {
 
   loginButton() {
     return CustomButton(
-        padding: 5,
-        type: CustomButtonType.colourButton,
-        text: 'login'.tr,
-        onTap: () {
-          disposeKeyboard();
-          if (formKey.currentState!.validate()) {
-            formKey.currentState!.save();
-            loginController.userLogin()
-              ..whenComplete(() {
+      padding: 5,
+      type: CustomButtonType.colourButton,
+      text: 'login'.tr,
+      onTap: () {
+        disposeKeyboard();
+        if (formKey.currentState!.validate()) {
+          formKey.currentState!.save();
+          loginController.userLogin()
+            ..whenComplete(
+              () {
                 try {
                   if (loginController.currentUserModel!.code == 100) {
                     Get.offAll(() => BaseScreen());
@@ -152,11 +153,11 @@ class LoginScreen extends StatelessWidget {
                 } catch (e) {
                   print('something went wrong');
                 }
-              });
-          }
-
-          //  Get.offAll(() => HomeScreen());
-        });
+              },
+            );
+        }
+      },
+    );
   }
 
   socialButtons() {
