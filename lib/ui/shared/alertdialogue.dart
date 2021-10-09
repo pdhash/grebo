@@ -84,18 +84,6 @@ Future<void> dialogueOpen(
     Function()? onOk,
     Function()? onCancel,
     required TextEditingController controller}) async {
-  Widget getButtons({Function()? onTap, required String text, Color? color}) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Text(
-        text,
-        style: TextStyle(
-            fontSize: getProportionateScreenWidth(15),
-            color: color == null ? AppColor.kDefaultFontColor : color),
-      ),
-    );
-  }
-
   return showDialog<void>(
     context: context,
     builder: (context) => Dialog(
@@ -137,7 +125,6 @@ Future<void> dialogueOpen(
                         text: 'cancel'.tr,
                         onTap: onCancel,
                         color: AppColor.kDefaultFontColor.withOpacity(0.66)),
-                    getHeightSizedBox(w: 30),
                     getButtons(text: 'add'.tr, onTap: onOk),
                   ],
                 ),
@@ -146,6 +133,18 @@ Future<void> dialogueOpen(
           ),
         ),
       ),
+    ),
+  );
+}
+
+Widget getButtons({Function()? onTap, required String text, Color? color}) {
+  return TextButton(
+    onPressed: onTap,
+    child: Text(
+      text,
+      style: TextStyle(
+          fontSize: getProportionateScreenWidth(15),
+          color: color == null ? AppColor.kDefaultFontColor : color),
     ),
   );
 }

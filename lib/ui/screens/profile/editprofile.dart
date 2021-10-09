@@ -43,8 +43,7 @@ class EditProfile extends StatelessWidget {
                       child: GestureDetector(
                         onTap: () {
                           disposeKeyboard();
-                          appImagePicker.openBottomSheet(
-                              context: context, multiple: false);
+                          appImagePicker.openBottomSheet();
                         },
                         child: Container(
                           height: getProportionateScreenWidth(94),
@@ -137,9 +136,7 @@ class EditProfile extends StatelessWidget {
                   child: CustomButton(
                       type: CustomButtonType.colourButton,
                       text: 'save'.tr,
-                      onTap: () {
-                        
-                      }),
+                      onTap: () {}),
                 ),
                 getHeightSizedBox(h: 15)
               ],

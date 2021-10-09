@@ -16,3 +16,12 @@ flutterToast(String msg) {
       backgroundColor: Colors.black.withOpacity(0.70),
       fontSize: 14);
 }
+
+List<String> weekDayList = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
+class DayModel {
+  final String day;
+  final int dayNum;
+
+  DayModel({required this.dayNum, required this.day});
+}

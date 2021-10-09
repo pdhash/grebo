@@ -11,6 +11,7 @@ class APIRoutes {
   static const String businessDetail = url + "user/update";
   static const String imageAdd = url + "image/add";
   static const String imageDelete = url + "image/delete";
+  static const String userUpdate = url + "user/update";
   static const String emailVerification = url + "user/resendVerification";
 }
 

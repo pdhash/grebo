@@ -211,7 +211,7 @@ class SignUp extends StatelessWidget {
           child: GestureDetector(
             onTap: () {
               disposeKeyboard();
-              appImagePicker.openBottomSheet(context: context, multiple: false);
+              appImagePicker.openBottomSheet();
             },
             child: appImagePicker.imagePickerController.image == null
                 ? Container(

@@ -56,7 +56,8 @@ class CustomTextField extends StatelessWidget {
             : textCapitalization as TextCapitalization,
         key: key,
         style: TextStyle(
-            fontSize: getProportionateScreenWidth(textSize!.toDouble())),
+            fontSize: getProportionateScreenWidth(textSize!.toDouble()),
+            color: Colors.black),
         validator: validator,
         controller: controller,
         maxLength: maxLength,

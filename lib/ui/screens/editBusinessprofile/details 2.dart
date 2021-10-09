@@ -6,6 +6,7 @@ import 'package:grebo/core/constants/appSetting.dart';
 import 'package:grebo/core/constants/app_assets.dart';
 import 'package:grebo/core/constants/appcolor.dart';
 import 'package:grebo/core/extension/customButtonextension.dart';
+import 'package:grebo/core/utils/appFunctions.dart';
 import 'package:grebo/core/utils/config.dart';
 import 'package:grebo/core/viewmodel/controller/availabilitycontroller.dart';
 import 'package:grebo/ui/screens/homeTab/home.dart';
@@ -55,7 +56,7 @@ class DetailsPage2 extends StatelessWidget {
                 Container(
                   height: 70,
                   child: GridView.builder(
-                      itemCount: controller.list.length,
+                      itemCount: weekDayList.length,
                       physics: NeverScrollableScrollPhysics(),
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 4,
@@ -65,20 +66,24 @@ class DetailsPage2 extends StatelessWidget {
                             children: [
                               InkWell(
                                   onTap: () {
-                                    controller.change(index);
+                                    if (controller.daysCount.contains(index)) {
+                                      controller.removeDays(index);
+                                    }
+                                    controller.addDays(index);
                                   },
                                   child: Container(
                                     width: 20,
                                     height: 20,
-                                    decoration: controller.list[index].selected
-                                        ? BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: Color(0xff2C9344))
-                                        : BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            border: Border.all(
-                                                color: Color(0xff2C9344),
-                                                width: 1)),
+                                    decoration:
+                                        controller.daysCount.contains(index)
+                                            ? BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                color: Color(0xff2C9344))
+                                            : BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                border: Border.all(
+                                                    color: Color(0xff2C9344),
+                                                    width: 1)),
                                     child: Center(
                                       child: Icon(
                                         Icons.check,
@@ -91,7 +96,7 @@ class DetailsPage2 extends StatelessWidget {
                               Padding(
                                 padding: const EdgeInsets.only(top: 4),
                                 child: Text(
-                                  controller.list[index].day,
+                                  weekDayList[index],
                                   style: TextStyle(
                                       fontSize: getProportionateScreenWidth(15),
                                       color: AppColor.kDefaultFontColor

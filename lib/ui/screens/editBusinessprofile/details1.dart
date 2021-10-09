@@ -1,14 +1,13 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:grebo/core/constants/appSetting.dart';
 import 'package:grebo/core/constants/app_assets.dart';
 import 'package:grebo/core/constants/appcolor.dart';
 import 'package:grebo/core/extension/customButtonextension.dart';
+import 'package:grebo/core/utils/appFunctions.dart';
 import 'package:grebo/core/utils/config.dart';
-import 'package:grebo/core/viewmodel/controller/imagepickercontoller.dart';
 import 'package:grebo/ui/screens/editBusinessprofile/controller/editprofilecontroller.dart';
 import 'package:grebo/ui/screens/homeTab/home.dart';
 import 'package:grebo/ui/shared/alertdialogue.dart';
@@ -24,66 +23,104 @@ class DetailsPage1 extends StatelessWidget {
 
   final EditBProfileController editProfileController =
       Get.put(EditBProfileController());
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   DetailsPage1({Key? key, this.isNext = true}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: customAppBar(),
-        body: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: kDefaultPadding - 5),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                imageSelectGrid(),
-                getHeightSizedBox(h: 18),
-                header('business_name'.tr),
-                Get.height < 800 ? getHeightSizedBox(h: 10) : SizedBox(),
-                nameField(),
-                getHeightSizedBox(h: 18),
-                header('business_category'.tr),
-                categorySelect(),
-                getHeightSizedBox(h: 18),
-                header('phone_number'.tr),
-                countryField(),
-                getHeightSizedBox(h: 18),
-                header('description'.tr),
-                descField(),
-                getHeightSizedBox(h: 18),
-                header('location'.tr),
-                locationFiled(),
-                getHeightSizedBox(h: 18),
-                websiteHeader(),
-                getHeightSizedBox(h: 16),
-                getHeightSizedBox(h: 10),
-                Divider(
-                  height: 0,
-                  thickness: 1,
-                  color: Color(0xffA4A4A4),
-                ),
-                getHeightSizedBox(h: 30),
-                CustomButton(
-                    type: CustomButtonType.colourButton,
-                    text: 'save'.tr,
-                    onTap: () {
-                      if (isNext) {
-                        appImagePicker.imagePickerController.resetImage();
-                        Get.to(() => DetailsPage2());
-                      } else {
-                        appImagePicker.imagePickerController.resetImage();
-                        Get.back();
-                      }
-                    }),
-                getHeightSizedBox(h: 40),
-              ],
-            )));
+    return GestureDetector(
+      onTap: () {
+        disposeKeyboard();
+      },
+      child: Scaffold(
+          appBar: customAppBar(),
+          body: Form(
+            key: formKey,
+            child: SingleChildScrollView(
+                physics: BouncingScrollPhysics(),
+                padding: EdgeInsets.symmetric(horizontal: kDefaultPadding - 5),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    imageSelectGrid(),
+                    getHeightSizedBox(h: 18),
+                    header('business_name'.tr),
+                    Get.height < 800 ? getHeightSizedBox(h: 10) : SizedBox(),
+                    nameField(),
+                    getHeightSizedBox(h: 18),
+                    header('business_category'.tr),
+                    categorySelect(),
+                    getHeightSizedBox(h: 18),
+                    header('phone_number'.tr),
+                    countryField(),
+                    getHeightSizedBox(h: 18),
+                    header('description'.tr),
+                    descField(),
+                    getHeightSizedBox(h: 18),
+                    header('location'.tr),
+                    locationFiled(),
+                    getHeightSizedBox(h: 18),
+                    websiteHeader(),
+                    getHeightSizedBox(h: 16),
+                    websites(),
+                    getHeightSizedBox(h: 10),
+                    Divider(
+                      height: 0,
+                      thickness: 1,
+                      color: Color(0xffA4A4A4),
+                    ),
+                    getHeightSizedBox(h: 30),
+                    CustomButton(
+                        type: CustomButtonType.colourButton,
+                        text: 'save'.tr,
+                        onTap: () async {
+                          print(editProfileController.websites.length);
+                          if (formKey.currentState!.validate()) {
+                            formKey.currentState!.save();
+                            if (editProfileController
+                                .uploadMultiFile.isNotEmpty) {
+                              if (editProfileController.websites.isNotEmpty) {
+                                if (isNext) {
+                                  await editProfileController
+                                      .submitAllFields()
+                                      .then((value) {
+                                    appImagePicker.imagePickerController
+                                        .resetImage();
+
+                                    Get.to(() => DetailsPage2());
+                                  });
+                                } else {
+                                  appImagePicker.imagePickerController
+                                      .resetImage();
+                                  Get.back();
+                                }
+                              } else {
+                                flutterToast('select_image'.tr);
+                              }
+                            } else {
+                              if (editProfileController.websites.isNotEmpty) {
+                                flutterToast('select_image'.tr);
+                              } else {
+                                flutterToast(
+                                    "${'select_image'.tr} & ${'enter_websites'.tr}");
+                              }
+                            }
+                          }
+                        }),
+                    getHeightSizedBox(h: 40),
+                  ],
+                )),
+          )),
+    );
   }
 
   websites() {
     return GetBuilder(
       builder: (EditBProfileController controller) {
-        return controller.websites.isEmpty
+        print(controller.websites);
+
+        return controller.websites.length == 0
             ? SizedBox()
             : Column(
                 children: controller.websites
@@ -115,17 +152,18 @@ class DetailsPage1 extends StatelessWidget {
                                       ),
                                     ),
                                   ),
-                                  GestureDetector(
-                                    onTap: () {
+                                  IconButton(
+                                    padding: EdgeInsets.zero,
+                                    onPressed: () {
+                                      disposeKeyboard();
                                       controller.removeWebsite(e);
                                     },
-                                    child: Icon(
+                                    icon: Icon(
                                       Icons.close,
                                       size: 16,
                                       color: Colors.white,
                                     ),
                                   ),
-                                  getHeightSizedBox(w: 10)
                                 ],
                               ),
                             ),
@@ -152,13 +190,13 @@ class DetailsPage1 extends StatelessWidget {
                     Get.back();
                   },
                   onOk: () {
-                    if (controller.weblinks.text == '') {
-                      Get.back();
-                    } else {
+                    if (controller.weblinks.text.isNotEmpty) {
                       controller.addWebsite(controller.weblinks.text);
-                      Get.back();
                       controller.weblinks.clear();
+
+                      Get.back();
                     }
+                    controller.weblinks.clear();
                   });
             },
             child: Wrap(
@@ -188,29 +226,48 @@ class DetailsPage1 extends StatelessWidget {
   }
 
   locationFiled() {
-    return CustomTextField(
-        controller: editProfileController.location,
-        enabled: false,
-        onFieldTap: () {
-          print('hello');
-        },
-        hintText: 'Villaz Johns Street 11, California..',
-        textSize: 14,
-        suffixWidth: 19,
-        suffix: GestureDetector(
-          onTap: () {
-            print('ok');
-          },
-          child: Container(
-              padding: EdgeInsets.all(0),
-              child: buildWidget(AppImages.gps, 19, 19)),
-        ));
+    return TextFormField(
+      style: TextStyle(
+          fontSize: getProportionateScreenWidth(14), color: Color(0xff8F92A3)),
+      controller: editProfileController.location,
+      // validator: (val) => val!.isEmpty ? "enter_location".tr : null,
+      enabled: false,
+      textInputAction: TextInputAction.next,
+      onTap: () {},
+      textAlignVertical: TextAlignVertical.center,
+      decoration: InputDecoration(
+          errorStyle: TextStyle(
+            color: Theme.of(Get.context as BuildContext)
+                .errorColor, // or any other color
+          ),
+          errorBorder: UnderlineInputBorder(
+              borderSide: BorderSide(
+            width: 1,
+            color: Theme.of(Get.context as BuildContext).errorColor,
+          )),
+          disabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(
+            width: 0.5,
+          )),
+          hintStyle: TextStyle(
+              fontSize: getProportionateScreenWidth(14),
+              color: Color(0xff8F92A3)),
+          hintText: 'Villaz Johns Street 11, California..',
+          suffixIcon: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: SvgPicture.asset(AppImages.gps),
+          )),
+    );
   }
 
   descField() {
     return TextFormField(
       controller: editProfileController.description,
       textInputAction: TextInputAction.done,
+      validator: (val) => val!.isEmpty ? "enter_description".tr : null,
+      style: TextStyle(
+        fontSize: getProportionateScreenWidth(14),
+      ),
       textCapitalization: TextCapitalization.sentences,
       maxLines: 2,
       minLines: 1,
@@ -224,32 +281,44 @@ class DetailsPage1 extends StatelessWidget {
   }
 
   categorySelect() {
-    return SizedBox(
-      height: 45,
-      child: DropdownButtonFormField<int>(
-        decoration: InputDecoration(
-            border: UnderlineInputBorder(
-                borderSide: BorderSide(color: Colors.white))),
-        value: 2,
+    List<String> list = ['healCare', 'product'];
+    return GetBuilder(
+      builder: (EditBProfileController controller) => GestureDetector(
         onTap: () {
           disposeKeyboard();
+          customItemPicker(
+              itemList: list,
+              onSelectedItemChanged: (val) {
+                controller.businessCategory.text = list[val];
+              });
         },
-        icon: buildWidget(AppImages.dropdownClose, 10, 20),
-        onChanged: (val) {},
-        items: <DropdownMenuItem<int>>[
-          DropdownMenuItem<int>(
-            value: 1,
-            child: Text(
-              "Owner",
-              style: TextStyle(fontSize: getProportionateScreenWidth(14)),
+        child: TextFormField(
+          enabled: false,
+          validator: (val) => val!.isEmpty ? "enter_category".tr : null,
+          controller: controller.businessCategory,
+          textAlignVertical: TextAlignVertical.center,
+          decoration: InputDecoration(
+            errorStyle: TextStyle(
+              color: Theme.of(Get.context as BuildContext)
+                  .errorColor, // or any other color
             ),
+            errorBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+              width: 1,
+              color: Theme.of(Get.context as BuildContext).errorColor,
+            )),
+            disabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+              width: 0.5,
+            )),
+            hintText: 'Heal care',
+            hintStyle: TextStyle(
+                fontSize: getProportionateScreenWidth(14),
+                color: Color(0xff8F92A3)),
+            suffixIcon: RotatedBox(
+                quarterTurns: 1, child: Icon(Icons.arrow_forward_ios_outlined)),
           ),
-          DropdownMenuItem<int>(
-            value: 2,
-            child: Text("Member",
-                style: TextStyle(fontSize: getProportionateScreenWidth(14))),
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -257,6 +326,8 @@ class DetailsPage1 extends StatelessWidget {
   nameField() {
     return CustomTextField(
       controller: editProfileController.businessName,
+      textInputAction: TextInputAction.next,
+      validator: (val) => val!.isEmpty ? "enter_business_name".tr : null,
       textCapitalization: TextCapitalization.sentences,
       hintText: 'Smith Hospitality',
       textSize: 14,
@@ -265,63 +336,66 @@ class DetailsPage1 extends StatelessWidget {
 
   imageSelectGrid() {
     return AspectRatio(
-        aspectRatio: 1.8,
-        child: GetBuilder(
-          builder: (ImagePickerController controller) => GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                  childAspectRatio: 100 / 80),
-              physics: NeverScrollableScrollPhysics(),
-              padding: EdgeInsets.only(
-                top: 10,
-              ),
-              clipBehavior: Clip.none,
-              itemCount: 6,
-              itemBuilder: (context, index) => controller.multiFile.length >
-                      (index)
-                  ? Stack(
-                      clipBehavior: Clip.none,
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(7),
-                          child: AspectRatio(
-                            aspectRatio: 100 / 80,
-                            child: Image.file(
-                              File(controller.multiFile[index]),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
+      aspectRatio: 1.8,
+      child: GetBuilder(
+        builder: (EditBProfileController controller) => GridView.builder(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
+              childAspectRatio: 100 / 80),
+          physics: NeverScrollableScrollPhysics(),
+          padding: EdgeInsets.only(
+            top: 10,
+          ),
+          clipBehavior: Clip.none,
+          itemCount: 6,
+          itemBuilder: (context, index) => controller.multiFile.length > (index)
+              ? Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(7),
+                      child: AspectRatio(
+                        aspectRatio: 100 / 80,
+                        child: Image.file(
+                          controller.multiFile[index],
+                          fit: BoxFit.cover,
                         ),
-                        Positioned(
-                            right: -4,
-                            top: -4,
-                            child: GestureDetector(
-                              onTap: () {
-                                controller.removeImage(index);
-                              },
-                              child: buildWidget(AppImages.closeGreen, 16, 16),
-                            ))
-                      ],
-                    )
-                  : GestureDetector(
-                      onTap: () {
-                        appImagePicker.openBottomSheet(
-                          context: context,
-                          multiple: true,
-                        );
-                      },
-                      child: buildWidget(AppImages.uploadImage, 80, 100))),
-        ));
+                      ),
+                    ),
+                    Positioned(
+                        right: -4,
+                        top: -4,
+                        child: GestureDetector(
+                          onTap: () {
+                            controller.deleteImage(index);
+                          },
+                          child: buildWidget(AppImages.closeGreen, 20, 20),
+                        ))
+                  ],
+                )
+              : GestureDetector(
+                  onTap: () {
+                    controller.uploadImage();
+                  },
+                  child: buildWidget(AppImages.uploadImage, 80, 100),
+                ),
+        ),
+      ),
+    );
   }
 
   countryField() {
     return GetBuilder(
       builder: (EditBProfileController controller) => TextFormField(
         controller: controller.mobileNumber,
-        style: TextStyle(fontSize: getProportionateScreenWidth(16)),
-        textInputAction: TextInputAction.done,
+        textInputAction: TextInputAction.next,
+        validator: (val) => val!.isEmpty ? "enter_mobile_number".tr : null,
+        style: TextStyle(
+          fontSize: getProportionateScreenWidth(14),
+        ),
+        maxLength: 10,
         keyboardType: TextInputType.phone,
         textAlignVertical: TextAlignVertical.center,
         buildCounter: (BuildContext context,
@@ -330,17 +404,55 @@ class DetailsPage1 extends StatelessWidget {
                 required int? maxLength}) =>
             null,
         decoration: InputDecoration(
-            contentPadding: EdgeInsets.only(left: 10, top: 2),
-            hintStyle: TextStyle(
-                fontSize: getProportionateScreenWidth(14),
-                color: AppColor.kDefaultFontColor.withOpacity(0.5)),
-            hintText: '987654321',
-            prefixIcon: GestureDetector(
-              onTap: () {},
+          hintStyle: TextStyle(
+              fontSize: getProportionateScreenWidth(14),
+              color: AppColor.kDefaultFontColor.withOpacity(0.5)),
+          hintText: '987654321',
+          prefixIcon: GestureDetector(
+            onTap: () {
+              disposeKeyboard();
+
+              showCupertinoModalPopup(
+                context: Get.context as BuildContext,
+                builder: (_) => SizedBox(
+                  height: getProportionateScreenWidth(250),
+                  child: CupertinoPicker(
+                    backgroundColor: Colors.white,
+                    itemExtent: 40,
+                    useMagnifier: false,
+                    children: List.generate(
+                        controller.countries!.length,
+                        (index) => Padding(
+                              padding: const EdgeInsets.only(top: 7),
+                              child: Text(
+                                  controller.countries![index].name.toString()),
+                            )),
+                    looping: true,
+                    onSelectedItemChanged: (value) {
+                      controller.kDefaultCountry = value.toString();
+                    },
+                  ),
+                ),
+              );
+            },
+            child: Container(
+              color: Colors.transparent,
+              width: getProportionateScreenWidth(60),
               child: Row(
-                children: [],
+                children: [
+                  Text(
+                    "+${controller.kDefaultCountry}",
+                    style: TextStyle(fontSize: getProportionateScreenWidth(14)),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 5),
+                    child: SvgPicture.asset(AppImages.dropdownCloseBlack),
+                  )
+                ],
               ),
-            )),
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -370,5 +482,30 @@ Widget header(String title) {
     title,
     style: TextStyle(
         fontSize: getProportionateScreenWidth(16), fontWeight: FontWeight.bold),
+  );
+}
+
+customItemPicker(
+    {required List<dynamic> itemList,
+    Function(int)? onSelectedItemChanged,
+    FixedExtentScrollController? scrollController,
+    bool looping = false}) async {
+  await showCupertinoModalPopup(
+    context: Get.context as BuildContext,
+    builder: (_) => SizedBox(
+      height: getProportionateScreenWidth(250),
+      child: CupertinoPicker(
+          backgroundColor: Colors.white,
+          itemExtent: 40,
+          looping: looping,
+          scrollController: scrollController,
+          children: List.generate(
+              itemList.length,
+              (index) => Padding(
+                    padding: const EdgeInsets.only(top: 7),
+                    child: Text(itemList[index]),
+                  )),
+          onSelectedItemChanged: onSelectedItemChanged),
+    ),
   );
 }

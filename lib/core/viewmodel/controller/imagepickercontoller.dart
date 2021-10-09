@@ -28,18 +28,6 @@ class ImagePickerController extends GetxController {
   void resetImage() {
     image = null;
   }
-
-  List<String> multiFile = <String>[];
-
-  void removeImage(int index) {
-    multiFile.removeAt(index);
-    update();
-  }
-
-  void multiAddImages(String image) {
-    multiFile.add(image);
-    update();
-  }
 }
 
 class AppImagePicker {
@@ -53,45 +41,29 @@ class AppImagePicker {
     this.tag = tag;
     _imagePickerController = Get.put(ImagePickerController(), tag: tag);
   }
-  browseImage(ImageSource imageSource, bool isMulti) async {
+  browseImage(ImageSource imageSource) async {
     var pickedFile =
         await imagePicker.pickImage(source: imageSource, imageQuality: 50);
-    if (isMulti == true) {
-      File? file = await ImageCropper.cropImage(
-        sourcePath: pickedFile!.path,
-        aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
-        compressQuality: 100,
-        maxHeight: 700,
-        maxWidth: 700,
-        compressFormat: ImageCompressFormat.jpg,
-        androidUiSettings: AndroidUiSettings(
-          toolbarColor: Colors.white,
-          toolbarTitle: "Image Cropper",
-        ),
-      );
-      imagePickerController.multiAddImages(file!.path);
-    } else {
-      File? file = await ImageCropper.cropImage(
-        sourcePath: pickedFile!.path,
-        aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
-        compressQuality: 100,
-        maxHeight: 700,
-        maxWidth: 700,
-        compressFormat: ImageCompressFormat.jpg,
-        androidUiSettings: AndroidUiSettings(
-          toolbarColor: Colors.white,
-          toolbarTitle: "Image Cropper",
-        ),
-      );
-      imagePickerController.image = file;
-    }
+
+    File? file = await ImageCropper.cropImage(
+      sourcePath: pickedFile!.path,
+      aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
+      compressQuality: 100,
+      maxHeight: 700,
+      maxWidth: 700,
+      compressFormat: ImageCompressFormat.jpg,
+      androidUiSettings: AndroidUiSettings(
+        toolbarColor: Colors.white,
+        toolbarTitle: "Image Cropper",
+      ),
+    );
+    imagePickerController.image = file;
   }
 
-  void openBottomSheet(
-      {required BuildContext context, required bool multiple}) {
+  Future<void> openBottomSheet() async {
     if (Platform.isIOS)
-      showCupertinoModalPopup<void>(
-        context: context,
+      await showCupertinoModalPopup<void>(
+        context: Get.context as BuildContext,
         builder: (BuildContext context) => CupertinoActionSheet(
           actions: <CupertinoActionSheetAction>[
             CupertinoActionSheetAction(
@@ -99,8 +71,8 @@ class AppImagePicker {
                 'Camera',
                 style: TextStyle(color: Colors.black),
               ),
-              onPressed: () {
-                browseImage(ImageSource.camera, multiple);
+              onPressed: () async {
+                await browseImage(ImageSource.camera);
 
                 Get.back();
               },
@@ -110,8 +82,8 @@ class AppImagePicker {
                 'Gallery',
                 style: TextStyle(color: Colors.black),
               ),
-              onPressed: () {
-                browseImage(ImageSource.gallery, multiple);
+              onPressed: () async {
+                await browseImage(ImageSource.gallery);
 
                 Get.back();
               },
@@ -129,7 +101,7 @@ class AppImagePicker {
         ),
       );
     else
-      Get.bottomSheet(
+      await Get.bottomSheet(
         Container(
           child: Wrap(
             children: [
@@ -138,26 +110,8 @@ class AppImagePicker {
                 title: Text('Photo Library'),
                 tileColor: Colors.white,
                 onTap: () async {
-                  browseImage(ImageSource.gallery, multiple);
+                  await browseImage(ImageSource.gallery);
                   Get.back();
-
-                  /*
-                  var status = await Permission.photos.status;
-                  print("STATUS ${status}");
-                  // try {
-                  if (status == PermissionStatus.denied) {
-                    print("DENIED");
-                    askPermissionAgain(Permission.photos);
-                  } else if (status == PermissionStatus.permanentlyDenied) {
-                    await openAppSettings();
-                  } else if (status == PermissionStatus.granted ||
-                      status == PermissionStatus.limited) {
-                    print("GRNATED");
-                    browseImage(ImageSource.gallery);
-                  } else {
-                    showMessage("restrictedAccessMsg".tr);
-                  }
-                 */
                 },
               ),
               Divider(
@@ -168,24 +122,8 @@ class AppImagePicker {
                 title: Text('Camera'),
                 tileColor: Colors.white,
                 onTap: () async {
+                  await browseImage(ImageSource.camera);
                   Get.back();
-                  browseImage(ImageSource.camera, multiple);
-
-                  /*
-                  var status = await Permission.camera.status;
-                  print("STATUS ${status}");
-                  // try {
-                  if (status == PermissionStatus.denied) {
-                    askPermissionAgain(Permission.camera);
-                  } else if (status == PermissionStatus.permanentlyDenied) {
-                    await openAppSettings();
-                  } else if (status == PermissionStatus.granted ||
-                      status == PermissionStatus.limited) {
-                    browseImage(ImageSource.camera);
-                  } else {
-                    showMessage("restrictedAccessMsg".tr);
-                  }
-                   */
                 },
               ),
             ],

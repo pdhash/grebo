@@ -105,8 +105,7 @@ class _AddServiceViewState extends State<AddServiceView> {
                 children: [
                   GestureDetector(
                       onTap: () async {
-                        widget.appImagePicker
-                            .openBottomSheet(context: context, multiple: false);
+                        widget.appImagePicker.openBottomSheet();
                       },
                       child: image != null
                           ? ClipRRect(

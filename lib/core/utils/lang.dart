@@ -170,7 +170,15 @@ class Lang extends Translations {
           //Contact Admin
           'how_can_we_help': 'How can we help?',
           'dialog_msg':
-              'Thanks you for submitting your request. we will surely help you.'
+              'Thanks you for submitting your request. we will surely help you.',
+          //validations
+          'enter_mobile_number': 'Please enter mobile number',
+          'enter_business_name': 'Please enter business name',
+          'enter_category': 'Please select category',
+          'enter_description': 'Please enter description',
+          'enter_location': 'Please enter location',
+          'enter_websites': 'Please enter websites',
+          'select_image': 'Please select image',
         },
       };
 }

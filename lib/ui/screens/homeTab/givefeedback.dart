@@ -120,8 +120,7 @@ class GiveFeedback extends StatelessWidget {
               GetBuilder(
                 builder: (ImagePickerController controller) => MaterialButton(
                   onPressed: () {
-                    appImagePicker.openBottomSheet(
-                        context: context, multiple: false);
+                    appImagePicker.openBottomSheet();
                   },
                   padding: EdgeInsets.zero,
                   child: Container(

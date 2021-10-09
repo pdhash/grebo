@@ -1,8 +1,15 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:grebo/core/constants/app_assets.dart';
 import 'package:grebo/core/models/countrymodel.dart';
+import 'package:grebo/core/service/repo/editProfileRepo.dart';
+import 'package:grebo/core/service/repo/imageRepo.dart';
+import 'package:grebo/core/utils/appFunctions.dart';
+
+import '../../../global.dart';
 
 class EditBProfileController extends GetxController {
   final TextEditingController businessName = TextEditingController();
@@ -39,12 +46,27 @@ class EditBProfileController extends GetxController {
   }
 
   //country update
-  String _kDefaultCountry = '+91';
+  late String _kDefaultCountry = '91';
 
   String get kDefaultCountry => _kDefaultCountry;
 
   set kDefaultCountry(String value) {
     _kDefaultCountry = value;
+    update();
+  }
+
+  List<File> multiFile = <File>[];
+  List<String> uploadMultiFile = [];
+
+  void removeImage(int index) {
+    multiFile.removeAt(index);
+    uploadMultiFile.removeAt(index);
+    update();
+  }
+
+  void multiAddImages(File file, String imageID) {
+    multiFile.add(file);
+    uploadMultiFile.add(imageID);
     update();
   }
 
@@ -56,6 +78,15 @@ class EditBProfileController extends GetxController {
 
   set selectValue(String? value) {
     _selectValue = value;
+    update();
+  }
+
+  late int _categorySelect;
+
+  int get categorySelect => _categorySelect;
+
+  set categorySelect(int value) {
+    _categorySelect = value;
     update();
   }
 
@@ -72,6 +103,39 @@ class EditBProfileController extends GetxController {
     print("loadCountryJsonFile....");
     var jsonText = await rootBundle.loadString(AppJson.country);
     countries = countryModelFromJson(jsonText);
+  }
+
+  uploadImage() {
+    appImagePicker.imagePickerController.resetImage();
+    appImagePicker.openBottomSheet().then((value) {
+      if (appImagePicker.imagePickerController.image != null) {
+        ImageRepo.uploadImage(
+                fileImage: [appImagePicker.imagePickerController.image as File])
+            .then((value) {
+          flutterToast(value["message"]);
+          multiAddImages(appImagePicker.imagePickerController.image as File,
+              value["data"].toString());
+        });
+      }
+    });
+  }
+
+  deleteImage(int index) {
+    ImageRepo.deleteImage(imageId: uploadMultiFile[index]).then((value) {
+      flutterToast(value["message"]);
+      removeImage(index);
+    });
+  }
+
+  Future submitAllFields() async {
+    await EditProfileRepo.updateUser(
+            desc: description.text.trim(),
+            mobileNumber: mobileNumber.text.trim(),
+            businessName: businessName.text.trim(),
+            websites: websites,
+            image: uploadMultiFile,
+            phoneCode: kDefaultCountry)
+        .then((value) => value);
   }
 
   @override
