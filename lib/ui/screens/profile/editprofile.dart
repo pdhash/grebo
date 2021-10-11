@@ -7,7 +7,7 @@ import 'package:grebo/core/constants/app_assets.dart';
 import 'package:grebo/core/extension/customButtonextension.dart';
 import 'package:grebo/core/service/apiRoutes.dart';
 import 'package:grebo/core/utils/config.dart';
-import 'package:grebo/core/viewmodel/controller/homeController.dart';
+import 'package:grebo/ui/screens/homeTab/controller/homeController.dart';
 import 'package:grebo/core/viewmodel/controller/imagepickercontoller.dart';
 import 'package:grebo/ui/screens/homeTab/home.dart';
 import 'package:grebo/ui/shared/appbar.dart';

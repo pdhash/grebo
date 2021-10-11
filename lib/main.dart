@@ -12,14 +12,16 @@ import 'core/utils/lang.dart';
 import 'core/utils/sharedpreference.dart';
 import 'core/viewmodel/controller/imagepickercontoller.dart';
 
-late final UserController userController;
+late UserController userController;
 
 void main() async {
-  await GetStorage.init();
   globalVerbsInit();
+
+  await GetStorage.init();
   userController = Get.put(UserController());
   final ImagePickerController imagePickerController =
       Get.put(ImagePickerController());
+  // print(userController.userToken);
   runApp(MyApp());
 }
 

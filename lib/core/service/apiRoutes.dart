@@ -13,6 +13,7 @@ class APIRoutes {
   static const String imageDelete = url + "image/delete";
   static const String userUpdate = url + "user/update";
   static const String emailVerification = url + "user/resendVerification";
+  static const String myPost = url + "post/myList";
 }
 
 enum ContentType { jsonType }

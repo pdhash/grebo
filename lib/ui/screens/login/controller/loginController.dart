@@ -20,8 +20,9 @@ class LoginController extends GetxController {
         userType: serviceController.servicesType == ServicesType.providerType
             ? 2
             : 1);
+    print(response);
 
-    currentUserModel = currentUserModelFromJson(response);
+    currentUserModel = CurrentUserModel.fromJson(response);
     saveUserDetails(currentUserModel!.data);
   }
 }

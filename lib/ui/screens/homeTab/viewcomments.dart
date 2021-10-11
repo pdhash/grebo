@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:grebo/core/constants/app_assets.dart';
 import 'package:grebo/core/extension/customButtonextension.dart';
 import 'package:grebo/core/utils/config.dart';
-import 'package:grebo/core/viewmodel/controller/homeController.dart';
+import 'package:grebo/ui/screens/homeTab/controller/homeController.dart';
 import 'package:grebo/ui/shared/appbar.dart';
 import 'package:grebo/ui/shared/commentview.dart';
 import 'package:grebo/ui/shared/custombutton.dart';

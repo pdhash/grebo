@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:grebo/core/constants/appSetting.dart';
 import 'package:grebo/core/constants/app_assets.dart';
 import 'package:grebo/core/utils/config.dart';
-import 'package:grebo/core/viewmodel/controller/homeController.dart';
+import 'package:grebo/ui/screens/homeTab/controller/homeController.dart';
 import 'package:grebo/ui/screens/homeTab/businessprofile.dart';
 import 'package:grebo/ui/screens/homeTab/home.dart';
 import 'package:grebo/ui/screens/homeTab/serviceoffered.dart';

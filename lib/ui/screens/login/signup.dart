@@ -5,6 +5,7 @@ import 'package:grebo/core/constants/appSetting.dart';
 import 'package:grebo/core/constants/app_assets.dart';
 import 'package:grebo/core/constants/appcolor.dart';
 import 'package:grebo/core/extension/customButtonextension.dart';
+import 'package:grebo/core/utils/appFunctions.dart';
 import 'package:grebo/core/utils/config.dart';
 import 'package:grebo/core/viewmodel/controller/imagepickercontoller.dart';
 import 'package:grebo/ui/screens/login/controller/signupcontroller.dart';
@@ -14,13 +15,13 @@ import 'package:grebo/ui/shared/custombutton.dart';
 import 'package:grebo/ui/shared/customtextfield.dart';
 import 'package:grebo/ui/shared/postview.dart';
 
+import '../../global.dart';
+
 class SignUp extends StatelessWidget {
   final GlobalKey<FormState> globalKey = GlobalKey<FormState>();
 
   final SignUpController signUpController = Get.put(SignUpController());
-  final ImagePickerController imagePickerController =
-      Get.put(ImagePickerController());
-  final AppImagePicker appImagePicker = AppImagePicker();
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -33,6 +34,7 @@ class SignUp extends StatelessWidget {
             return Scaffold(
               appBar: appBar('Register'),
               body: Form(
+                key: globalKey,
                 child: SingleChildScrollView(
                   child: Padding(
                     padding:
@@ -66,7 +68,15 @@ class SignUp extends StatelessWidget {
                             type: CustomButtonType.colourButton,
                             text: 'Signup'.tr,
                             onTap: () {
-                              controller.emailVer = false;
+                              if (globalKey.currentState!.validate()) {
+                                if (!appImagePicker
+                                    .imagePickerController.image.isNull) {
+                                  globalKey.currentState!.save();
+                                  signUpController.userSignUp();
+                                } else {
+                                  flutterToast("select_image".tr);
+                                }
+                              }
                             }),
                         getHeightSizedBox(h: 20),
                         toLoginText(),
@@ -150,9 +160,15 @@ class SignUp extends StatelessWidget {
     return Obx(
       () => CustomTextField(
         controller: signUpController.confirmPassword,
+        validator: (val) => val!.isEmpty
+            ? "please_enter_password".tr
+            : signUpController.password.text.trim() == val
+                ? null
+                : 'password_not_matched'.tr,
+        textInputAction: TextInputAction.done,
         hintText: 'XXXXXXXX',
         suffixWidth: 40,
-        keyboardType: TextInputType.visiblePassword,
+        //keyboardType: TextInputType.visiblePassword,
         obSecureText: signUpController.showText2.value,
         suffix: IconButton(
           padding: EdgeInsets.zero,
@@ -172,8 +188,10 @@ class SignUp extends StatelessWidget {
     return Obx(() => CustomTextField(
           controller: signUpController.password,
           suffixWidth: 40,
+          textInputAction: TextInputAction.next,
           hintText: 'XXXXXXXX',
-          keyboardType: TextInputType.visiblePassword,
+          validator: (val) => val!.isEmpty ? "please_enter_password".tr : null,
+          //  keyboardType: TextInputType.visiblePassword,
           obSecureText: signUpController.showText.value,
           suffix: IconButton(
             padding: EdgeInsets.zero,
@@ -191,6 +209,12 @@ class SignUp extends StatelessWidget {
   emailField() {
     return CustomTextField(
         keyboardType: TextInputType.emailAddress,
+        textInputAction: TextInputAction.next,
+        validator: (val) => val!.isEmpty
+            ? "please_enter_email".tr
+            : val.isValidEmail()
+                ? null
+                : 'please_enter_valid_email'.tr,
         textCapitalization: TextCapitalization.none,
         controller: signUpController.email,
         hintText: 'johnsmith@gmail.com');
@@ -199,6 +223,8 @@ class SignUp extends StatelessWidget {
   nameField() {
     return CustomTextField(
       controller: signUpController.name,
+      validator: (val) => val!.isEmpty ? "please_enter_name".tr : null,
+      textInputAction: TextInputAction.next,
       hintText: 'John smith',
       textCapitalization: TextCapitalization.sentences,
     );
@@ -223,7 +249,7 @@ class SignUp extends StatelessWidget {
                     ),
                   )
                 : uploadProfile(
-                    image: controller.image.toString(), height: 94, width: 94),
+                    image: controller.image!.path, height: 94, width: 94),
           ),
         );
       },

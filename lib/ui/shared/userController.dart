@@ -12,7 +12,7 @@ class UserController extends GetxController {
     update();
   }
 
-  late String _userToken;
+  String _userToken = "";
 
   String get userToken => _userToken;
 

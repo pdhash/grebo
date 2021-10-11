@@ -75,7 +75,6 @@ class DetailsPage1 extends StatelessWidget {
                         type: CustomButtonType.colourButton,
                         text: 'save'.tr,
                         onTap: () async {
-                          print(editProfileController.websites.length);
                           if (formKey.currentState!.validate()) {
                             formKey.currentState!.save();
                             if (editProfileController
@@ -297,6 +296,7 @@ class DetailsPage1 extends StatelessWidget {
           validator: (val) => val!.isEmpty ? "enter_category".tr : null,
           controller: controller.businessCategory,
           textAlignVertical: TextAlignVertical.center,
+          style: TextStyle(fontSize: getProportionateScreenWidth(14)),
           decoration: InputDecoration(
             errorStyle: TextStyle(
               color: Theme.of(Get.context as BuildContext)
@@ -496,13 +496,13 @@ customItemPicker(
       height: getProportionateScreenWidth(250),
       child: CupertinoPicker(
           backgroundColor: Colors.white,
-          itemExtent: 40,
+          itemExtent: 30,
           looping: looping,
           scrollController: scrollController,
           children: List.generate(
               itemList.length,
               (index) => Padding(
-                    padding: const EdgeInsets.only(top: 7),
+                    padding: const EdgeInsets.only(top: 3),
                     child: Text(itemList[index]),
                   )),
           onSelectedItemChanged: onSelectedItemChanged),

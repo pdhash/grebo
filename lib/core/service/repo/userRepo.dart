@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:grebo/core/service/apiHandler.dart';
 import 'package:grebo/core/service/apiRoutes.dart';
@@ -29,18 +30,20 @@ class UserRepo {
     required String email,
     required String name,
     required String password,
-    required String image,
+    required File image,
     required int userType,
   }) async {
-    var responseBody = await API.apiHandler(
-      url: APIRoutes.userSignUp,
-      header: {
-        'Content-Type': 'application/json',
-      },
-      body: jsonEncode(
-        {"email": email, "password": password, "userType": userType},
-      ),
-    );
+    var responseBody =
+        await API.multiPartAPIHandler(url: APIRoutes.userSignUp, field: {
+      "data": jsonEncode({
+        "email": email,
+        "password": password,
+        "userType": userType,
+        "name": name
+      })
+    }, fileImage: [
+      image
+    ]);
     if (responseBody != null)
       return responseBody;
     else
@@ -64,10 +67,7 @@ class UserRepo {
         {"email": email, "requestType": 2, "userType": userType},
       ),
     );
-    if (responseBody != null)
-      return responseBody;
-    else
-      return null;
+    if (responseBody != null) return responseBody;
   }
 }
 

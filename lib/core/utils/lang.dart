@@ -179,6 +179,16 @@ class Lang extends Translations {
           'enter_location': 'Please enter location',
           'enter_websites': 'Please enter websites',
           'select_image': 'Please select image',
+          'password_not_matched': 'Password not matched',
+          'please_enter_name': 'Please enter name',
+          'please_enter_email': 'Please enter email',
+          'please_enter_password': 'Please enter password',
+          'please_enter_valid_email': 'Please enter valid email',
+
+          //toasts
+          'please_select_working_days': 'Please select working days',
+          'please_select_working_hours': 'Please select working hours',
+          'no_post_found': 'No post found',
         },
       };
 }

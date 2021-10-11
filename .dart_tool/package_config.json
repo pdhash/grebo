@@ -8,6 +8,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "bloc",
+      "rootUri": "file:///Users/imac/Desktop/Flutter/setup/flutter/.pub-cache/hosted/pub.dartlang.org/bloc-7.2.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "boolean_selector",
       "rootUri": "file:///Users/imac/Desktop/Flutter/setup/flutter/.pub-cache/hosted/pub.dartlang.org/boolean_selector-2.1.0",
       "packageUri": "lib/",
@@ -94,6 +100,12 @@
     {
       "name": "flutter",
       "rootUri": "file:///Users/imac/Desktop/Flutter/setup/flutter/packages/flutter",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "flutter_bloc",
+      "rootUri": "file:///Users/imac/Desktop/Flutter/setup/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_bloc-7.3.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -218,6 +230,18 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "nested",
+      "rootUri": "file:///Users/imac/Desktop/Flutter/setup/flutter/.pub-cache/hosted/pub.dartlang.org/nested-1.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "pagination_view",
+      "rootUri": "file:///Users/imac/Desktop/Flutter/setup/flutter/.pub-cache/hosted/pub.dartlang.org/pagination_view-2.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "path",
       "rootUri": "file:///Users/imac/Desktop/Flutter/setup/flutter/.pub-cache/hosted/pub.dartlang.org/path-1.8.0",
       "packageUri": "lib/",
@@ -292,6 +316,12 @@
     {
       "name": "process",
       "rootUri": "file:///Users/imac/Desktop/Flutter/setup/flutter/.pub-cache/hosted/pub.dartlang.org/process-4.2.3",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "provider",
+      "rootUri": "file:///Users/imac/Desktop/Flutter/setup/flutter/.pub-cache/hosted/pub.dartlang.org/provider-6.0.1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -434,7 +464,7 @@
       "languageVersion": "2.12"
     }
   ],
-  "generated": "2021-10-01T13:00:32.733953Z",
+  "generated": "2021-10-11T12:58:46.573658Z",
   "generator": "pub",
   "generatorVersion": "2.13.4"
 }

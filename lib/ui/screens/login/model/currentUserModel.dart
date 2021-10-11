@@ -1,11 +1,3 @@
-import 'dart:convert';
-
-CurrentUserModel currentUserModelFromJson(String str) =>
-    CurrentUserModel.fromJson(json.decode(str));
-
-String currentUserModelToJson(CurrentUserModel data) =>
-    json.encode(data.toJson());
-
 class CurrentUserModel {
   CurrentUserModel({
     required this.code,

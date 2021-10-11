@@ -6,9 +6,10 @@ import 'package:grebo/core/constants/appSetting.dart';
 import 'package:grebo/core/constants/app_assets.dart';
 import 'package:grebo/core/constants/appcolor.dart';
 import 'package:grebo/core/extension/customButtonextension.dart';
+import 'package:grebo/core/extension/dateTimeFormatExtension.dart';
 import 'package:grebo/core/utils/appFunctions.dart';
 import 'package:grebo/core/utils/config.dart';
-import 'package:grebo/core/viewmodel/controller/availabilitycontroller.dart';
+import 'package:grebo/ui/screens/editBusinessprofile/controller/availabilitycontroller.dart';
 import 'package:grebo/ui/screens/homeTab/home.dart';
 import 'package:grebo/ui/shared/appbar.dart';
 import 'package:grebo/ui/shared/custombutton.dart';
@@ -62,48 +63,58 @@ class DetailsPage2 extends StatelessWidget {
                           crossAxisCount: 4,
                           childAspectRatio: 4,
                           mainAxisSpacing: 16),
-                      itemBuilder: (context, index) => Row(
-                            children: [
-                              InkWell(
-                                  onTap: () {
-                                    if (controller.daysCount.contains(index)) {
-                                      controller.removeDays(index);
-                                    }
-                                    controller.addDays(index);
-                                  },
-                                  child: Container(
-                                    width: 20,
-                                    height: 20,
-                                    decoration:
-                                        controller.daysCount.contains(index)
-                                            ? BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                color: Color(0xff2C9344))
-                                            : BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                border: Border.all(
-                                                    color: Color(0xff2C9344),
-                                                    width: 1)),
-                                    child: Center(
-                                      child: Icon(
-                                        Icons.check,
-                                        size: 15.0,
-                                        color: Colors.white,
+                      itemBuilder: (context, index) => GestureDetector(
+                            onTap: () {
+                              if (controller.daysCount.contains(index + 1)) {
+                                controller.removeDays(index + 1);
+                              } else {
+                                controller.addDays(index + 1);
+                              }
+                            },
+                            child: Container(
+                              color: Colors.transparent,
+                              margin: EdgeInsets.only(right: 5),
+                              child: Row(
+                                children: [
+                                  GetBuilder(
+                                    builder: (AvailabilityController con) =>
+                                        Container(
+                                      width: 20,
+                                      height: 20,
+                                      decoration:
+                                          con.daysCount.contains(index + 1)
+                                              ? BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  color: Color(0xff2C9344))
+                                              : BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  border: Border.all(
+                                                      color: Color(0xff2C9344),
+                                                      width: 1)),
+                                      child: Center(
+                                        child: Icon(
+                                          Icons.check,
+                                          size: 15.0,
+                                          color: Colors.white,
+                                        ),
                                       ),
                                     ),
-                                  )),
-                              getHeightSizedBox(w: 5),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 4),
-                                child: Text(
-                                  weekDayList[index],
-                                  style: TextStyle(
-                                      fontSize: getProportionateScreenWidth(15),
-                                      color: AppColor.kDefaultFontColor
-                                          .withOpacity(0.80)),
-                                ),
+                                  ),
+                                  getHeightSizedBox(w: 5),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 4),
+                                    child: Text(
+                                      weekDayList[index],
+                                      style: TextStyle(
+                                          fontSize:
+                                              getProportionateScreenWidth(15),
+                                          color: AppColor.kDefaultFontColor
+                                              .withOpacity(0.80)),
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
+                            ),
                           )),
                 ),
                 getHeightSizedBox(h: 20),
@@ -122,6 +133,8 @@ class DetailsPage2 extends StatelessWidget {
                             onChanged: (date) {},
                             onConfirm: (date) {
                               controller.defaultTime = dateFormat.format(date);
+                              controller.startTime =
+                                  appTimeFunDB(TimeOfDay.fromDateTime(date));
                             },
                           );
                         } else {
@@ -141,6 +154,7 @@ class DetailsPage2 extends StatelessWidget {
                               final formattedTimeOfDay =
                                   localizations.formatTimeOfDay(value!);
                               controller.defaultTime = formattedTimeOfDay;
+                              controller.startTime = appTimeFunDB(value);
                             });
                         }
                       },
@@ -157,7 +171,11 @@ class DetailsPage2 extends StatelessWidget {
                             showTitleActions: true,
                             onChanged: (date) {},
                             onConfirm: (date) {
-                              controller.defaultTime = dateFormat.format(date);
+                              controller.defaultTimeEnd =
+                                  dateFormat.format(date);
+
+                              controller.endTime =
+                                  appTimeFunDB(TimeOfDay.fromDateTime(date));
                             },
                           );
                         } else {
@@ -177,6 +195,7 @@ class DetailsPage2 extends StatelessWidget {
                               final formattedTimeOfDay =
                                   localizations.formatTimeOfDay(value!);
                               controller.defaultTimeEnd = formattedTimeOfDay;
+                              controller.endTime = appTimeFunDB(value);
                             });
                         }
                       },
@@ -189,7 +208,18 @@ class DetailsPage2 extends StatelessWidget {
                     child: CustomButton(
                   text: 'next'.tr,
                   onTap: () {
-                    Get.to(() => DetailsPage3());
+                    if (controller.defaultTime != "00:00 AM" &&
+                        controller.defaultTimeEnd != "00:00 PM") {
+                      if (controller.daysCount.isNotEmpty) {
+                        controller.updateUser().then((value) {
+                          Get.to(() => DetailsPage3());
+                        });
+                      } else {
+                        flutterToast('please_select_working_days');
+                      }
+                    } else {
+                      flutterToast('please_select_working_hours');
+                    }
                   },
                   type: CustomButtonType.colourButton,
                 )),

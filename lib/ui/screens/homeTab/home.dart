@@ -7,8 +7,8 @@ import 'package:grebo/core/constants/app_assets.dart';
 import 'package:grebo/core/constants/appcolor.dart';
 import 'package:grebo/core/service/repo/userRepo.dart';
 import 'package:grebo/core/utils/config.dart';
-import 'package:grebo/core/viewmodel/controller/homeController.dart';
 import 'package:grebo/core/viewmodel/controller/selectservicecontoller.dart';
+import 'package:grebo/ui/screens/homeTab/controller/homeController.dart';
 import 'package:grebo/ui/screens/homeTab/viewAllCategories.dart';
 import 'package:grebo/ui/shared/custombutton.dart';
 import 'package:grebo/ui/shared/postview.dart';
@@ -123,6 +123,20 @@ class Home extends StatelessWidget {
             },
           ),
         ),
+        // Expanded(
+        //     child: PaginationView(
+        //   itemBuilder: (BuildContext context, PostData postData, int index) {
+        //     return PostView(index: index);
+        //   },
+        //       pullToRefresh: true,
+        //   pageFetch: homeController.fetchMyPost,
+        //   onEmpty: Center(
+        //     child: Text('no_post_found'.tr),
+        //   ),
+        //   onError: (error) {
+        //     return Center(child: Text(error));
+        //   },
+        // ))
       ],
     );
   }

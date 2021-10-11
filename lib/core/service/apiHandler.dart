@@ -91,7 +91,7 @@ class API {
           LoadingOverlay.of().hide();
           flutterToast(resDecode["message"]);
 
-          return null;
+          //return null;
         }
       } else {
         flutterToast('check_your_connection'.tr);

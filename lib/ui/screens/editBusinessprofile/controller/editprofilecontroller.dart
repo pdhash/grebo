@@ -129,13 +129,18 @@ class EditBProfileController extends GetxController {
 
   Future submitAllFields() async {
     await EditProfileRepo.updateUser(
-            desc: description.text.trim(),
-            mobileNumber: mobileNumber.text.trim(),
-            businessName: businessName.text.trim(),
-            websites: websites,
-            image: uploadMultiFile,
-            phoneCode: kDefaultCountry)
-        .then((value) => value);
+      map: {
+        "name": "userName",
+        "businessName": businessName.text.trim(),
+        "images": uploadMultiFile,
+        "latitude": 1,
+        "longitude": 2,
+        "websites": websites,
+        "phoneCode": kDefaultCountry,
+        "phoneNumber": mobileNumber.text.trim(),
+        "description": description.text.trim()
+      },
+    ).then((value) => value);
   }
 
   @override
