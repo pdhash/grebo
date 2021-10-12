@@ -16,7 +16,6 @@ import 'package:grebo/ui/shared/custombutton.dart';
 import 'package:grebo/ui/shared/customtextfield.dart';
 
 import '../../global.dart';
-import 'details 2.dart';
 
 class DetailsPage1 extends StatelessWidget {
   final bool isNext;
@@ -81,14 +80,10 @@ class DetailsPage1 extends StatelessWidget {
                                 .uploadMultiFile.isNotEmpty) {
                               if (editProfileController.websites.isNotEmpty) {
                                 if (isNext) {
-                                  await editProfileController
-                                      .submitAllFields()
-                                      .then((value) {
-                                    appImagePicker.imagePickerController
-                                        .resetImage();
+                                  appImagePicker.imagePickerController
+                                      .resetImage();
 
-                                    Get.to(() => DetailsPage2());
-                                  });
+                                  editProfileController.submitAllFields();
                                 } else {
                                   appImagePicker.imagePickerController
                                       .resetImage();

@@ -7,7 +7,11 @@ final sharedPreference = GetStorage();
 saveUserDetails(Datum data) {
   userController.user = data.user;
   sharedPreference.write("GreboUser", data.user.toJson());
+
   sharedPreference.write("UserToken", data.accessToken);
+}
+updateUserDetail(User user){
+  sharedPreference.write("GreboUser",user.toJson());
 }
 
 removerUserDetail() {

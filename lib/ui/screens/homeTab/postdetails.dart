@@ -12,11 +12,15 @@ import 'package:grebo/ui/shared/commentview.dart';
 import 'package:grebo/ui/shared/postdetailbottom.dart';
 import 'package:grebo/ui/shared/postview.dart';
 
+import 'model/postModel.dart';
+
 class PostDetails extends StatelessWidget {
   final int indexx;
   final HomeController homeScreenController = Get.find();
   final TextEditingController comment = TextEditingController();
-  PostDetails({Key? key, required this.indexx}) : super(key: key);
+  final PostData postData;
+  PostDetails({Key? key, required this.indexx, required this.postData})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,7 +31,10 @@ class PostDetails extends StatelessWidget {
             SingleChildScrollView(
               child: Column(
                 children: [
-                  PostView(index: indexx),
+                  PostView(
+                    index: indexx,
+                    postData: postData,
+                  ),
                   getHeightSizedBox(h: 10),
                   Padding(
                     padding:

@@ -53,28 +53,32 @@ class Datum {
 
 class User {
   User({
-    required this.location,
-    required this.userType,
-    required this.verifiedByAdmin,
-    required this.images,
-    required this.websites,
-    required this.workingDays,
-    required this.verified,
-    required this.blocked,
-    required this.deleted,
-    required this.id,
-    required this.email,
-    required this.picture,
-    required this.createdOn,
-    required this.updatedOn,
-    required this.businessName,
-    required this.description,
-    required this.endTime,
-    required this.name,
-    required this.phoneCode,
-    required this.phoneNumber,
-    required this.startTime,
-  });
+    location,
+    this.userType = 0,
+    this.verifiedByAdmin = false,
+    this.images = const [],
+    this.websites = const [],
+    this.workingDays = const [],
+    this.verified = false,
+    this.blocked = false,
+    this.deleted = false,
+    this.id = "",
+    this.email = "",
+    this.picture = "",
+    createdOn,
+    updatedOn,
+    this.businessName = "",
+    this.description = "",
+    endTime,
+    this.name = "",
+    this.phoneCode = "",
+    this.phoneNumber = "",
+    startTime,
+  })  : this.location = Location(),
+        this.createdOn = DateTime.now(),
+        this.endTime = DateTime.now(),
+        this.updatedOn = DateTime.now(),
+        this.startTime = DateTime.now();
 
   Location location;
   int userType;
@@ -149,9 +153,9 @@ class User {
 
 class Location {
   Location({
-    required this.address,
-    required this.type,
-    required this.coordinates,
+    this.address = "",
+    this.type = "",
+    this.coordinates = const [],
   });
 
   String address;

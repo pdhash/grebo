@@ -5,10 +5,12 @@ import 'package:get/get.dart';
 import 'package:grebo/core/constants/appSetting.dart';
 import 'package:grebo/core/constants/app_assets.dart';
 import 'package:grebo/core/constants/appcolor.dart';
+import 'package:grebo/core/service/apiRoutes.dart';
 import 'package:grebo/core/utils/config.dart';
-import 'package:grebo/ui/screens/homeTab/controller/homeController.dart';
 import 'package:grebo/ui/screens/homeTab/businessprofile.dart';
+import 'package:grebo/ui/screens/homeTab/controller/homeController.dart';
 import 'package:grebo/ui/screens/homeTab/home.dart';
+import 'package:grebo/ui/screens/homeTab/model/postModel.dart';
 import 'package:grebo/ui/screens/homeTab/postdetails.dart';
 import 'package:grebo/ui/screens/homeTab/provider/likeerror.dart';
 import 'package:grebo/ui/screens/homeTab/viewcomments.dart';
@@ -16,9 +18,11 @@ import 'package:readmore/readmore.dart';
 
 class PostView extends StatelessWidget {
   final int index;
+  final PostData postData;
   final HomeController homeScreenController = Get.find<HomeController>();
 
-  PostView({Key? key, required this.index}) : super(key: key);
+  PostView({Key? key, required this.index, required this.postData})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +39,9 @@ class PostView extends StatelessWidget {
                   Get.to(() => BusinessProfile());
                 },
                 child: buildCircleProfile(
-                    image: AppImages.defaultProfile, height: 44, width: 44),
+                    image: imageUrl + "${postData.postUserDetail.picture}",
+                    height: 44,
+                    width: 44),
               ),
               getHeightSizedBox(w: 10),
               Expanded(
@@ -43,6 +49,7 @@ class PostView extends StatelessWidget {
                   onTap: () {
                     Get.to(() => PostDetails(
                           indexx: index,
+                          postData: postData,
                         ));
                   },
                   child: Column(
@@ -57,7 +64,7 @@ class PostView extends StatelessWidget {
                               Get.to(() => BusinessProfile());
                             },
                             child: Text(
-                              'Business Name',
+                              postData.postUserDetail.name,
                               style: TextStyle(
                                   fontSize: getProportionateScreenWidth(16),
                                   fontWeight: FontWeight.bold),
@@ -75,27 +82,26 @@ class PostView extends StatelessWidget {
                             color:
                                 AppColor.kDefaultFontColor.withOpacity(0.57)),
                       ),
-                      list[index]['image'] == null
-                          ? SizedBox()
-                          : getHeightSizedBox(h: 10),
-                      list[index]['image'] == null
+                      postData.video == ""
                           ? SizedBox()
                           : Container(
                               height: 138,
                               width: 281,
+                              margin: EdgeInsets.only(top: 10),
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(11),
                                   image: DecorationImage(
-                                      image: AssetImage(list[index]['image']),
+                                      image: NetworkImage(
+                                          "${imageUrl + postData.postUserDetail.picture}"),
                                       fit: BoxFit.fill)),
                             ),
-                      list[index]['title'] == null
+                      postData.text == ""
                           ? getHeightSizedBox(h: 5)
                           : getHeightSizedBox(h: 10),
-                      list[index]['title'] == null
+                      postData.text == ""
                           ? SizedBox()
                           : ReadMoreText(
-                              'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is dummy text of the & typesetting industry',
+                              postData.text,
                               trimLines: 3,
                               style: TextStyle(
                                 fontSize: getProportionateScreenWidth(14),
@@ -125,10 +131,15 @@ class PostView extends StatelessWidget {
                             },
                             child: Row(
                               children: [
-                                buildWidget(AppImages.like, 15, 17),
+                                buildWidget(
+                                    postData.isLike
+                                        ? AppImages.like
+                                        : AppImages.unlike,
+                                    15,
+                                    17),
                                 getHeightSizedBox(w: 5),
                                 Text(
-                                  '12700',
+                                  postData.like.toString(),
                                   style: TextStyle(
                                       fontSize:
                                           getProportionateScreenWidth(12)),
@@ -147,7 +158,7 @@ class PostView extends StatelessWidget {
                                   buildWidget(AppImages.comment, 15, 16),
                                   getHeightSizedBox(w: 5),
                                   Text(
-                                    '300',
+                                    postData.comment.toString(),
                                     style: TextStyle(
                                         fontSize:
                                             getProportionateScreenWidth(12)),
@@ -177,7 +188,7 @@ Widget buildCircleProfile(
     width: getProportionateScreenWidth(width),
     decoration: BoxDecoration(
         shape: BoxShape.circle,
-        image: DecorationImage(image: AssetImage(image), fit: BoxFit.cover)),
+        image: DecorationImage(image: NetworkImage(image), fit: BoxFit.cover)),
   );
 }
 

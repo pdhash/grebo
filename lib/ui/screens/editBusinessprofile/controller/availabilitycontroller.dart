@@ -1,6 +1,8 @@
 import 'package:get/get.dart';
 import 'package:grebo/core/service/repo/editProfileRepo.dart';
 
+import '../details3.dart';
+
 class AvailabilityController extends GetxController {
   List<int> daysCount = [];
 
@@ -56,14 +58,16 @@ class AvailabilityController extends GetxController {
     update();
   }
 
-  Future updateUser() async {
-    daysCount.sort((a, b) {
-      return a.compareTo(b);
-    });
-    await EditProfileRepo.updateUser(map: {
-      "workingDays": daysCount,
-      "startTime": startTime,
-      "endTime": endTime
-    }).then((value) => print(value));
+  Future submitAllFields() async {
+    var v = await EditProfileRepo.updateUser(
+      map: {
+        "workingDays": daysCount,
+        "startTime": startTime,
+        "endTime": endTime,
+      },
+    );
+    if (v != null) {
+      Get.to(() => DetailsPage3());
+    }
   }
 }

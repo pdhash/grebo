@@ -3,19 +3,32 @@ import 'package:grebo/core/service/repo/postRepo.dart';
 import 'package:grebo/ui/screens/homeTab/model/postModel.dart';
 
 class HomeController extends GetxController {
+  late bool isNextPost;
+  HomeController() {
+    isNextPost = true;
+  }
   RxBool descTextShowFlag = false.obs;
 
+//for providers post
   Future<List<PostData>> fetchMyPost(int offset) async {
+    if (offset == 0) isNextPost = true;
+    if (isNextPost == false) return [];
     List<PostData> getPost = [];
     var request = await PostRepo.fetchMyPost();
     getPost = request!.postData;
+    isNextPost = request.hasMore;
     return getPost;
   }
 
-  @override
-  void onInit() {
-    fetchMyPost(2);
-    super.onInit();
+  //for user posts
+  Future<List<PostData>> fetchAllPost(int offset) async {
+    if (offset == 0) isNextPost = true;
+    if (isNextPost == false) return [];
+    List<PostData> getPost = [];
+    var request = await PostRepo.fetchMyPost();
+    getPost = request!.postData;
+    isNextPost = request.hasMore;
+    return getPost;
   }
 }
 

@@ -16,7 +16,6 @@ import 'package:grebo/ui/shared/custombutton.dart';
 import 'package:keyboard_actions/external/platform_check/platform_check.dart';
 
 import 'details1.dart';
-import 'details3.dart';
 
 class DetailsPage2 extends StatelessWidget {
   final bool showEdit;
@@ -211,9 +210,7 @@ class DetailsPage2 extends StatelessWidget {
                     if (controller.defaultTime != "00:00 AM" &&
                         controller.defaultTimeEnd != "00:00 PM") {
                       if (controller.daysCount.isNotEmpty) {
-                        controller.updateUser().then((value) {
-                          Get.to(() => DetailsPage3());
-                        });
+                        controller.submitAllFields();
                       } else {
                         flutterToast('please_select_working_days');
                       }

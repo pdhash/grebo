@@ -15,11 +15,13 @@ class API {
     required String url,
     RequestType requestType = RequestType.Post,
     Map<String, String>? header,
+    bool showLoader = true,
     dynamic body,
   }) async {
     try {
       if (await checkConnection()) {
-        LoadingOverlay.of().show();
+        if (showLoader) LoadingOverlay.of().show();
+
         print("URl ===> $url");
         print("HEADER ===> $header");
         print("BODY ===> $body");
@@ -36,15 +38,16 @@ class API {
           var res = jsonDecode(response.body);
           print("RESPONSE BODY CREATE ====== $res");
 
-          LoadingOverlay.of().hide();
+          if (showLoader) LoadingOverlay.of().hide();
 
           if (res["code"] == 100) {
             return res;
           } else {
             flutterToast(res["message"]);
+            return null;
           }
         } else {
-          LoadingOverlay.of().hide();
+          if (showLoader) LoadingOverlay.of().hide();
 
           return null;
         }
@@ -60,13 +63,17 @@ class API {
   static Future multiPartAPIHandler(
       {List<File>? fileImage,
       Map<String, String>? field,
+      bool showLoader = true,
       Map<String, String>? header,
       required String url}) async {
     try {
       bool connection = await checkConnection();
 
       if (connection) {
-        LoadingOverlay.of().show();
+        print("URl ===> $url");
+        print("HEADER ===> $header");
+        print("BODY ===> $field");
+        if (showLoader) LoadingOverlay.of().show();
         var request = http.MultipartRequest(
           'POST',
           Uri.parse(url),
@@ -84,11 +91,11 @@ class API {
         var res = await response.stream.bytesToString();
         var resDecode = jsonDecode(res);
         if (resDecode["code"] == 100) {
-          LoadingOverlay.of().hide();
+          if (showLoader) LoadingOverlay.of().hide();
 
           return resDecode;
         } else {
-          LoadingOverlay.of().hide();
+          if (showLoader) LoadingOverlay.of().hide();
           flutterToast(resDecode["message"]);
 
           //return null;

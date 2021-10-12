@@ -18,7 +18,9 @@ void main() async {
   globalVerbsInit();
 
   await GetStorage.init();
+
   userController = Get.put(UserController());
+
   final ImagePickerController imagePickerController =
       Get.put(ImagePickerController());
   // print(userController.userToken);

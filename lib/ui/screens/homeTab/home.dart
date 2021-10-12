@@ -9,9 +9,11 @@ import 'package:grebo/core/service/repo/userRepo.dart';
 import 'package:grebo/core/utils/config.dart';
 import 'package:grebo/core/viewmodel/controller/selectservicecontoller.dart';
 import 'package:grebo/ui/screens/homeTab/controller/homeController.dart';
+import 'package:grebo/ui/screens/homeTab/model/postModel.dart';
 import 'package:grebo/ui/screens/homeTab/viewAllCategories.dart';
 import 'package:grebo/ui/shared/custombutton.dart';
 import 'package:grebo/ui/shared/postview.dart';
+import 'package:pagination_view/pagination_view.dart';
 
 import '../../../main.dart';
 
@@ -114,29 +116,32 @@ class Home extends StatelessWidget {
                 ],
               )
             : SizedBox(),
-        Expanded(
-          child: ListView.builder(
-            itemCount: list.length,
-            physics: BouncingScrollPhysics(),
-            itemBuilder: (context, index) {
-              return PostView(index: index);
-            },
-          ),
-        ),
         // Expanded(
-        //     child: PaginationView(
-        //   itemBuilder: (BuildContext context, PostData postData, int index) {
-        //     return PostView(index: index);
-        //   },
-        //       pullToRefresh: true,
-        //   pageFetch: homeController.fetchMyPost,
-        //   onEmpty: Center(
-        //     child: Text('no_post_found'.tr),
+        //   child: ListView.builder(
+        //     itemCount: list.length,
+        //     physics: BouncingScrollPhysics(),
+        //     itemBuilder: (context, index) {
+        //       return PostView(index: index);
+        //     },
         //   ),
-        //   onError: (error) {
-        //     return Center(child: Text(error));
-        //   },
-        // ))
+        // ),
+        Expanded(
+            child: PaginationView(
+          itemBuilder: (BuildContext context, PostData postData, int index) {
+            return PostView(
+              index: index,
+              postData: postData,
+            );
+          },
+          pullToRefresh: true,
+          pageFetch: homeController.fetchMyPost,
+          onEmpty: Center(
+            child: Text('no_post_found'.tr),
+          ),
+          onError: (error) {
+            return Center(child: Text(error));
+          },
+        ))
       ],
     );
   }

@@ -8,11 +8,9 @@ extension DateTimeFormatExtension on DateTimeFormat {
     switch (this) {
       case DateTimeFormat.date:
         return 'yyyy-MMMM-dd';
-        break;
       case DateTimeFormat.time:
         return "HH:mm";
-        // return "hh:mm a";
-        break;
+      // return "hh:mm a";
     }
     return 'yyyy-MMMM-dd';
   }

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:grebo/core/constants/app_assets.dart';
-import 'package:grebo/ui/screens/homeTab/controller/homeController.dart';
+import 'package:grebo/main.dart';
 import 'package:grebo/ui/screens/baseScreen/controller/baseController.dart';
+import 'package:grebo/ui/screens/homeTab/controller/homeController.dart';
 import 'package:grebo/ui/shared/bottomabar.dart';
 
 import '../../global.dart';
@@ -14,6 +15,7 @@ class BaseScreen extends StatelessWidget {
   final BaseController baseController = Get.put(BaseController());
   @override
   Widget build(BuildContext context) {
+    print("USER TOKEN ${userController.userToken}");
     return Scaffold(
       appBar: buildAppBar(),
       body: GetBuilder(

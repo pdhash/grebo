@@ -1,72 +1,13 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:grebo/core/constants/app_assets.dart';
 import 'package:grebo/core/utils/config.dart';
 import 'package:grebo/core/viewmodel/controller/imagepickercontoller.dart';
+import 'package:grebo/ui/screens/editBusinessprofile/controller/addservicecontroller.dart';
 import 'package:grebo/ui/screens/homeTab/home.dart';
-
-class AddServicesModel {
-  final String? image;
-  final String? title;
-
-  AddServicesModel({this.image = "", this.title = ""});
-}
-
-class AddServiceController extends GetxController {
-  List<AddServiceView> addServiceViews = [];
-  List<AddServicesModel> serviceMultiFile = [];
-  addDefault() {
-    if (serviceMultiFile.length == 0) {
-      addServiceViews = [AddServiceView(index: 0)];
-      serviceMultiFile = <AddServicesModel>[AddServicesModel()];
-    }
-  }
-
-  add() {
-    print(addServiceViews.length);
-    if (addServiceViews[addServiceViews.length - 1]
-            .textController
-            .text
-            .isNotEmpty &&
-        addServiceViews[addServiceViews.length - 1]
-                .appImagePicker
-                .imagePickerController
-                .image !=
-            null) {
-      serviceMultiFile.add(AddServicesModel());
-      addServiceViews.add(AddServiceView(
-        index: addServiceViews.length,
-      ));
-    } else
-      print('not valid');
-    update();
-  }
-
-  bool finaAdd() {
-    return addServiceViews[addServiceViews.length - 1]
-            .textController
-            .text
-            .isNotEmpty &&
-        addServiceViews[addServiceViews.length - 1]
-                .appImagePicker
-                .imagePickerController
-                .image !=
-            null;
-  }
-
-  remove(int index) {
-    addServiceViews[index].appImagePicker.imagePickerController.resetImage();
-    serviceMultiFile.removeAt(index);
-    addServiceViews.removeAt(index);
-
-    addServiceViews.asMap().forEach((int index, AddServiceView view) {
-      view.index = index;
-    });
-    update();
-  }
-}
 
 class AddServiceView extends StatefulWidget {
   final TextEditingController textController = TextEditingController();
@@ -87,7 +28,7 @@ class _AddServiceViewState extends State<AddServiceView> {
   @override
   void initState() {
     super.initState();
-    widget.tag = "AddServiceView${widget.index}";
+    widget.tag = DateTime.now().millisecondsSinceEpoch.toString();
     widget.appImagePicker = AppImagePicker(tag: widget.tag);
   }
 
@@ -97,6 +38,11 @@ class _AddServiceViewState extends State<AddServiceView> {
       tag: widget.tag,
       builder: (controller) {
         File? image = widget.appImagePicker.imagePickerController.image;
+        if (image != null) {
+          widget.addServiceController.serviceMultiFile[widget.index].image =
+              image;
+        }
+
         return Column(
           children: [
             Padding(
@@ -104,7 +50,7 @@ class _AddServiceViewState extends State<AddServiceView> {
               child: Row(
                 children: [
                   GestureDetector(
-                      onTap: () async {
+                      onTap: () {
                         widget.appImagePicker.openBottomSheet();
                       },
                       child: image != null
@@ -147,17 +93,22 @@ class _AddServiceViewState extends State<AddServiceView> {
                     controller: widget.textController,
                     cursorHeight: 15,
                     textCapitalization: TextCapitalization.sentences,
+                    onChanged: (val) {
+                      widget.addServiceController.serviceMultiFile[widget.index]
+                          .title = val;
+                    },
                     decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: 'name_of_service'.tr,
                         hintStyle: TextStyle(fontSize: 15)),
                   )),
                   SizedBox(width: 10),
-                  GestureDetector(
-                      onTap: () {
-                        widget.addServiceController.remove(widget.index);
-                      },
-                      child: buildWidget(AppImages.closeGreen, 24, 24))
+                  if (widget.index != 0)
+                    IconButton(
+                        onPressed: () {
+                          widget.addServiceController.remove(widget.index);
+                        },
+                        icon: SvgPicture.asset(AppImages.closeGreen))
                 ],
               ),
             ),

@@ -8,6 +8,7 @@ import 'package:grebo/core/models/countrymodel.dart';
 import 'package:grebo/core/service/repo/editProfileRepo.dart';
 import 'package:grebo/core/service/repo/imageRepo.dart';
 import 'package:grebo/core/utils/appFunctions.dart';
+import 'package:grebo/main.dart';
 
 import '../../../global.dart';
 
@@ -128,7 +129,8 @@ class EditBProfileController extends GetxController {
   }
 
   Future submitAllFields() async {
-    await EditProfileRepo.updateUser(
+    print(userController.user);
+    var v = await EditProfileRepo.updateUser(
       map: {
         "name": "userName",
         "businessName": businessName.text.trim(),
@@ -138,9 +140,13 @@ class EditBProfileController extends GetxController {
         "websites": websites,
         "phoneCode": kDefaultCountry,
         "phoneNumber": mobileNumber.text.trim(),
-        "description": description.text.trim()
+        "description": description.text.trim(),
       },
-    ).then((value) => value);
+    );
+    if (v != null) {
+      //saveUserDetails()
+      //Get.to(() => DetailsPage2());
+    }
   }
 
   @override

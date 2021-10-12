@@ -189,6 +189,7 @@ class Lang extends Translations {
           'please_select_working_days': 'Please select working days',
           'please_select_working_hours': 'Please select working hours',
           'no_post_found': 'No post found',
+          'please_enter_service': 'Please Enter Service',
         },
       };
 }

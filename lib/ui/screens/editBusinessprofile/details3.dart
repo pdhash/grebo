@@ -4,7 +4,7 @@ import 'package:grebo/core/constants/appSetting.dart';
 import 'package:grebo/core/constants/appcolor.dart';
 import 'package:grebo/core/extension/customButtonextension.dart';
 import 'package:grebo/core/utils/config.dart';
-import 'package:grebo/core/viewmodel/controller/addservicecontroller.dart';
+import 'package:grebo/ui/screens/editBusinessprofile/controller/addservicecontroller.dart';
 import 'package:grebo/ui/shared/alertdialogue.dart';
 import 'package:grebo/ui/shared/appbar.dart';
 import 'package:grebo/ui/shared/custombutton.dart';
@@ -49,18 +49,21 @@ class DetailsPage3 extends StatelessWidget {
                     children: [
                       Column(
                         children: List.generate(
-                            controller.serviceMultiFile.length, (index) {
+                            controller.addServiceViews.length, (index) {
                           return controller.addServiceViews[index];
                         }),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: kDefaultPadding),
-                        child: GestureDetector(
-                          onTap: () {
-                            controller.add();
-                            disposeKeyboard();
-                          },
+                      GestureDetector(
+                        onTap: () {
+                          disposeKeyboard();
+
+                          controller.add();
+                        },
+                        child: Container(
+                          color: Colors.transparent,
+                          padding: EdgeInsets.symmetric(vertical: 5),
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: kDefaultPadding),
                           child: header('add_more_service'.tr),
                         ),
                       ),
@@ -82,21 +85,26 @@ class DetailsPage3 extends StatelessWidget {
                             type: CustomButtonType.colourButton,
                             text: isShow ? 'submit'.tr : 'save'.tr,
                             onTap: () {
-                              if (isShow) {
-                                showCustomDialog(
-                                    context: context,
-                                    content: 'dialogue_msg'.tr,
-                                    contentSize: 15,
-                                    onTap: () {
-                                      Get.back();
-                                      Get.back();
-                                      Get.back();
-                                      Get.back();
-                                    },
-                                    color: AppColor.kDefaultColor,
-                                    okText: 'ok'.tr);
-                              }
                               disposeKeyboard();
+
+                              controller.submitAllFields().then((value) {
+                                if (value != null) {
+                                  if (isShow) {
+                                    showCustomDialog(
+                                        context: context,
+                                        content: 'dialogue_msg'.tr,
+                                        contentSize: 15,
+                                        onTap: () {
+                                          Get.back();
+                                          Get.back();
+                                          Get.back();
+                                          Get.back();
+                                        },
+                                        color: AppColor.kDefaultColor,
+                                        okText: 'ok'.tr);
+                                  }
+                                }
+                              });
                             }),
                       ),
                     ),

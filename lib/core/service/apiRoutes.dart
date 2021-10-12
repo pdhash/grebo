@@ -14,6 +14,8 @@ class APIRoutes {
   static const String userUpdate = url + "user/update";
   static const String emailVerification = url + "user/resendVerification";
   static const String myPost = url + "post/myList";
+  static const String addPost = url + "post/add";
+  static const String addServices = url + "services/add";
 }
 
 enum ContentType { jsonType }

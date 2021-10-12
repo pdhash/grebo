@@ -4,6 +4,7 @@ import 'package:grebo/core/service/repo/userRepo.dart';
 import 'package:grebo/core/utils/sharedpreference.dart';
 import 'package:grebo/core/viewmodel/controller/selectservicecontoller.dart';
 import 'package:grebo/ui/global.dart';
+import 'package:grebo/ui/screens/baseScreen/baseScreen.dart';
 import 'package:grebo/ui/screens/login/model/currentUserModel.dart';
 
 class LoginController extends GetxController {
@@ -20,9 +21,13 @@ class LoginController extends GetxController {
         userType: serviceController.servicesType == ServicesType.providerType
             ? 2
             : 1);
-    print(response);
+    if (response != null) {
+      print(response);
 
-    currentUserModel = CurrentUserModel.fromJson(response);
-    saveUserDetails(currentUserModel!.data);
+      currentUserModel = CurrentUserModel.fromJson(response);
+      saveUserDetails(currentUserModel!.data);
+
+      if (currentUserModel!.code == 100) Get.offAll(() => BaseScreen());
+    }
   }
 }

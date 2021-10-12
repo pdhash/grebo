@@ -6,8 +6,10 @@ import 'package:get/get.dart';
 import 'package:grebo/core/constants/appSetting.dart';
 import 'package:grebo/core/constants/app_assets.dart';
 import 'package:grebo/core/constants/appcolor.dart';
+import 'package:grebo/core/service/apiRoutes.dart';
 import 'package:grebo/core/utils/config.dart';
 import 'package:grebo/core/viewmodel/controller/createPostController.dart';
+import 'package:grebo/main.dart';
 import 'package:grebo/ui/screens/homeTab/home.dart';
 import 'package:grebo/ui/shared/alertdialogue.dart';
 import 'package:grebo/ui/shared/appbar.dart';
@@ -66,13 +68,13 @@ class _CreatePostState extends State<CreatePost> {
                       buildCircleProfile(
                           height: 57,
                           width: 57,
-                          image: AppImages.defaultProfile),
+                          image: "${imageUrl + userController.user.picture}"),
                       getHeightSizedBox(w: 10),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Business Name',
+                            userController.user.name,
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: getProportionateScreenWidth(18),

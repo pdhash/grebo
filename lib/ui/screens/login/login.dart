@@ -7,7 +7,6 @@ import 'package:grebo/core/constants/appcolor.dart';
 import 'package:grebo/core/extension/customButtonextension.dart';
 import 'package:grebo/core/utils/config.dart';
 import 'package:grebo/core/viewmodel/controller/selectservicecontoller.dart';
-import 'package:grebo/ui/screens/baseScreen/baseScreen.dart';
 import 'package:grebo/ui/screens/login/controller/loginController.dart';
 import 'package:grebo/ui/screens/login/signup.dart';
 import 'package:grebo/ui/shared/appbar.dart';
@@ -143,18 +142,7 @@ class LoginScreen extends StatelessWidget {
         disposeKeyboard();
         if (formKey.currentState!.validate()) {
           formKey.currentState!.save();
-          loginController.userLogin()
-            ..whenComplete(
-              () {
-                try {
-                  if (loginController.currentUserModel!.code == 100) {
-                    Get.offAll(() => BaseScreen());
-                  }
-                } catch (e) {
-                  print('something went wrong');
-                }
-              },
-            );
+          loginController.userLogin();
         }
       },
     );
