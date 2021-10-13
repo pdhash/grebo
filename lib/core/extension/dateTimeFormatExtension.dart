@@ -30,11 +30,9 @@ extension DateTimeFormatExtension on DateTimeFormat {
     switch (this) {
       case DateTimeFormat.date:
         return 'yyyy-MM-ddTHH:mm:ss';
-        break;
       case DateTimeFormat.time:
         Duration duration = DateTime.now().timeZoneOffset;
         return "yyyy-MM-dd'T'HH:mm:ss${duration.isNegative ? "-" : "+"}${durationToString(duration.inMinutes)}";
-        break;
     }
   }
 
@@ -51,6 +49,7 @@ String appTimeFunDB(TimeOfDay timeOfDay) {
   var outputFormat =
       DateFormat(DateTimeFormat.time.availabilityDBDateTimeFormat);
   var outputDate = outputFormat.format(dt);
+  print("==============$outputDate");
 
   return outputDate;
 }

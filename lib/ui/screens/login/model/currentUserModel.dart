@@ -66,21 +66,20 @@ class User {
     this.id = "",
     this.email = "",
     this.picture = "",
-    this.categories = const <Category>[],
+    this.categories = const [],
     createdOn,
     updatedOn,
     this.businessName = "",
     this.description = "",
-    endTime,
+    this.endTime = "",
     this.name = "",
     this.phoneCode = "",
     this.phoneNumber = "",
-    startTime,
+    this.startTime = "",
+    this.services = const [],
   })  : this.location = Location(),
         this.createdOn = DateTime.now(),
-        this.endTime = DateTime.now(),
-        this.updatedOn = DateTime.now(),
-        this.startTime = DateTime.now();
+        this.updatedOn = DateTime.now();
 
   Location location;
   List<Category> categories;
@@ -100,11 +99,12 @@ class User {
   DateTime updatedOn;
   String businessName;
   String description;
-  DateTime endTime;
+  String endTime;
   String name;
   String phoneCode;
   String phoneNumber;
-  DateTime startTime;
+  String startTime;
+  List<ServiceList> services;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
         location: Location.fromJson(json["location"]),
@@ -124,13 +124,15 @@ class User {
         updatedOn: DateTime.parse(json["updatedOn"] ?? DateTime.now()),
         businessName: json["businessName"] ?? "",
         description: json["description"] ?? "",
-        endTime: DateTime.parse(json["endTime"] ?? DateTime.now()),
+        endTime: json["endTime"] ?? "",
         name: json["name"] ?? "",
         phoneCode: json["phoneCode"] ?? "",
         phoneNumber: json["phoneNumber"] ?? "",
-        startTime: DateTime.parse(json["startTime"] ?? DateTime.now()),
+        startTime: json["startTime"] ?? "",
         categories: List<Category>.from(
             (json["categories"] ?? []).map((x) => Category.fromJson(x))),
+        services: List<ServiceList>.from(
+            (json["services"] ?? []).map((x) => ServiceList.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -140,7 +142,8 @@ class User {
         "images": List<dynamic>.from(images.map((x) => x)),
         "websites": List<dynamic>.from(websites.map((x) => x)),
         "workingDays": List<dynamic>.from(workingDays.map((x) => x)),
-        "categories": List<Category>.from(categories.map((e) => e)),
+        "categories": List<dynamic>.from(categories.map((e) => e.toJson())),
+        "services": List<dynamic>.from(services.map((x) => x.toJson())),
         "verified": verified,
         "blocked": blocked,
         "deleted": deleted,
@@ -152,11 +155,31 @@ class User {
         "updatedOn": updatedOn.toIso8601String(),
         "businessName": businessName,
         "description": description,
-        "endTime": endTime.toIso8601String(),
+        "endTime": endTime,
         "name": name,
         "phoneCode": phoneCode,
         "phoneNumber": phoneNumber,
-        "startTime": startTime.toIso8601String(),
+        "startTime": startTime,
+      };
+}
+
+class ServiceList {
+  ServiceList({
+    this.image = "",
+    this.name = "",
+  });
+
+  String image;
+  String name;
+
+  factory ServiceList.fromJson(Map<String, dynamic> json) => ServiceList(
+        image: json["image"] ?? "",
+        name: json["name"] ?? "",
+      );
+
+  Map<String, dynamic> toJson() => {
+        "image": image,
+        "name": name,
       };
 }
 

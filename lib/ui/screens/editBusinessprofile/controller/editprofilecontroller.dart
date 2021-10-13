@@ -154,7 +154,7 @@ class EditBProfileController extends GetxController {
       },
     );
     if (v != null) {
-      updateUserDetail(User.fromJson(v['userController.user']));
+      updateUserDetail(User.fromJson(v['data']));
 
       Get.to(() => DetailsPage2());
     }

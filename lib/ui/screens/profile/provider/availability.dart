@@ -80,8 +80,9 @@ class Availability extends StatelessWidget {
                                     .withOpacity(0.78)),
                           ),
                           Text(
-                            dateFormat
-                                .format(controller.user.startTime.toLocal()),
+                            dateFormat.format(
+                                DateTime.parse(controller.user.startTime)
+                                    .toLocal()),
                             style: TextStyle(
                                 fontSize: getProportionateScreenWidth(16),
                                 fontWeight: FontWeight.bold),
@@ -103,8 +104,9 @@ class Availability extends StatelessWidget {
                                     .withOpacity(0.78)),
                           ),
                           Text(
-                            dateFormat
-                                .format(controller.user.endTime.toLocal()),
+                            dateFormat.format(
+                                DateTime.parse(controller.user.endTime)
+                                    .toLocal()),
                             style: TextStyle(
                                 fontSize: getProportionateScreenWidth(16),
                                 fontWeight: FontWeight.bold),

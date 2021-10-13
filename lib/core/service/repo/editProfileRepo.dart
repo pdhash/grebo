@@ -23,7 +23,10 @@ class EditProfileRepo {
     String field = jsonEncode(map);
     var responseBody = await API.apiHandler(
         url: APIRoutes.addServices,
-        header: {"Authorization": userController.userToken},
+        header: {
+          "Authorization": userController.userToken,
+          'Content-Type': 'application/json',
+        },
         body: field);
     if (responseBody != null)
       return responseBody;
@@ -39,5 +42,16 @@ class EditProfileRepo {
           responseBody["data"].map((x) => Category.fromJson(x)));
     else
       return [Category()];
+  }
+
+  static Future getServices() async {
+    var responseBody = await API.apiHandler(
+        url: APIRoutes.serviceList,
+        showLoader: false,
+        header: {"Authorization": userController.userToken});
+    if (responseBody != null)
+      return responseBody;
+    else
+      return [ServiceList()];
   }
 }
