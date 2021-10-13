@@ -62,9 +62,11 @@ class User {
     this.verified = false,
     this.blocked = false,
     this.deleted = false,
+    this.profileCompleted = false,
     this.id = "",
     this.email = "",
     this.picture = "",
+    this.categories = const <Category>[],
     createdOn,
     updatedOn,
     this.businessName = "",
@@ -81,9 +83,11 @@ class User {
         this.startTime = DateTime.now();
 
   Location location;
+  List<Category> categories;
   int userType;
   bool verifiedByAdmin;
   List<String> images;
+  bool profileCompleted;
   List<String> websites;
   List<int> workingDays;
   bool verified;
@@ -110,6 +114,7 @@ class User {
         websites: List<String>.from((json["websites"] ?? []).map((x) => x)),
         workingDays: List<int>.from((json["workingDays"] ?? []).map((x) => x)),
         verified: json["verified"] ?? false,
+        profileCompleted: json["profileCompleted"] ?? false,
         blocked: json["blocked"] ?? false,
         deleted: json["deleted"] ?? false,
         id: json["_id"] ?? "",
@@ -124,6 +129,8 @@ class User {
         phoneCode: json["phoneCode"] ?? "",
         phoneNumber: json["phoneNumber"] ?? "",
         startTime: DateTime.parse(json["startTime"] ?? DateTime.now()),
+        categories: List<Category>.from(
+            (json["categories"] ?? []).map((x) => Category.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -133,10 +140,12 @@ class User {
         "images": List<dynamic>.from(images.map((x) => x)),
         "websites": List<dynamic>.from(websites.map((x) => x)),
         "workingDays": List<dynamic>.from(workingDays.map((x) => x)),
+        "categories": List<Category>.from(categories.map((e) => e)),
         "verified": verified,
         "blocked": blocked,
         "deleted": deleted,
         "_id": id,
+        "profileCompleted": profileCompleted,
         "email": email,
         "picture": picture,
         "createdOn": createdOn.toIso8601String(),
@@ -148,6 +157,30 @@ class User {
         "phoneCode": phoneCode,
         "phoneNumber": phoneNumber,
         "startTime": startTime.toIso8601String(),
+      };
+}
+
+class Category {
+  Category({
+    this.id = "",
+    this.name = "",
+    this.categoryRef = "",
+  });
+
+  String id;
+  String name;
+  String categoryRef;
+
+  factory Category.fromJson(Map<String, dynamic> json) => Category(
+        id: json["_id"] ?? "",
+        name: json["name"] ?? "",
+        categoryRef: json["categoryRef"] ?? "",
+      );
+
+  Map<String, dynamic> toJson() => {
+        "_id": id,
+        "name": name,
+        "categoryRef": categoryRef,
       };
 }
 
@@ -163,10 +196,10 @@ class Location {
   List<double> coordinates;
 
   factory Location.fromJson(Map<String, dynamic> json) => Location(
-        address: json["address"],
-        type: json["type"],
-        coordinates:
-            List<double>.from(json["coordinates"].map((x) => x.toDouble())),
+        address: json["address"] ?? "",
+        type: json["type"] ?? "",
+        coordinates: List<double>.from(
+            (json["coordinates"] ?? []).map((x) => x.toDouble())),
       );
 
   Map<String, dynamic> toJson() => {

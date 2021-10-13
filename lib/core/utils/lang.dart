@@ -190,6 +190,7 @@ class Lang extends Translations {
           'please_select_working_hours': 'Please select working hours',
           'no_post_found': 'No post found',
           'please_enter_service': 'Please Enter Service',
+          'weblink_toast': "You can add max 3 website link"
         },
       };
 }

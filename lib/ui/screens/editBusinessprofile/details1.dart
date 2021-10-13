@@ -6,8 +6,10 @@ import 'package:grebo/core/constants/appSetting.dart';
 import 'package:grebo/core/constants/app_assets.dart';
 import 'package:grebo/core/constants/appcolor.dart';
 import 'package:grebo/core/extension/customButtonextension.dart';
+import 'package:grebo/core/service/apiRoutes.dart';
 import 'package:grebo/core/utils/appFunctions.dart';
 import 'package:grebo/core/utils/config.dart';
+import 'package:grebo/main.dart';
 import 'package:grebo/ui/screens/editBusinessprofile/controller/editprofilecontroller.dart';
 import 'package:grebo/ui/screens/homeTab/home.dart';
 import 'package:grebo/ui/shared/alertdialogue.dart';
@@ -177,21 +179,24 @@ class DetailsPage1 extends StatelessWidget {
           Spacer(),
           GestureDetector(
             onTap: () {
-              dialogueOpen(
-                  controller: controller.weblinks,
-                  context: Get.context as BuildContext,
-                  onCancel: () {
-                    Get.back();
-                  },
-                  onOk: () {
-                    if (controller.weblinks.text.isNotEmpty) {
-                      controller.addWebsite(controller.weblinks.text);
-                      controller.weblinks.clear();
-
+              if (controller.websites.length < 3)
+                dialogueOpen(
+                    controller: controller.weblinks,
+                    context: Get.context as BuildContext,
+                    onCancel: () {
                       Get.back();
-                    }
-                    controller.weblinks.clear();
-                  });
+                    },
+                    onOk: () {
+                      if (controller.weblinks.text.isNotEmpty) {
+                        controller.addWebsite(controller.weblinks.text);
+                        controller.weblinks.clear();
+
+                        Get.back();
+                      }
+                      controller.weblinks.clear();
+                    });
+              else
+                flutterToast('weblink_toast'.tr);
             },
             child: Wrap(
               //  crossAxisAlignment: WrapCrossAlignment.center,
@@ -247,9 +252,9 @@ class DetailsPage1 extends StatelessWidget {
               fontSize: getProportionateScreenWidth(14),
               color: Color(0xff8F92A3)),
           hintText: 'Villaz Johns Street 11, California..',
-          suffixIcon: Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: SvgPicture.asset(AppImages.gps),
+          suffixIconConstraints: BoxConstraints.tight(Size(22, 22)),
+          suffixIcon: SvgPicture.asset(
+            AppImages.gps,
           )),
     );
   }
@@ -265,6 +270,7 @@ class DetailsPage1 extends StatelessWidget {
       textCapitalization: TextCapitalization.sentences,
       maxLines: 2,
       minLines: 1,
+      maxLength: 300,
       decoration: InputDecoration(
           hintStyle: TextStyle(
               fontSize: getProportionateScreenWidth(14),
@@ -275,16 +281,35 @@ class DetailsPage1 extends StatelessWidget {
   }
 
   categorySelect() {
-    List<String> list = ['healCare', 'product'];
     return GetBuilder(
       builder: (EditBProfileController controller) => GestureDetector(
         onTap: () {
           disposeKeyboard();
-          customItemPicker(
-              itemList: list,
-              onSelectedItemChanged: (val) {
-                controller.businessCategory.text = list[val];
-              });
+          print(userController.globalCategory.length);
+          showCupertinoModalPopup(
+            context: Get.context as BuildContext,
+            builder: (_) => SizedBox(
+              height: getProportionateScreenWidth(250),
+              child: CupertinoPicker(
+                  backgroundColor: Colors.white,
+                  itemExtent: 30,
+                  looping: true,
+                  scrollController: FixedExtentScrollController(
+                      initialItem: controller.categorySelect),
+                  children: List.generate(
+                      userController.globalCategory.length,
+                      (index) => Padding(
+                            padding: const EdgeInsets.only(top: 3),
+                            child:
+                                Text(userController.globalCategory[index].name),
+                          )),
+                  onSelectedItemChanged: (val) {
+                    controller.categorySelect = val;
+                    controller.businessCategory.text =
+                        userController.globalCategory[val].name;
+                  }),
+            ),
+          );
         },
         child: TextFormField(
           enabled: false,
@@ -311,7 +336,7 @@ class DetailsPage1 extends StatelessWidget {
                 fontSize: getProportionateScreenWidth(14),
                 color: Color(0xff8F92A3)),
             suffixIcon: RotatedBox(
-                quarterTurns: 1, child: Icon(Icons.arrow_forward_ios_outlined)),
+                quarterTurns: 1, child: Icon(Icons.arrow_forward_ios_sharp)),
           ),
         ),
       ),
@@ -333,50 +358,83 @@ class DetailsPage1 extends StatelessWidget {
     return AspectRatio(
       aspectRatio: 1.8,
       child: GetBuilder(
-        builder: (EditBProfileController controller) => GridView.builder(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
-              childAspectRatio: 100 / 80),
-          physics: NeverScrollableScrollPhysics(),
-          padding: EdgeInsets.only(
-            top: 10,
-          ),
-          clipBehavior: Clip.none,
-          itemCount: 6,
-          itemBuilder: (context, index) => controller.multiFile.length > (index)
-              ? Stack(
-                  clipBehavior: Clip.none,
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(7),
-                      child: AspectRatio(
-                        aspectRatio: 100 / 80,
-                        child: Image.file(
-                          controller.multiFile[index],
+        builder: (EditBProfileController controller) {
+          print("calling get builder");
+          return GridView.builder(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+                childAspectRatio: 100 / 80),
+            physics: NeverScrollableScrollPhysics(),
+            padding: EdgeInsets.only(
+              top: 10,
+            ),
+            clipBehavior: Clip.none,
+            itemCount: 6,
+            itemBuilder: (context, index) => userController.user.images.length >
+                    index
+                ? Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(7),
+                        child: FadeInImage(
+                          image: NetworkImage(
+                              "${imageUrl + userController.user.images[index]}"),
+                          height: 80,
+                          width: 100,
                           fit: BoxFit.cover,
+                          placeholder: AssetImage(AppImages.placeHolder),
                         ),
                       ),
-                    ),
-                    Positioned(
-                        right: -4,
-                        top: -4,
-                        child: GestureDetector(
-                          onTap: () {
-                            controller.deleteImage(index);
-                          },
-                          child: buildWidget(AppImages.closeGreen, 20, 20),
-                        ))
-                  ],
-                )
-              : GestureDetector(
-                  onTap: () {
-                    controller.uploadImage();
-                  },
-                  child: buildWidget(AppImages.uploadImage, 80, 100),
-                ),
-        ),
+                      Positioned(
+                          right: -4,
+                          top: -4,
+                          child: GestureDetector(
+                            onTap: () {
+                              controller.removeImageLocally(index);
+                            },
+                            child: buildWidget(AppImages.closeGreen, 20, 20),
+                          ))
+                    ],
+                  )
+                : controller.multiFile.length > (index)
+                    ? Stack(
+                        clipBehavior: Clip.none,
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(7),
+                            child: AspectRatio(
+                              aspectRatio: 100 / 80,
+                              child: Image.file(
+                                controller.multiFile[index],
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                              right: -4,
+                              top: -4,
+                              child: GestureDetector(
+                                onTap: () {
+                                  print("remove server");
+
+                                  controller.deleteImage(index);
+                                },
+                                child:
+                                    buildWidget(AppImages.closeGreen, 20, 20),
+                              ))
+                        ],
+                      )
+                    : GestureDetector(
+                        onTap: () {
+                          controller.uploadImage();
+                        },
+                        child: buildWidget(AppImages.uploadImage, 80, 100),
+                      ),
+          );
+        },
       ),
     );
   }
@@ -477,30 +535,5 @@ Widget header(String title) {
     title,
     style: TextStyle(
         fontSize: getProportionateScreenWidth(16), fontWeight: FontWeight.bold),
-  );
-}
-
-customItemPicker(
-    {required List<dynamic> itemList,
-    Function(int)? onSelectedItemChanged,
-    FixedExtentScrollController? scrollController,
-    bool looping = false}) async {
-  await showCupertinoModalPopup(
-    context: Get.context as BuildContext,
-    builder: (_) => SizedBox(
-      height: getProportionateScreenWidth(250),
-      child: CupertinoPicker(
-          backgroundColor: Colors.white,
-          itemExtent: 30,
-          looping: looping,
-          scrollController: scrollController,
-          children: List.generate(
-              itemList.length,
-              (index) => Padding(
-                    padding: const EdgeInsets.only(top: 3),
-                    child: Text(itemList[index]),
-                  )),
-          onSelectedItemChanged: onSelectedItemChanged),
-    ),
   );
 }

@@ -16,6 +16,7 @@ class APIRoutes {
   static const String myPost = url + "post/myList";
   static const String addPost = url + "post/add";
   static const String addServices = url + "services/add";
+  static const String categoryList = url + "category/list";
 }
 
 enum ContentType { jsonType }

@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:grebo/core/constants/app_theme.dart';
+import 'package:grebo/core/service/repo/editProfileRepo.dart';
 import 'package:grebo/ui/global.dart';
 import 'package:grebo/ui/screens/baseScreen/baseScreen.dart';
 import 'package:grebo/ui/screens/onbording.dart';
@@ -20,6 +21,7 @@ void main() async {
   await GetStorage.init();
 
   userController = Get.put(UserController());
+  userController.globalCategory = await EditProfileRepo.getCategories();
 
   final ImagePickerController imagePickerController =
       Get.put(ImagePickerController());

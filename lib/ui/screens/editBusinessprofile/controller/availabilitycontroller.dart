@@ -1,5 +1,9 @@
 import 'package:get/get.dart';
+import 'package:grebo/core/constants/appSetting.dart';
 import 'package:grebo/core/service/repo/editProfileRepo.dart';
+import 'package:grebo/core/utils/sharedpreference.dart';
+import 'package:grebo/main.dart';
+import 'package:grebo/ui/screens/login/model/currentUserModel.dart';
 
 import '../details3.dart';
 
@@ -13,11 +17,9 @@ class AvailabilityController extends GetxController {
   }
 
   void removeDays(int index) {
-    print("before list ${daysCount}");
     daysCount.remove(index);
 
     update();
-    print("After list ${daysCount}");
   }
 
   ///=====================
@@ -59,6 +61,7 @@ class AvailabilityController extends GetxController {
   }
 
   Future submitAllFields() async {
+    daysCount.sort();
     var v = await EditProfileRepo.updateUser(
       map: {
         "workingDays": daysCount,
@@ -67,7 +70,23 @@ class AvailabilityController extends GetxController {
       },
     );
     if (v != null) {
+      updateUserDetail(User.fromJson(v['data']));
+
       Get.to(() => DetailsPage3());
     }
+  }
+
+  @override
+  void onInit() {
+    if (userController.user.profileCompleted) {
+      daysCount = userController.user.workingDays;
+      defaultTime = dateFormat.format(userController.user.startTime.toLocal());
+      defaultTimeEnd = dateFormat.format(userController.user.endTime.toLocal());
+      //startTime=appTimeFunDB(TimeOfDay.fromDateTime(date))
+      print(userController.user.startTime);
+      print(userController.user.endTime);
+    }
+
+    super.onInit();
   }
 }

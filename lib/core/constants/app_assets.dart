@@ -82,6 +82,7 @@ class AppImages {
 
   /// default profile
   static final userOfflineImage = 'assets/image/static/ic_image_upload@3x.png';
+  static final placeHolder = 'assets/image/static/ic_placeholder.png';
   static final defaultProfile = 'assets/image/static/ic_user-img@3x.png';
   static final serviceOffered = 'assets/image/static/ic_services_img-1.png';
 }

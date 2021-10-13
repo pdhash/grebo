@@ -3,10 +3,12 @@ import 'dart:io';
 import 'package:get/get.dart';
 import 'package:grebo/core/service/repo/editProfileRepo.dart';
 import 'package:grebo/core/service/repo/imageRepo.dart';
+import 'package:grebo/core/utils/sharedpreference.dart';
 import 'package:grebo/ui/screens/editBusinessprofile/controller/availabilitycontroller.dart';
 import 'package:grebo/ui/screens/editBusinessprofile/controller/editprofilecontroller.dart';
 import 'package:grebo/ui/screens/editBusinessprofile/model/addSeviceModel.dart';
 import 'package:grebo/ui/screens/editBusinessprofile/widgets/addServiceView.dart';
+import 'package:grebo/ui/screens/login/model/currentUserModel.dart';
 
 class AddServiceController extends GetxController {
   late EditBProfileController editBProfileController;
@@ -77,6 +79,9 @@ class AddServiceController extends GetxController {
       var v = await EditProfileRepo.updateUser(
         map: {"services": uploadData},
       );
+      if (v != null) {
+        updateUserDetail(User.fromJson(v['data']));
+      }
       return v;
     }
   }

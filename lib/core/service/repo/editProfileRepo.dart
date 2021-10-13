@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:grebo/ui/screens/login/model/currentUserModel.dart';
+
 import '../../../main.dart';
 import '../apiHandler.dart';
 import '../apiRoutes.dart';
@@ -27,5 +29,15 @@ class EditProfileRepo {
       return responseBody;
     else
       return null;
+  }
+
+  static Future<List<Category>> getCategories() async {
+    var responseBody =
+        await API.apiHandler(url: APIRoutes.categoryList, showLoader: false);
+    if (responseBody != null)
+      return List<Category>.from(
+          responseBody["data"].map((x) => Category.fromJson(x)));
+    else
+      return [Category()];
   }
 }
