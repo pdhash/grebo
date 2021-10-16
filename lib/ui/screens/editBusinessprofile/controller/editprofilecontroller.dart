@@ -125,7 +125,7 @@ class EditBProfileController extends GetxController {
             .then((value) {
           flutterToast(value["message"]);
           multiAddImages(appImagePicker.imagePickerController.image as File,
-              value["userController.user"].toString());
+              value["data"].toString());
         });
       }
     });

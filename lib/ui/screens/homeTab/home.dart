@@ -92,9 +92,9 @@ class Home extends StatelessWidget {
                     child: Padding(
                       padding: EdgeInsets.only(left: kDefaultPadding),
                       child: Row(
-                        children: categories
+                        children: userController.globalCategory
                             .map((e) => BusinessCategories(
-                                  text: e,
+                                  text: e.name,
                                   textStyle: TextStyle(
                                       fontSize: getProportionateScreenWidth(13),
                                       color: AppColor.kDefaultFontColor),
@@ -116,32 +116,28 @@ class Home extends StatelessWidget {
                 ],
               )
             : SizedBox(),
-        // Expanded(
-        //   child: ListView.builder(
-        //     itemCount: list.length,
-        //     physics: BouncingScrollPhysics(),
-        //     itemBuilder: (context, index) {
-        //       return PostView(index: index);
-        //     },
-        //   ),
-        // ),
         Expanded(
-            child: PaginationView(
-          itemBuilder: (BuildContext context, PostData postData, int index) {
-            return PostView(
-              index: index,
+          child: PaginationView(
+            // key: widget.paginationViewKey,
+            pullToRefresh: true,
+            physics: BouncingScrollPhysics(),
+            itemBuilder: (BuildContext context, PostData postData, int index) =>
+                PostView(
               postData: postData,
-            );
-          },
-          pullToRefresh: true,
-          pageFetch: homeController.fetchMyPost,
-          onEmpty: Center(
-            child: Text('no_post_found'.tr),
+            ),
+            pageFetch: userController.user.userType ==
+                    getServiceTypeCode(ServicesType.userType)
+                ? homeController.fetchUserPost
+                : homeController.fetchProviderPost,
+            onError: (dynamic error) => Center(child: Text(error)),
+            onEmpty: Center(
+              child: Text("no_post_found".tr),
+            ),
+            initialLoader: GetPlatform.isAndroid
+                ? Center(child: CircularProgressIndicator())
+                : Center(child: CupertinoActivityIndicator()),
           ),
-          onError: (error) {
-            return Center(child: Text(error));
-          },
-        ))
+        )
       ],
     );
   }

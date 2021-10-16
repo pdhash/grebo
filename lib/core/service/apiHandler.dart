@@ -63,7 +63,9 @@ class API {
   static Future multiPartAPIHandler(
       {List<File>? fileImage,
       Map<String, String>? field,
+      File? thumbnail,
       bool showLoader = true,
+      String multiPartImageKeyName = "image",
       Map<String, String>? header,
       required String url}) async {
     try {
@@ -83,9 +85,14 @@ class API {
 
         if (fileImage != null)
           fileImage.forEach((element) async {
-            request.files
-                .add(await http.MultipartFile.fromPath('image', element.path));
+            print("VIDEO ================ ${element.path}");
+            request.files.add(await http.MultipartFile.fromPath(
+                multiPartImageKeyName, element.path));
           });
+        if (thumbnail != null) {
+          request.files.add(await http.MultipartFile.fromPath(
+              "thumbnailImage", thumbnail.path));
+        }
 
         http.StreamedResponse response = await request.send();
         var res = await response.stream.bytesToString();

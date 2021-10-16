@@ -47,12 +47,10 @@ class DetailsPage3 extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Column(
-                        children: List.generate(
-                            controller.addServiceViews.length, (index) {
-                          return controller.addServiceViews[index];
-                        }),
-                      ),
+                      ...List.generate(controller.addServiceViews.length,
+                          (index) {
+                        return controller.addServiceViews[index];
+                      }),
                       GestureDetector(
                         onTap: () {
                           disposeKeyboard();

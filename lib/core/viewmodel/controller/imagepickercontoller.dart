@@ -3,21 +3,21 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:grebo/core/service/apiRoutes.dart';
+import 'package:grebo/core/utils/appFunctions.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ImagePickerController extends GetxController {
-  // setImage(String url) async {
-  //   if (url != "") {
-  //     if (!url.startsWith("http"))
-  //       _image = File(url);
-  //     else {
-  //       _image = await urlToFile(url);
-  //     }
-  //     update();
-  //   }
-  // }
+  setImage(String url) async {
+    if (url != "") {
+      _image = await urlToFile(imageUrl + url);
+      print("ImagePickerController GOT IMAGE $tag");
+      update();
+    }
+  }
 
+  String? tag;
   File? _image;
   File? get image => _image;
   set image(File? value) {
@@ -28,6 +28,8 @@ class ImagePickerController extends GetxController {
   void resetImage() {
     image = null;
   }
+
+  ImagePickerController({this.tag});
 }
 
 class AppImagePicker {
@@ -39,8 +41,13 @@ class AppImagePicker {
 
   AppImagePicker({String? tag}) {
     this.tag = tag;
-    _imagePickerController = Get.put(ImagePickerController(), tag: tag);
+    _imagePickerController = Get.put(ImagePickerController(tag: tag), tag: tag);
   }
+
+  update() {
+    _imagePickerController.update();
+  }
+
   browseImage(ImageSource imageSource) async {
     var pickedFile =
         await imagePicker.pickImage(source: imageSource, imageQuality: 50);

@@ -77,11 +77,11 @@ class User {
     this.phoneNumber = "",
     this.startTime = "",
     this.services = const [],
-  })  : this.location = Location(),
+  })  : this.location = LocationData(),
         this.createdOn = DateTime.now(),
         this.updatedOn = DateTime.now();
 
-  Location location;
+  LocationData location;
   List<Category> categories;
   int userType;
   bool verifiedByAdmin;
@@ -107,7 +107,7 @@ class User {
   List<ServiceList> services;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
-        location: Location.fromJson(json["location"]),
+        location: LocationData.fromJson(json["location"] ?? Map()),
         userType: json["userType"] ?? 1,
         verifiedByAdmin: json["verifiedByAdmin"] ?? false,
         images: List<String>.from((json["images"] ?? []).map((x) => x)),
@@ -207,8 +207,8 @@ class Category {
       };
 }
 
-class Location {
-  Location({
+class LocationData {
+  LocationData({
     this.address = "",
     this.type = "",
     this.coordinates = const [],
@@ -218,7 +218,7 @@ class Location {
   String type;
   List<double> coordinates;
 
-  factory Location.fromJson(Map<String, dynamic> json) => Location(
+  factory LocationData.fromJson(Map<String, dynamic> json) => LocationData(
         address: json["address"] ?? "",
         type: json["type"] ?? "",
         coordinates: List<double>.from(

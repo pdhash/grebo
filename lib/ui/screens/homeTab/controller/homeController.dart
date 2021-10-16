@@ -3,94 +3,70 @@ import 'package:grebo/core/service/repo/postRepo.dart';
 import 'package:grebo/ui/screens/homeTab/model/postModel.dart';
 
 class HomeController extends GetxController {
-  late bool isNextPost;
+  int page = 1;
+
   HomeController() {
-    isNextPost = true;
+    page = 1;
   }
   RxBool descTextShowFlag = false.obs;
 
 //for providers post
-  Future<List<PostData>> fetchMyPost(int offset) async {
-    if (offset == 0) isNextPost = true;
-    if (isNextPost == false) return [];
+  Future<List<PostData>> fetchProviderPost(int offset) async {
+    if (offset == 0) page = 1;
+    if (page == -1) return [];
     List<PostData> getPost = [];
-    var request = await PostRepo.fetchMyPost();
+    var request = await PostRepo.fetchProviderPost(page);
     getPost = request!.postData;
-    isNextPost = request.hasMore;
+    page = request.hasMore ? page + 1 : -1;
     return getPost;
+  }
+
+  List<String> selectedCategory = [];
+  updateCategory(String id) {
+    if (selectedCategory.contains(id)) {
+      selectedCategory.remove(id);
+    } else
+      selectedCategory.add(id);
   }
 
   //for user posts
-  Future<List<PostData>> fetchAllPost(int offset) async {
-    if (offset == 0) isNextPost = true;
-    if (isNextPost == false) return [];
+  Future<List<PostData>> fetchUserPost(int offset) async {
+    if (offset == 0) page = 1;
+    if (page == -1) return [];
     List<PostData> getPost = [];
-    var request = await PostRepo.fetchMyPost();
+    var request = await PostRepo.fetchUserPost(
+        page: page, latitude: 76.779419, longitude: 30.733315);
     getPost = request!.postData;
-    isNextPost = request.hasMore;
+    page = request.hasMore ? page + 1 : -1;
     return getPost;
   }
+
+  Future likeUpdate(PostData postData) async {
+    postData.isLike = !postData.isLike;
+    if (postData.isLike) {
+      postData.like += 1;
+    } else
+      postData.like -= 1;
+
+    update();
+
+    PostRepo.likeUpdate(postData.id, postData.isLike);
+  }
+
+  late String _currentPostRef;
+
+  String get currentPostRef => _currentPostRef;
+
+  set currentPostRef(String value) {
+    _currentPostRef = value;
+    update();
+  }
+
+  addComment(PostData postData, String commentText) async {
+    postData.comment += 1;
+    update();
+    await PostRepo.addComments(
+            postRef: currentPostRef, commentsText: commentText)
+        .then((value) => print("============$value"));
+  }
 }
-
-List categories = ['Health care', 'Sports', 'Retailers', 'Transport'];
-
-List<Map<String, dynamic>> list = [
-  {
-    'title':
-        'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is dummy text of the & typesetting industry',
-    'image': null,
-    'comment': [
-      {
-        'title':
-            'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text.',
-        'name': 'Sanjay Singh',
-        'time': '6hrs',
-        'profile': 'assets/image/static/sanjay.png',
-      },
-      {
-        'title':
-            'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text.',
-        'name': 'Sanjay Singh',
-        'time': '6hrs',
-        'profile': 'assets/image/static/sanjay.png',
-      },
-      {
-        'title':
-            'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text.',
-        'name': 'Sanjay Singh',
-        'time': '6hrs',
-        'profile': 'assets/image/static/sanjay.png',
-      },
-      {
-        'title':
-            'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text.',
-        'name': 'Sanjay Singh',
-        'time': '6hrs',
-        'profile': 'assets/image/static/sanjay.png',
-      },
-      {
-        'title':
-            'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text. Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
-        'name': 'Swati Singh',
-        'time': '7hrs',
-        'profile': 'assets/image/static/swati.png',
-      }
-    ]
-  },
-  {
-    'title':
-        'Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text',
-    'image': 'assets/image/static/ic_post_img.png',
-    'comment': null
-  },
-  {
-    'title': 'Lorem Ipsum is simply dummy text of ',
-    'image': 'assets/image/static/ic_post_video_cover_img.png',
-    'comment': null
-  },
-  {
-    'title': null,
-    'image': 'assets/image/static/ic_post_video_cover_img.png',
-    'comment': null
-  },
-];

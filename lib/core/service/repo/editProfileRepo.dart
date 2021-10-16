@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:grebo/ui/screens/login/model/currentUserModel.dart';
 
@@ -7,12 +8,23 @@ import '../apiHandler.dart';
 import '../apiRoutes.dart';
 
 class EditProfileRepo {
-  static Future updateUser({required Map<String, dynamic> map}) async {
+  static Future updateUser(
+      {required Map<String, dynamic> map, File? image}) async {
     String field = jsonEncode(map);
-    var responseBody = await API.multiPartAPIHandler(
-        url: APIRoutes.userUpdate,
-        header: {'Authorization': userController.userToken},
-        field: {"data": field});
+    var responseBody;
+    if (image == null) {
+      responseBody = await API.multiPartAPIHandler(
+          url: APIRoutes.userUpdate,
+          header: {'Authorization': userController.userToken},
+          field: {"data": field});
+    } else
+      responseBody = await API.multiPartAPIHandler(
+          url: APIRoutes.userUpdate,
+          header: {'Authorization': userController.userToken},
+          field: {"data": field},
+          multiPartImageKeyName: "picture",
+          fileImage: [image]);
+
     if (responseBody != null)
       return responseBody;
     else

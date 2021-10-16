@@ -27,7 +27,7 @@ class LoginController extends GetxController {
       currentUserModel = CurrentUserModel.fromJson(response);
       saveUserDetails(currentUserModel!.data);
 
-      if (currentUserModel!.code == 100) Get.offAll(() => BaseScreen());
+      Get.offAll(() => BaseScreen());
     }
   }
 }

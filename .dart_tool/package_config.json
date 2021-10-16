@@ -422,6 +422,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "video_compress",
+      "rootUri": "file:///Users/imac/Desktop/Flutter/setup/flutter/.pub-cache/hosted/pub.dartlang.org/video_compress-3.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "video_player",
       "rootUri": "file:///Users/imac/Desktop/Flutter/setup/flutter/.pub-cache/hosted/pub.dartlang.org/video_player-2.1.13",
       "packageUri": "lib/",
@@ -464,7 +470,7 @@
       "languageVersion": "2.12"
     }
   ],
-  "generated": "2021-10-11T12:58:46.573658Z",
+  "generated": "2021-10-16T13:02:31.025818Z",
   "generator": "pub",
   "generatorVersion": "2.13.4"
 }

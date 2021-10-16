@@ -3,26 +3,77 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:grebo/core/service/repo/postRepo.dart';
+import 'package:grebo/ui/shared/loader.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:video_compress/video_compress.dart';
 
-class PostController extends GetxController {
-  String? _image;
-  String? get image => _image;
-  set image(String? value) {
-    _image = value;
+class AddPostController extends GetxController {
+  final TextEditingController postCaption = TextEditingController();
+
+  File? _uploadFile;
+  File? get uploadFile => _uploadFile;
+  set uploadFile(File? value) {
+    _uploadFile = value;
     update();
   }
 
-  bool? isImage;
+  File? _thumbnail;
+
+  File? get thumbnail => _thumbnail;
+
+  set thumbnail(File? value) {
+    _thumbnail = value;
+    update();
+  }
+
+  Future addPost() async {
+    print("ahgdhjgvshvds");
+    var response;
+
+    response = await PostRepo.postUpload(uploadFile as File,
+        {"text": postCaption.text.trim()}, isImage, thumbnail);
+
+    if (response != null) {
+      print(response);
+      return response;
+    }
+  }
+
+  late bool _isImage;
+
+  bool get isImage => _isImage;
+
+  set isImage(bool value) {
+    _isImage = value;
+    update();
+  }
 
   browseImage(ImageSource imageSource, bool isVideo) async {
     ImagePicker imagePicker = ImagePicker();
     if (isVideo) {
       isImage = false;
-      var pickedVideo = await imagePicker.pickVideo(source: imageSource);
+      var pickedVideo = await imagePicker.pickVideo(
+        source: imageSource,
+      );
+      if (pickedVideo != null) {
+        LoadingOverlay.of().show();
+        MediaInfo? mediaInfo = await VideoCompress.compressVideo(
+          pickedVideo.path,
+          quality: VideoQuality.MediumQuality,
+          deleteOrigin: true, // It's false by default
+        );
+        LoadingOverlay.of().hide();
 
-      _image = pickedVideo!.path;
+        final uint8list = await VideoCompress.getFileThumbnail(
+          mediaInfo!.path.toString(),
+        );
+        thumbnail = uint8list;
+
+        uploadFile = File(mediaInfo.path.toString());
+      }
+
       update();
     } else {
       isImage = true;
@@ -41,7 +92,7 @@ class PostController extends GetxController {
           toolbarTitle: "Image Cropper",
         ),
       );
-      image = file!.path;
+      uploadFile = file;
       update();
     }
   }
@@ -61,7 +112,7 @@ class PostController extends GetxController {
                 browseImage(ImageSource.camera, isVideo);
 
                 Get.back();
-                image = null;
+                uploadFile = null;
               },
             ),
             CupertinoActionSheetAction(
@@ -73,7 +124,7 @@ class PostController extends GetxController {
                 browseImage(ImageSource.gallery, isVideo);
 
                 Get.back();
-                image = null;
+                uploadFile = null;
               },
             ),
           ],

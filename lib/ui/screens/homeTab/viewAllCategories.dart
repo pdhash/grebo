@@ -3,14 +3,13 @@ import 'package:get/get.dart';
 import 'package:grebo/core/constants/app_assets.dart';
 import 'package:grebo/core/extension/customButtonextension.dart';
 import 'package:grebo/core/utils/config.dart';
-import 'package:grebo/core/viewmodel/controller/categoriescontroller.dart';
+import 'package:grebo/main.dart';
+import 'package:grebo/ui/screens/homeTab/controller/homeController.dart';
 import 'package:grebo/ui/screens/homeTab/home.dart';
 import 'package:grebo/ui/shared/appbar.dart';
 import 'package:grebo/ui/shared/custombutton.dart';
 
 class ViewAll extends StatelessWidget {
-  final CategoriesController categoriesController =
-      Get.put(CategoriesController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,14 +18,14 @@ class ViewAll extends StatelessWidget {
         children: [
           Expanded(
             child: GetBuilder(
-              builder: (CategoriesController controller) {
+              builder: (HomeController controller) {
                 return ListView.builder(
-                  itemCount: 5,
+                  itemCount: userController.globalCategory.length,
                   itemBuilder: (context, index) => Column(
                     children: [
                       ListTile(
                         title: Text(
-                          'Hello',
+                          userController.globalCategory[index].name,
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: getProportionateScreenWidth(15)),

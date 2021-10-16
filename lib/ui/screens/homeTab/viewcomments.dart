@@ -1,33 +1,38 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:grebo/core/constants/appSetting.dart';
 import 'package:grebo/core/constants/app_assets.dart';
 import 'package:grebo/core/extension/customButtonextension.dart';
 import 'package:grebo/core/utils/config.dart';
 import 'package:grebo/ui/screens/homeTab/controller/homeController.dart';
+import 'package:grebo/ui/screens/homeTab/controller/postDetailController.dart';
+import 'package:grebo/ui/screens/homeTab/model/commentModel.dart';
 import 'package:grebo/ui/shared/appbar.dart';
 import 'package:grebo/ui/shared/commentview.dart';
 import 'package:grebo/ui/shared/custombutton.dart';
 import 'package:grebo/ui/shared/postdetailbottom.dart';
+import 'package:pagination_view/pagination_view.dart';
 
 import '../../../main.dart';
 import 'home.dart';
+import 'model/postModel.dart';
 
 class ViewComments extends StatelessWidget {
-  final int currentPost;
+  final PostData postData;
   final TextEditingController comment = TextEditingController();
-  final HomeController homeScreenController = Get.find<HomeController>();
-  // final ServiceController serviceController = Get.find<ServiceController>();
+  final PostDetailController postDetailController =
+      Get.put(PostDetailController());
 
-  ViewComments({Key? key, required this.currentPost}) : super(key: key);
+  ViewComments({Key? key, required this.postData}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    print(currentPost);
     return Scaffold(
       appBar: appBar('comments'.tr),
       body: Stack(
         fit: StackFit.expand,
         children: [
-          list[currentPost]['comment'] == null
+          postData.comment == 0
               ? Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -50,30 +55,48 @@ class ViewComments extends StatelessWidget {
                     )
                   ],
                 )
-              : SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      Column(
-                        children: List.generate(
-                            list[currentPost]['comment'].length,
-                            (index) => CommentView(
-                                currentPost: currentPost, index: index)),
-                      ),
-                      SizedBox(
-                        height: 230,
-                      )
-                    ],
-                  ),
+              : GetBuilder(
+                  builder: (HomeController controller) {
+                    print("GET BUILDER CALLING");
+                    return PaginationView(
+                        padding: EdgeInsets.only(bottom: 100),
+                        scrollController:
+                            ScrollController(initialScrollOffset: 10),
+                        pullToRefresh: true,
+                        physics: AlwaysScrollableScrollPhysics(),
+                        itemBuilder: (BuildContext context,
+                            CommentsData commentData, int index) {
+                          return CommentView(
+                            commentsData: commentData,
+                          );
+                        },
+                        pageFetch: postDetailController.fetchComments,
+                        onError: (dynamic error) => Center(child: Text(error)),
+                        onEmpty: Center(
+                          child: Text("no_post_found".tr),
+                        ),
+                        initialLoader: GetPlatform.isAndroid
+                            ? Center(child: CircularProgressIndicator())
+                            : Center(child: CupertinoActivityIndicator()));
+                  },
                 ),
           Positioned(
               bottom: 0,
               left: 0,
               right: 0,
-              child: userController.user.userType == 1
+              child: userController.user.profileCompleted
                   ? PostDetailsBottomView(
                       comment: comment,
                       hintText: 'textfieldmsg1'.tr,
-                      send: () {},
+                      send: () {
+                        if (comment.text.isNotEmpty) {
+                          disposeKeyboard();
+                          postDetailController.commentText =
+                              comment.text.trim();
+                          comment.clear();
+                          postDetailController.addComments(postData);
+                        }
+                      },
                     )
                   : Container(
                       color: Color(0xffF9F9F9),

@@ -3,11 +3,14 @@ import 'dart:io';
 import 'package:get/get.dart';
 import 'package:grebo/core/service/repo/editProfileRepo.dart';
 import 'package:grebo/core/service/repo/imageRepo.dart';
+import 'package:grebo/ui/global.dart';
 import 'package:grebo/ui/screens/editBusinessprofile/model/addSeviceModel.dart';
+import 'package:grebo/ui/screens/editBusinessprofile/model/serviceListModel.dart';
 import 'package:grebo/ui/screens/editBusinessprofile/widgets/addServiceView.dart';
 
 class AddServiceController extends GetxController {
   List<AddServiceView> addServiceViews = [];
+
   List<AddServicesModel> serviceMultiFile = [];
 
   addDefault() {
@@ -40,7 +43,6 @@ class AddServiceController extends GetxController {
   }
 
   remove(int index) {
-    //addServiceViews[index].appImagePicker.imagePickerController.resetImage();
     serviceMultiFile.removeAt(index);
     addServiceViews.removeAt(index);
 
@@ -52,6 +54,8 @@ class AddServiceController extends GetxController {
   }
 
   Future<dynamic> submitAllFields() async {
+    print(serviceMultiFile.map((e) => e.isEdit));
+
     if (validateForm()) {
       List<Map<String, dynamic>> uploadData = [];
       uploadData.clear();
@@ -64,11 +68,48 @@ class AddServiceController extends GetxController {
         }
       }
       print(uploadData);
+      appImagePicker.imagePickerController.resetImage();
       var v = await EditProfileRepo.serviceUpdate(
         map: {"services": uploadData},
       );
 
       return v;
     }
+  }
+
+  Future getAllServices() async {
+    var v = await EditProfileRepo.getServices().then((value) {
+      if (value != null) {
+        addServiceViews.clear();
+        serviceMultiFile.clear();
+        List<Ser> services = ServiceListModel.fromJson(value).data;
+        services.forEach((element) {
+          ///-medam
+          // Future.delayed(Duration(milliseconds: 200), addData(element));
+          addServiceViews.add(AddServiceView(
+              index: addServiceViews.length, serviceModel: element));
+          serviceMultiFile.add(AddServicesModel(
+              title: element.name, url: element.image, isEdit: false));
+        });
+        update();
+      }
+    });
+    if (v != null) {
+      return true;
+    }
+  }
+
+  ///--medam
+  // addData(Ser element) {
+  //   addServiceViews.add(
+  //       AddServiceView(index: addServiceViews.length, serviceModel: element));
+  //   serviceMultiFile
+  //       .add(AddServicesModel(title: element.name, url: element.image));
+  // }
+
+  @override
+  void onInit() {
+    getAllServices();
+    super.onInit();
   }
 }

@@ -33,13 +33,6 @@ class ServiceOffered extends StatelessWidget {
                 icon: buildWidget(AppImages.editProfile, 19, 19))
             : SizedBox()
       ]),
-      // body: ListView.builder(
-      //   itemCount: 7,
-      //   itemBuilder: (context, index) {
-      //     return buildListTile(
-      //         image: AppImages.serviceOffered, text: 'Volunteer Care');
-      //   },
-      // ),
       body: PaginationView(
         itemBuilder:
             (BuildContext context, ServiceList serviceList, int index) {
@@ -59,7 +52,6 @@ class ServiceOffered extends StatelessWidget {
   }
 
   Widget buildListTile({required String text, required String image}) {
-    print(image);
     return Column(
       children: [
         Padding(
@@ -73,17 +65,17 @@ class ServiceOffered extends StatelessWidget {
                   image: NetworkImage("${imageUrl + image}"),
                   height: 60,
                   width: 60,
+                  imageErrorBuilder: (context, error, stackTrace) {
+                    return Image.asset(
+                      AppImages.placeHolder,
+                      height: 60,
+                      width: 60,
+                      fit: BoxFit.cover,
+                    );
+                  },
                   fit: BoxFit.cover,
                 ),
-              )
-              // Container(
-              //   height: 60,
-              //   width: 60,
-              //   decoration: BoxDecoration(
-              //       image: DecorationImage(
-              //           image: AssetImage(image), fit: BoxFit.fill)),
-              // ),
-              ,
+              ),
               getHeightSizedBox(w: 10),
               Text(
                 text,

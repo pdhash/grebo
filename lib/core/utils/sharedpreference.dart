@@ -4,21 +4,21 @@ import 'package:grebo/ui/screens/login/model/currentUserModel.dart';
 
 final sharedPreference = GetStorage();
 
-saveUserDetails(Datum data) async {
+saveUserDetails(Datum data) {
+  print("From SHAREPREFRENCE ${data.accessToken}");
   userController.user = data.user;
-  await sharedPreference.write("GreboUser", data.user.toJson());
-
-  await sharedPreference.write("UserToken", data.accessToken);
+  userController.userToken = data.accessToken;
+  sharedPreference.write("GreboUser", data.user.toJson());
+  sharedPreference.write("UserToken", data.accessToken);
 }
 
 updateUserDetail(User user) async {
   userController.user = user;
-  await sharedPreference.write("GreboUser", user.toJson());
+  sharedPreference.write("GreboUser", user.toJson());
 }
 
 removerUserDetail() async {
-  await sharedPreference.remove("GreboUser");
-  await sharedPreference.remove("UserToken");
+  sharedPreference.erase();
 }
 
 bool getUserDetail() {
