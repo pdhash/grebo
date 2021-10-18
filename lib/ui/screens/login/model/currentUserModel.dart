@@ -38,11 +38,11 @@ class Datum {
   });
 
   String accessToken;
-  User user;
+  UserModel user;
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
         accessToken: json["accessToken"] ?? "",
-        user: User.fromJson(json["user"]),
+        user: UserModel.fromJson(json["user"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -51,8 +51,8 @@ class Datum {
       };
 }
 
-class User {
-  User({
+class UserModel {
+  UserModel({
     location,
     this.userType = 0,
     this.verifiedByAdmin = false,
@@ -106,7 +106,7 @@ class User {
   String startTime;
   List<ServiceList> services;
 
-  factory User.fromJson(Map<String, dynamic> json) => User(
+  factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
         location: LocationData.fromJson(json["location"] ?? Map()),
         userType: json["userType"] ?? 1,
         verifiedByAdmin: json["verifiedByAdmin"] ?? false,

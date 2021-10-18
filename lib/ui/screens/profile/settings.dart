@@ -4,6 +4,7 @@ import 'package:grebo/core/constants/appSetting.dart';
 import 'package:grebo/core/constants/app_assets.dart';
 import 'package:grebo/core/utils/config.dart';
 import 'package:grebo/core/utils/sharedpreference.dart';
+import 'package:grebo/ui/screens/baseScreen/controller/baseController.dart';
 import 'package:grebo/ui/screens/homeTab/home.dart';
 import 'package:grebo/ui/screens/profile/settingslist.dart';
 import 'package:grebo/ui/screens/selectservice.dart';
@@ -48,6 +49,7 @@ class Settings extends StatelessWidget {
       'title': 'logOut'.tr,
       'onTap': () {
         removerUserDetail();
+        Get.find<BaseController>().currentTab = 0;
         Get.offAll(() => ChooseServices());
       }
     },

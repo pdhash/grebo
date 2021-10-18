@@ -76,7 +76,10 @@ class ViewComments extends StatelessWidget {
                           child: Text("no_post_found".tr),
                         ),
                         initialLoader: GetPlatform.isAndroid
-                            ? Center(child: CircularProgressIndicator())
+                            ? Center(
+                                child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                              ))
                             : Center(child: CupertinoActivityIndicator()));
                   },
                 ),

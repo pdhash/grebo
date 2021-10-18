@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:grebo/core/constants/app_assets.dart';
 import 'package:grebo/core/extension/customButtonextension.dart';
 import 'package:grebo/core/utils/config.dart';
 import 'package:grebo/main.dart';
 import 'package:grebo/ui/screens/homeTab/controller/homeController.dart';
-import 'package:grebo/ui/screens/homeTab/home.dart';
 import 'package:grebo/ui/shared/appbar.dart';
 import 'package:grebo/ui/shared/custombutton.dart';
 
 class ViewAll extends StatelessWidget {
+  final HomeController homeController = Get.find<HomeController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,27 +21,35 @@ class ViewAll extends StatelessWidget {
             child: GetBuilder(
               builder: (HomeController controller) {
                 return ListView.builder(
-                  itemCount: userController.globalCategory.length,
-                  itemBuilder: (context, index) => Column(
-                    children: [
-                      ListTile(
-                        title: Text(
-                          userController.globalCategory[index].name,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: getProportionateScreenWidth(15)),
-                        ),
-                        contentPadding: EdgeInsets.symmetric(horizontal: 25),
-                        trailing: GestureDetector(
-                            onTap: () {},
-                            child: buildWidget(AppImages.checked, 21, 21)),
-                      ),
-                      Divider(
-                        height: 0,
-                      )
-                    ],
-                  ),
-                );
+                    physics: BouncingScrollPhysics(),
+                    itemCount: userController.globalCategory.length,
+                    itemBuilder: (context, index) {
+                      var catRef = userController.globalCategory[index].id;
+                      return Column(
+                        children: [
+                          ListTile(
+                            title: Text(
+                              userController.globalCategory[index].name,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: getProportionateScreenWidth(15)),
+                            ),
+                            onTap: () {
+                              controller.updateCategory(catRef);
+                            },
+                            contentPadding:
+                                EdgeInsets.symmetric(horizontal: 25),
+                            trailing:
+                                controller.selectedCategory.contains(catRef)
+                                    ? SvgPicture.asset(AppImages.checked)
+                                    : SvgPicture.asset(AppImages.unchecked),
+                          ),
+                          Divider(
+                            height: 0,
+                          )
+                        ],
+                      );
+                    });
               },
             ),
           ),
@@ -49,6 +58,7 @@ class ViewAll extends StatelessWidget {
               type: CustomButtonType.colourButton,
               text: 'apply'.tr,
               onTap: () {
+                print(homeController.selectedCategory);
                 Get.back();
               },
               padding: 30,

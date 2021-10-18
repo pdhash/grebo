@@ -29,7 +29,10 @@ class PostRepo {
     var response = await API.apiHandler(
       url: APIRoutes.userPostList,
       showLoader: false,
-      header: {"Authorization": userController.userToken},
+      header: {
+        "Authorization": userController.userToken,
+        'Content-Type': 'application/json',
+      },
       body: jsonEncode(
         {
           "page": page,

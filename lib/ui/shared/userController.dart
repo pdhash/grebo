@@ -4,11 +4,11 @@ import 'package:grebo/core/utils/appFunctions.dart';
 import '../screens/login/model/currentUserModel.dart';
 
 class UserController extends GetxController {
-  late User _user;
+  late UserModel _user;
 
-  User get user => _user;
+  UserModel get user => _user;
 
-  set user(User value) {
+  set user(UserModel value) {
     _user = value;
     updateDetails();
     update();

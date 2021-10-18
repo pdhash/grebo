@@ -76,6 +76,7 @@ class ChooseServices extends StatelessWidget {
                             text: 'user'.tr,
                             onTap: () {
                               controller.servicesType = ServicesType.userType;
+
                               Get.to(() => LoginScreen());
                             }),
                         getHeightSizedBox(h: 16),

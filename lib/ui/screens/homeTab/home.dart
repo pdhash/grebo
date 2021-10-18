@@ -86,28 +86,41 @@ class Home extends StatelessWidget {
                     ),
                   ),
                   getHeightSizedBox(h: 12),
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    physics: BouncingScrollPhysics(),
-                    child: Padding(
-                      padding: EdgeInsets.only(left: kDefaultPadding),
-                      child: Row(
-                        children: userController.globalCategory
-                            .map((e) => BusinessCategories(
-                                  text: e.name,
-                                  textStyle: TextStyle(
-                                      fontSize: getProportionateScreenWidth(13),
-                                      color: AppColor.kDefaultFontColor),
-                                  onTap: () {},
-                                  height: 38,
-                                  backgroundColor: Colors.white,
-                                  border: Border.all(
-                                      color: AppColor.categoriesColor,
-                                      width: 1),
-                                ))
-                            .toList(),
-                      ),
-                    ),
+                  GetBuilder(
+                    builder: (HomeController controller) {
+                      return SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        physics: BouncingScrollPhysics(),
+                        child: Padding(
+                          padding: EdgeInsets.only(left: kDefaultPadding),
+                          child: Row(
+                            children: List.generate(
+                                userController.globalCategory.length, (index) {
+                              var catRef = userController.globalCategory[index];
+                              return BusinessCategories(
+                                text: catRef.name,
+                                textStyle: TextStyle(
+                                    fontSize: getProportionateScreenWidth(13),
+                                    color: controller.selectedCategory
+                                            .contains(catRef.id)
+                                        ? Colors.white
+                                        : AppColor.kDefaultFontColor),
+                                onTap: () {
+                                  controller.updateCategory(catRef.id);
+                                },
+                                height: 38,
+                                backgroundColor: controller.selectedCategory
+                                        .contains(catRef.id)
+                                    ? AppColor.categoriesColor
+                                    : Colors.white,
+                                border: Border.all(
+                                    color: AppColor.categoriesColor, width: 1),
+                              );
+                            }),
+                          ),
+                        ),
+                      );
+                    },
                   ),
                   getHeightSizedBox(h: 10),
                   Divider(
@@ -129,12 +142,18 @@ class Home extends StatelessWidget {
                     getServiceTypeCode(ServicesType.userType)
                 ? homeController.fetchUserPost
                 : homeController.fetchProviderPost,
-            onError: (dynamic error) => Center(child: Text(error)),
+            onError: (error) {
+              print("Error $error");
+              return Center(child: Text(error));
+            },
             onEmpty: Center(
               child: Text("no_post_found".tr),
             ),
             initialLoader: GetPlatform.isAndroid
-                ? Center(child: CircularProgressIndicator())
+                ? Center(
+                    child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                  ))
                 : Center(child: CupertinoActivityIndicator()),
           ),
         )

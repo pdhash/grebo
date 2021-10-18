@@ -84,12 +84,7 @@ class AddServiceController extends GetxController {
         serviceMultiFile.clear();
         List<Ser> services = ServiceListModel.fromJson(value).data;
         services.forEach((element) {
-          ///-medam
-          // Future.delayed(Duration(milliseconds: 200), addData(element));
-          addServiceViews.add(AddServiceView(
-              index: addServiceViews.length, serviceModel: element));
-          serviceMultiFile.add(AddServicesModel(
-              title: element.name, url: element.image, isEdit: false));
+          Future.delayed(Duration(milliseconds: 200), addData(element));
         });
         update();
       }
@@ -99,13 +94,12 @@ class AddServiceController extends GetxController {
     }
   }
 
-  ///--medam
-  // addData(Ser element) {
-  //   addServiceViews.add(
-  //       AddServiceView(index: addServiceViews.length, serviceModel: element));
-  //   serviceMultiFile
-  //       .add(AddServicesModel(title: element.name, url: element.image));
-  // }
+  addData(Ser element) {
+    addServiceViews.add(
+        AddServiceView(index: addServiceViews.length, serviceModel: element));
+    serviceMultiFile
+        .add(AddServicesModel(title: element.name, url: element.image));
+  }
 
   @override
   void onInit() {

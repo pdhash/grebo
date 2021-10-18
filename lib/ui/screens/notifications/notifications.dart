@@ -29,7 +29,10 @@ class AllNotification extends StatelessWidget {
           return Center(child: Text(error));
         },
         initialLoader: GetPlatform.isAndroid
-            ? Center(child: CircularProgressIndicator())
+            ? Center(
+                child: CircularProgressIndicator(
+                strokeWidth: 2,
+              ))
             : Center(child: CupertinoActivityIndicator()));
   }
 
@@ -78,16 +81,20 @@ class AllNotification extends StatelessWidget {
           ),
           title: Text(
             notifyData.text,
+            maxLines: 2,
             style: TextStyle(fontSize: getProportionateScreenWidth(15)),
           ),
-          subtitle: Align(
-            alignment: Alignment.centerRight,
-            child: Text(
-              DateTimeFormatExtension.displayChatTimeFromTimestamp(
-                  notifyData.createdAt.toLocal()),
-              style: TextStyle(
-                  color: AppColor.kDefaultFontColor.withOpacity(0.65),
-                  fontSize: getProportionateScreenWidth(12)),
+          subtitle: Padding(
+            padding: const EdgeInsets.only(top: 3),
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: Text(
+                DateTimeFormatExtension.displayChatTimeFromTimestamp(
+                    notifyData.createdAt.toLocal()),
+                style: TextStyle(
+                    color: AppColor.kDefaultFontColor.withOpacity(0.65),
+                    fontSize: getProportionateScreenWidth(12)),
+              ),
             ),
           ),
         ),

@@ -22,20 +22,27 @@ class HomeController extends GetxController {
   }
 
   List<String> selectedCategory = [];
+
   updateCategory(String id) {
     if (selectedCategory.contains(id)) {
       selectedCategory.remove(id);
-    } else
+    } else {
       selectedCategory.add(id);
+    }
+    update();
   }
 
   //for user posts
   Future<List<PostData>> fetchUserPost(int offset) async {
+    print(selectedCategory.length);
     if (offset == 0) page = 1;
     if (page == -1) return [];
     List<PostData> getPost = [];
     var request = await PostRepo.fetchUserPost(
-        page: page, latitude: 76.779419, longitude: 30.733315);
+        page: page,
+        latitude: 21.1702,
+        longitude: 72.8311,
+        categoryRefs: selectedCategory);
     getPost = request!.postData;
     page = request.hasMore ? page + 1 : -1;
     return getPost;

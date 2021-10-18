@@ -144,8 +144,8 @@ class EditBProfileController extends GetxController {
         "name": "userName",
         "businessName": businessName.text.trim(),
         "images": uploadMultiFile,
-        "latitude": 1,
-        "longitude": 2,
+        "latitude": 21.1702,
+        "longitude": 72.8311,
         "categories": [userController.globalCategory[categorySelect].id],
         "websites": websites,
         "phoneCode": kDefaultCountry,
@@ -154,7 +154,7 @@ class EditBProfileController extends GetxController {
       },
     );
     if (v != null) {
-      updateUserDetail(User.fromJson(v['data']));
+      updateUserDetail(UserModel.fromJson(v['data']));
 
       Get.to(() => DetailsPage2());
     }

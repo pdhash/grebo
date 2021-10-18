@@ -20,6 +20,7 @@ class ForgotPassword extends StatelessWidget {
       child: Scaffold(
         appBar: appBar('forgot_password'.tr),
         body: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
             child: Column(

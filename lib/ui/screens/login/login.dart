@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -5,6 +8,7 @@ import 'package:grebo/core/constants/appSetting.dart';
 import 'package:grebo/core/constants/app_assets.dart';
 import 'package:grebo/core/constants/appcolor.dart';
 import 'package:grebo/core/extension/customButtonextension.dart';
+import 'package:grebo/core/service/auth/googleAuth.dart';
 import 'package:grebo/core/utils/config.dart';
 import 'package:grebo/core/viewmodel/controller/selectservicecontoller.dart';
 import 'package:grebo/ui/screens/login/controller/loginController.dart';
@@ -12,16 +16,18 @@ import 'package:grebo/ui/screens/login/signup.dart';
 import 'package:grebo/ui/shared/appbar.dart';
 import 'package:grebo/ui/shared/custombutton.dart';
 import 'package:grebo/ui/shared/customtextfield.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
-import '../../global.dart';
 import 'widgets/forgotpassword.dart';
 
 class LoginScreen extends StatelessWidget {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final LoginController loginController = Get.put(LoginController());
-
+  final ServiceController serviceController = Get.find<ServiceController>();
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
   @override
   Widget build(BuildContext context) {
+    print(serviceController.servicesType);
     return GestureDetector(
       onTap: () {
         disposeKeyboard();
@@ -33,6 +39,7 @@ class LoginScreen extends StatelessWidget {
         body: Form(
           key: formKey,
           child: SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
             child: Column(
               children: [
                 Padding(
@@ -149,22 +156,32 @@ class LoginScreen extends StatelessWidget {
   }
 
   socialButtons() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          socialButton(AppImages.facebook, () {
-            disposeKeyboard();
-          }),
-          socialButton(AppImages.google, () {
-            disposeKeyboard();
-          }),
-          socialButton(AppImages.apple, () {
-            disposeKeyboard();
-          }),
-        ],
-      ),
+    return Row(
+      children: [
+        Spacer(),
+        socialButton(AppImages.facebook, () {
+          disposeKeyboard();
+          GoogleAuth.signOut();
+        }),
+        Spacer(),
+        socialButton(AppImages.google, () async {
+          loginController.socialLogin();
+          disposeKeyboard();
+        }),
+        Platform.isIOS ? Spacer() : SizedBox(),
+        Platform.isIOS
+            ? socialButton(AppImages.apple, () async {
+                disposeKeyboard();
+                final credential = await SignInWithApple.getAppleIDCredential(
+                  scopes: [
+                    AppleIDAuthorizationScopes.email,
+                    AppleIDAuthorizationScopes.fullName,
+                  ],
+                );
+              })
+            : SizedBox(),
+        Spacer(),
+      ],
     );
   }
 

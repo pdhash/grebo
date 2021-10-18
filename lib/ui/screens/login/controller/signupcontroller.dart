@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:grebo/core/service/repo/userRepo.dart';
+import 'package:grebo/core/viewmodel/controller/selectservicecontoller.dart';
 import 'package:grebo/ui/global.dart';
 import 'package:grebo/ui/shared/loader.dart';
 
@@ -24,6 +25,8 @@ class SignUpController extends GetxController {
   }
 
   Future userSignUp() async {
+    final ServiceController serviceController = Get.find<ServiceController>();
+
     LoadingOverlay.of().show();
     var response = await UserRepo.userSignUp(
         email: email.text.trim(),

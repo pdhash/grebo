@@ -6,6 +6,7 @@ import 'package:grebo/core/constants/app_assets.dart';
 import 'package:grebo/core/constants/appcolor.dart';
 import 'package:grebo/core/extension/customButtonextension.dart';
 import 'package:grebo/core/utils/config.dart';
+import 'package:grebo/core/utils/sharedpreference.dart';
 import 'package:grebo/core/viewmodel/controller/onboadingController.dart';
 import 'package:grebo/ui/screens/selectservice.dart';
 import 'package:grebo/ui/shared/custombutton.dart';
@@ -67,7 +68,8 @@ class _OnBoardingState extends State<OnBoarding> {
                         children: [
                           InkWell(
                               onTap: () {
-                                Get.to(() => ChooseServices());
+                                onBoardingHide();
+                                Get.offAll(() => ChooseServices());
                               },
                               child: Container(
                                 height: 40,
@@ -90,7 +92,8 @@ class _OnBoardingState extends State<OnBoarding> {
                             type: CustomButtonType.colourButton,
                             onTap: () {
                               if (onBoardingController.index == 3 - 1) {
-                                Get.to(() => ChooseServices());
+                                onBoardingHide();
+                                Get.offAll(() => ChooseServices());
                               } else {
                                 pageController.nextPage(
                                   duration: kOnBoardingPageAnimationDuration,

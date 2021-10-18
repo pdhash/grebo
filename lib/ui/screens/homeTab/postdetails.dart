@@ -109,7 +109,9 @@ class PostDetails extends StatelessWidget {
                                             height: 100,
                                             child: Center(
                                               child: GetPlatform.isAndroid
-                                                  ? CircularProgressIndicator()
+                                                  ? CircularProgressIndicator(
+                                                      strokeWidth: 2,
+                                                    )
                                                   : CupertinoActivityIndicator(),
                                             ))
                                         : Column(

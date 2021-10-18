@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -7,6 +8,7 @@ import 'package:grebo/core/service/repo/editProfileRepo.dart';
 import 'package:grebo/ui/global.dart';
 import 'package:grebo/ui/screens/baseScreen/baseScreen.dart';
 import 'package:grebo/ui/screens/onbording.dart';
+import 'package:grebo/ui/screens/selectservice.dart';
 import 'package:grebo/ui/shared/userController.dart';
 
 import 'core/utils/lang.dart';
@@ -17,7 +19,8 @@ late UserController userController;
 
 void main() async {
   globalVerbsInit();
-
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   await GetStorage.init();
 
   userController = Get.put(UserController());
@@ -25,7 +28,6 @@ void main() async {
 
   final ImagePickerController imagePickerController =
       Get.put(ImagePickerController());
-  // print(userController.userToken);
   runApp(MyApp());
 }
 
@@ -44,7 +46,11 @@ class MyApp extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
       title: 'Grebo',
-      home: getUserDetail() ? BaseScreen() : OnBoarding(),
+      home: getUserDetail()
+          ? BaseScreen()
+          : onBoardingHideRead()
+              ? ChooseServices()
+              : OnBoarding(),
       translations: Lang(),
       theme: AppTheme.defTheme,
       locale: Locale('en', 'US'), //Localizations.localeOf(context),

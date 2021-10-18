@@ -22,7 +22,7 @@ class ProfileChangeController extends GetxController {
         .then((v) {
       if (v != null) {
         appImagePicker.imagePickerController.resetImage();
-        updateUserDetail(User.fromJson(v['data']));
+        updateUserDetail(UserModel.fromJson(v['data']));
         flutterToast(v["message"]);
         Get.back();
       }

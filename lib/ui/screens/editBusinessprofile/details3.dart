@@ -44,6 +44,7 @@ class DetailsPage3 extends StatelessWidget {
               fit: StackFit.expand,
               children: [
                 SingleChildScrollView(
+                  physics: BouncingScrollPhysics(),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [

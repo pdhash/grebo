@@ -23,6 +23,7 @@ class APIRoutes {
   static const String notificationList = url + "notification/list";
   static const String getComments = url + "comment/list";
   static const String addComments = url + "comment/add";
+  static const String socialLogin = url + "user/socialLogin";
 }
 
 enum ContentType { jsonType }

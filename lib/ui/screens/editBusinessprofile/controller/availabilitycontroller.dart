@@ -73,7 +73,7 @@ class AvailabilityController extends GetxController {
     );
     if (v != null) {
       print(v);
-      updateUserDetail(User.fromJson(v['data']));
+      updateUserDetail(UserModel.fromJson(v['data']));
 
       Get.to(() => DetailsPage3());
     }

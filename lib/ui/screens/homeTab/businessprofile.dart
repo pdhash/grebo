@@ -22,7 +22,7 @@ import 'customerreview.dart';
 class BusinessProfile extends StatelessWidget {
   final BusinessController businessController = Get.put(BusinessController());
   final isShow;
-  final User user;
+  final UserModel user;
 
   BusinessProfile({Key? key, this.isShow = false, required this.user})
       : super(key: key);

@@ -5,14 +5,24 @@ import 'package:grebo/ui/screens/login/model/currentUserModel.dart';
 final sharedPreference = GetStorage();
 
 saveUserDetails(Datum data) {
-  print("From SHAREPREFRENCE ${data.accessToken}");
   userController.user = data.user;
   userController.userToken = data.accessToken;
   sharedPreference.write("GreboUser", data.user.toJson());
   sharedPreference.write("UserToken", data.accessToken);
 }
 
-updateUserDetail(User user) async {
+onBoardingHide() {
+  sharedPreference.write("HideOnBoarding", true);
+}
+
+bool onBoardingHideRead() {
+  if (sharedPreference.read("HideOnBoarding") == null) {
+    return false;
+  } else
+    return true;
+}
+
+updateUserDetail(UserModel user) async {
   userController.user = user;
   sharedPreference.write("GreboUser", user.toJson());
 }
@@ -27,7 +37,7 @@ bool getUserDetail() {
   if (userData == null) {
     return false;
   } else {
-    userController.user = User.fromJson(userData);
+    userController.user = UserModel.fromJson(userData);
     userController.userToken = userToken;
     return true;
   }
