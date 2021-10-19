@@ -59,6 +59,7 @@ class PostDetails extends StatelessWidget {
                                       : GestureDetector(
                                           onTap: () {
                                             disposeKeyboard();
+
                                             Get.to(() => ViewComments(
                                                   postData: postData,
                                                 ));

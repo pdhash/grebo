@@ -17,6 +17,7 @@ class APIRoutes {
   static const String userPostList = url + "post/list"; // provider
   static const String addPost = url + "post/add";
   static const String addServices = url + "services/add";
+  static const String updateServices = url + "services/update";
   static const String updateLike = url + "like/update";
   static const String serviceList = url + "services/list";
   static const String categoryList = url + "category/list";

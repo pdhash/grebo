@@ -5,6 +5,8 @@ import 'package:get/get.dart';
 import 'package:grebo/core/utils/appFunctions.dart';
 import 'package:grebo/ui/shared/loader.dart';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart' as mimeee;
+import 'package:mime_type/mime_type.dart';
 
 enum RequestType { Get, Post }
 
@@ -83,12 +85,17 @@ class API {
         if (header != null) request.headers.addAll(header);
         if (field != null) request.fields.addAll(field);
 
-        if (fileImage != null)
+        if (fileImage != null) {
           fileImage.forEach((element) async {
+            String? mimeType = mime(element.path);
+            print(mimeType);
             print("VIDEO ================ ${element.path}");
             request.files.add(await http.MultipartFile.fromPath(
-                multiPartImageKeyName, element.path));
+                multiPartImageKeyName, element.path,
+                contentType: mimeee.MediaType(
+                    mimeType!.split("/")[0], mimeType.split("/")[1])));
           });
+        }
         if (thumbnail != null) {
           request.files.add(await http.MultipartFile.fromPath(
               "thumbnailImage", thumbnail.path));

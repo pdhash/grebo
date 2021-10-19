@@ -1,7 +1,8 @@
+import 'package:get/get.dart';
 import 'package:grebo/core/service/repo/editProfileRepo.dart';
 import 'package:grebo/ui/screens/login/model/currentUserModel.dart';
 
-class ServiceOfferedController {
+class ServiceOfferedController extends GetxController {
   late bool isNextPost;
   ServiceOfferedController() {
     isNextPost = true;

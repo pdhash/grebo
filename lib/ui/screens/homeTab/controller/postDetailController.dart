@@ -19,14 +19,14 @@ class PostDetailController extends GetxController {
   Future fetchCommentsLast2() async {
     last2Comments.clear();
 
-    var request = await PostRepo.fetchComments(postRef: selectedPostRef);
+    var request =
+        await PostRepo.fetchComments(postRef: selectedPostRef, page: 1);
     request!.data
         .asMap()
         .map((i, value) =>
             i < 2 ? MapEntry(i, last2Comments.add(value)) : MapEntry(i, value))
         .values
         .toList();
-    print("last two == ${last2Comments.length}");
     update();
   }
 
@@ -39,6 +39,13 @@ class PostDetailController extends GetxController {
     update();
   }
 
+  late bool _hasNext;
+  bool _isFetching = false;
+  bool get hasNext => _hasNext;
+  int page = 0;
+
+  List<CommentsData> getComments = [];
+
   Future addComments(PostData postData) async {
     var currentComment = CommentsData(
         name: userController.user.name,
@@ -46,26 +53,32 @@ class PostDetailController extends GetxController {
         text: commentText,
         picture: userController.user.picture,
         updatedAt: DateTime.now());
-    getComments.add(currentComment);
-    last2Comments.removeLast();
-    last2Comments.insert(0, currentComment);
+    getComments.insert(0, currentComment);
 
+    if (last2Comments.length > 1) last2Comments.removeLast();
+    last2Comments.insert(0, currentComment);
     update();
     homeController.addComment(postData, commentText);
     commentText = "";
   }
 
-  List<CommentsData> getComments = [];
-
-  Future<List<CommentsData>> fetchComments(int offset) async {
-    // print("POstRef from global === $currentPostRef}");
-    if (offset == 0) commentPage = 1;
-    if (commentPage == -1) return [];
-    var request = await PostRepo.fetchComments(postRef: selectedPostRef);
+  Future fetchComments() async {
+    page = 0;
+    _isFetching = false;
     getComments.clear();
-    getComments = request!.data;
-    commentPage = request.hasMore ? commentPage + 1 : -1;
-    return getComments;
+    await fetchNextComments();
+  }
+
+  Future fetchNextComments() async {
+    if (_isFetching) return;
+    _isFetching = true;
+    page++;
+    var request =
+        await PostRepo.fetchComments(postRef: selectedPostRef, page: page);
+    getComments.addAll(request!.data.map((e) => e));
+    _hasNext = request.hasMore;
+    _isFetching = false;
+    update();
   }
 
   late HomeController homeController;

@@ -34,7 +34,7 @@ class EditProfileRepo {
   static Future serviceUpdate({required Map<String, dynamic> map}) async {
     String field = jsonEncode(map);
     var responseBody = await API.apiHandler(
-        url: APIRoutes.addServices,
+        url: APIRoutes.updateServices,
         header: {
           "Authorization": userController.userToken,
           'Content-Type': 'application/json',
@@ -61,6 +61,7 @@ class EditProfileRepo {
         url: APIRoutes.serviceList,
         showLoader: false,
         header: {"Authorization": userController.userToken});
+    print("getServices $responseBody");
     if (responseBody != null)
       return responseBody;
     else

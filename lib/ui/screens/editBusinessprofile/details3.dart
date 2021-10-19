@@ -4,7 +4,9 @@ import 'package:grebo/core/constants/appSetting.dart';
 import 'package:grebo/core/constants/appcolor.dart';
 import 'package:grebo/core/extension/customButtonextension.dart';
 import 'package:grebo/core/utils/config.dart';
+import 'package:grebo/ui/screens/baseScreen/controller/baseController.dart';
 import 'package:grebo/ui/screens/editBusinessprofile/controller/addservicecontroller.dart';
+import 'package:grebo/ui/screens/homeTab/serviceoffered.dart';
 import 'package:grebo/ui/shared/alertdialogue.dart';
 import 'package:grebo/ui/shared/appbar.dart';
 import 'package:grebo/ui/shared/custombutton.dart';
@@ -20,7 +22,8 @@ class DetailsPage3 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    addServiceController.addDefault();
+    print("DetailsPage3 BUILD");
+    // addServiceController.addDefault();
     return Scaffold(
         appBar: appBar(
           'add_services_offered'.tr,
@@ -97,10 +100,16 @@ class DetailsPage3 extends StatelessWidget {
                                           Get.back();
                                           Get.back();
                                           Get.back();
-                                          Get.back();
+                                          final BaseController baseController =
+                                              Get.find<BaseController>();
+                                          baseController.currentTab = 0;
                                         },
                                         color: AppColor.kDefaultColor,
                                         okText: 'ok'.tr);
+                                  } else {
+                                    Get.back();
+                                    ServiceOffered.paginationKey.currentState!
+                                        .refresh();
                                   }
                                 }
                               });

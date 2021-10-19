@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:get/get.dart';
 import 'package:grebo/core/service/repo/editProfileRepo.dart';
 import 'package:grebo/core/service/repo/imageRepo.dart';
-import 'package:grebo/ui/global.dart';
 import 'package:grebo/ui/screens/editBusinessprofile/model/addSeviceModel.dart';
 import 'package:grebo/ui/screens/editBusinessprofile/model/serviceListModel.dart';
 import 'package:grebo/ui/screens/editBusinessprofile/widgets/addServiceView.dart';
@@ -11,41 +10,45 @@ import 'package:grebo/ui/screens/editBusinessprofile/widgets/addServiceView.dart
 class AddServiceController extends GetxController {
   List<AddServiceView> addServiceViews = [];
 
-  List<AddServicesModel> serviceMultiFile = [];
+  List<AddServicesModel> addServiceModels = [];
 
   addDefault() {
-    if (serviceMultiFile.length == 0) {
+    print("ADD DEFAULT");
+    if (addServiceModels.length == 0) {
       addServiceViews = [AddServiceView(index: 0)];
-      serviceMultiFile = <AddServicesModel>[AddServicesModel()];
+      addServiceModels = <AddServicesModel>[AddServicesModel()];
     }
   }
 
   bool validateForm() {
-    for (int i = 0; i < serviceMultiFile.length; i++) {
-      var element = serviceMultiFile[i];
+    for (int i = 0; i < addServiceModels.length; i++) {
+      var element = addServiceModels[i];
       if (element.image == null ||
           element.title == null ||
           element.title!.trim().isEmpty) {
+        print("validateForm FALSE");
         return false;
       }
     }
+    print("validateForm TRUE");
     return true;
   }
 
   add() {
+    print("ADD at ${addServiceViews.length}");
     bool flag = validateForm();
     if (flag) {
       addServiceViews.add(AddServiceView(index: addServiceViews.length));
-      serviceMultiFile.add(AddServicesModel());
+      addServiceModels.add(AddServicesModel());
     } else
       print('not valid');
     update();
   }
 
   remove(int index) {
-    serviceMultiFile.removeAt(index);
+    print("REMOVE at ${index}");
+    addServiceModels.removeAt(index);
     addServiceViews.removeAt(index);
-
     addServiceViews.asMap().forEach((int index, AddServiceView view) {
       view.index = index;
     });
@@ -54,21 +57,24 @@ class AddServiceController extends GetxController {
   }
 
   Future<dynamic> submitAllFields() async {
-    print(serviceMultiFile.map((e) => e.isEdit));
-
     if (validateForm()) {
       List<Map<String, dynamic>> uploadData = [];
-      uploadData.clear();
-      for (int i = 0; i < serviceMultiFile.length; i++) {
-        var v = await ImageRepo.uploadImage(
-            fileImage: [serviceMultiFile[i].image as File]);
-        if (v != null) {
-          uploadData
-              .add({"image": v["data"], "name": serviceMultiFile[i].title});
+      for (int i = 0; i < addServiceModels.length; i++) {
+        if (addServiceModels[i].url != "") {
+          uploadData.add({
+            "image": addServiceViews[i].serviceModel!.image,
+            "name": addServiceModels[i].title
+          });
+        } else {
+          var v = await ImageRepo.uploadImage(
+              fileImage: [addServiceModels[i].image as File]);
+          if (v != null) {
+            uploadData
+                .add({"image": v["data"], "name": addServiceModels[i].title});
+          }
         }
       }
-      print(uploadData);
-      appImagePicker.imagePickerController.resetImage();
+      print("serviceUpdate ${uploadData.length}");
       var v = await EditProfileRepo.serviceUpdate(
         map: {"services": uploadData},
       );
@@ -78,26 +84,27 @@ class AddServiceController extends GetxController {
   }
 
   Future getAllServices() async {
-    var v = await EditProfileRepo.getServices().then((value) {
+    await EditProfileRepo.getServices().then((value) {
       if (value != null) {
-        addServiceViews.clear();
-        serviceMultiFile.clear();
         List<Ser> services = ServiceListModel.fromJson(value).data;
-        services.forEach((element) {
-          Future.delayed(Duration(milliseconds: 200), addData(element));
-        });
-        update();
+        if (services.isNotEmpty) {
+          addServiceViews.clear();
+          addServiceModels.clear();
+          services.forEach((element) {
+            Future.delayed(Duration(milliseconds: 20), addData(element));
+          });
+          update();
+        } else {
+          addDefault();
+        }
       }
     });
-    if (v != null) {
-      return true;
-    }
   }
 
   addData(Ser element) {
     addServiceViews.add(
         AddServiceView(index: addServiceViews.length, serviceModel: element));
-    serviceMultiFile
+    addServiceModels
         .add(AddServicesModel(title: element.name, url: element.image));
   }
 

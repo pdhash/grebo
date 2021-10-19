@@ -241,35 +241,3 @@ Widget imageButtons(
     ),
   );
 }
-//
-// class VideoDisplay extends StatefulWidget {
-//   final String path;
-//   late final VideoPlayerController videoPlayerController;
-//
-//   VideoDisplay({Key? key, required this.path}) : super(key: key);
-//
-//   @override
-//   _VideoDisplayState createState() => _VideoDisplayState();
-// }
-//
-// class _VideoDisplayState extends State<VideoDisplay> {
-//   @override
-//   void initState() {
-//     widget.videoPlayerController = VideoPlayerController.file(File(widget.path))
-//       ..initialize().then((_) {
-//         setState(() {});
-//       });
-//     super.initState();
-//   }
-//
-//   @override
-//   void dispose() {
-//     widget.videoPlayerController.dispose();
-//     super.dispose();
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return VideoPlayer(widget.videoPlayerController);
-//   }
-// }

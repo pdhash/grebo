@@ -12,7 +12,7 @@ class ImagePickerController extends GetxController {
   setImage(String url) async {
     if (url != "") {
       _image = await urlToFile(imageUrl + url);
-      print("ImagePickerController GOT IMAGE $tag");
+      print("ImagePickerController SET IMAGE $tag");
       update();
     }
   }

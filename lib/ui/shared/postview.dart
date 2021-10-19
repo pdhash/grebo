@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:grebo/core/constants/appSetting.dart';
 import 'package:grebo/core/constants/app_assets.dart';
@@ -16,6 +17,7 @@ import 'package:grebo/ui/screens/homeTab/controller/homeController.dart';
 import 'package:grebo/ui/screens/homeTab/home.dart';
 import 'package:grebo/ui/screens/homeTab/model/postModel.dart';
 import 'package:grebo/ui/screens/homeTab/postdetails.dart';
+import 'package:grebo/ui/screens/homeTab/videoScreen.dart';
 import 'package:grebo/ui/screens/homeTab/viewcomments.dart';
 import 'package:readmore/readmore.dart';
 
@@ -88,31 +90,48 @@ class PostView extends StatelessWidget {
                         ),
                         postData.video == "" && postData.image == ""
                             ? SizedBox()
-                            : Padding(
-                                padding: const EdgeInsets.only(top: 10),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(11),
-                                  child: FadeInImage(
-                                    placeholder:
-                                        AssetImage(AppImages.placeHolder),
-                                    image: postData.image == ""
-                                        ? NetworkImage(
-                                            "${imageUrl + postData.thumbnail}")
-                                        : NetworkImage(
-                                            "${imageUrl + postData.image}"),
-                                    height: 138,
-                                    width: 281,
-                                    imageErrorBuilder:
-                                        (context, error, stackTrace) {
-                                      return Image.asset(
-                                        AppImages.placeHolder,
-                                        height: 138,
-                                        width: 281,
-                                        fit: BoxFit.cover,
-                                      );
-                                    },
-                                    fit: BoxFit.cover,
-                                  ),
+                            : GestureDetector(
+                                onTap: () {
+                                  if (postData.image == "") {
+                                    print("ok");
+                                    Get.to(() => VideoScreen(
+                                        path: "${videoUrl + postData.video}"));
+                                  }
+                                },
+                                child: Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 10),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(11),
+                                        child: FadeInImage(
+                                          placeholder:
+                                              AssetImage(AppImages.placeHolder),
+                                          image: postData.image == ""
+                                              ? NetworkImage(
+                                                  "${imageUrl + postData.thumbnail}")
+                                              : NetworkImage(
+                                                  "${imageUrl + postData.image}"),
+                                          height: 138,
+                                          width: 281,
+                                          imageErrorBuilder:
+                                              (context, error, stackTrace) {
+                                            return Image.asset(
+                                              AppImages.placeHolder,
+                                              height: 138,
+                                              width: 281,
+                                              fit: BoxFit.cover,
+                                            );
+                                          },
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ),
+                                    postData.image == ""
+                                        ? SvgPicture.asset(AppImages.videoPlay)
+                                        : SizedBox()
+                                  ],
                                 ),
                               ),
                         postData.text == ""

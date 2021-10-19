@@ -42,10 +42,8 @@ class _AddServiceViewState extends State<AddServiceView> {
         widget.appImagePicker.imagePickerController
             .setImage(widget.serviceModel!.image);
       }
-      Future.delayed(Duration(milliseconds: 1000), () {
-        widget.appImagePicker.update();
-      });
     }
+    print("AddServiceView BUILD ${widget.tag}");
     return Column(
       children: [
         Padding(
@@ -60,11 +58,13 @@ class _AddServiceViewState extends State<AddServiceView> {
                   print(
                       "AddServiceView IMAGE ${widget.tag} ${widget.index} ${image}");
                   if (image != null) {
-                    widget.addServiceController.serviceMultiFile[widget.index]
+                    widget.addServiceController.addServiceModels[widget.index]
                         .image = image;
                   }
                   return GestureDetector(
                       onTap: () {
+                        widget.addServiceController
+                            .addServiceModels[widget.index].url = "";
                         widget.appImagePicker.openBottomSheet();
                       },
                       child: image != null
@@ -110,10 +110,8 @@ class _AddServiceViewState extends State<AddServiceView> {
                 cursorHeight: 15,
                 textCapitalization: TextCapitalization.sentences,
                 onChanged: (val) {
-                  widget.addServiceController.serviceMultiFile[widget.index]
+                  widget.addServiceController.addServiceModels[widget.index]
                       .title = val;
-                  widget.addServiceController.serviceMultiFile[widget.index]
-                      .isEdit = true;
                 },
                 decoration: InputDecoration(
                     border: InputBorder.none,

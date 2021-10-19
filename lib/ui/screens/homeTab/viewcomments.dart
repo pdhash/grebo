@@ -7,24 +7,55 @@ import 'package:grebo/core/extension/customButtonextension.dart';
 import 'package:grebo/core/utils/config.dart';
 import 'package:grebo/ui/screens/homeTab/controller/homeController.dart';
 import 'package:grebo/ui/screens/homeTab/controller/postDetailController.dart';
-import 'package:grebo/ui/screens/homeTab/model/commentModel.dart';
 import 'package:grebo/ui/shared/appbar.dart';
 import 'package:grebo/ui/shared/commentview.dart';
 import 'package:grebo/ui/shared/custombutton.dart';
 import 'package:grebo/ui/shared/postdetailbottom.dart';
-import 'package:pagination_view/pagination_view.dart';
 
 import '../../../main.dart';
 import 'home.dart';
 import 'model/postModel.dart';
 
-class ViewComments extends StatelessWidget {
+class ViewComments extends StatefulWidget {
   final PostData postData;
-  final TextEditingController comment = TextEditingController();
-  final PostDetailController postDetailController =
-      Get.put(PostDetailController());
 
   ViewComments({Key? key, required this.postData}) : super(key: key);
+
+  @override
+  _ViewCommentsState createState() => _ViewCommentsState();
+}
+
+class _ViewCommentsState extends State<ViewComments> {
+  final TextEditingController comment = TextEditingController();
+
+  final PostDetailController postDetailController =
+      Get.put(PostDetailController());
+  final scrollController = ScrollController();
+
+  @override
+  void initState() {
+    print(">>>>>> ViewComments initState");
+    super.initState();
+    scrollController.addListener(scrollListener);
+    postDetailController.fetchComments();
+  }
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
+  }
+
+  void scrollListener() {
+    if (scrollController.offset >=
+            scrollController.position.maxScrollExtent / 2 &&
+        !scrollController.position.outOfRange) {
+      if (postDetailController.hasNext) {
+        postDetailController.fetchNextComments();
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,57 +63,61 @@ class ViewComments extends StatelessWidget {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          postData.comment == 0
-              ? Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      height: 200,
-                      width: 200,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          buildWidget(AppImages.noComment, 20, 21.34),
-                          Text(
-                            'no_comments'.tr,
-                            style: TextStyle(
-                                color: Color(0xff969696),
-                                fontWeight: FontWeight.bold,
-                                fontSize: getProportionateScreenWidth(20)),
-                          )
-                        ],
-                      ),
+          GetBuilder(
+            builder: (HomeController controller) {
+              return widget.postData.comment == 0
+                  ? Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          height: 200,
+                          width: 200,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              buildWidget(AppImages.noComment, 20, 21.34),
+                              Text(
+                                'no_comments'.tr,
+                                style: TextStyle(
+                                    color: Color(0xff969696),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: getProportionateScreenWidth(20)),
+                              )
+                            ],
+                          ),
+                        )
+                      ],
                     )
-                  ],
-                )
-              : GetBuilder(
-                  builder: (HomeController controller) {
-                    print("GET BUILDER CALLING");
-                    return PaginationView(
-                        padding: EdgeInsets.only(bottom: 100),
-                        scrollController:
-                            ScrollController(initialScrollOffset: 10),
-                        pullToRefresh: true,
-                        physics: AlwaysScrollableScrollPhysics(),
-                        itemBuilder: (BuildContext context,
-                            CommentsData commentData, int index) {
-                          return CommentView(
-                            commentsData: commentData,
-                          );
-                        },
-                        pageFetch: postDetailController.fetchComments,
-                        onError: (dynamic error) => Center(child: Text(error)),
-                        onEmpty: Center(
-                          child: Text("no_post_found".tr),
-                        ),
-                        initialLoader: GetPlatform.isAndroid
-                            ? Center(
-                                child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                              ))
-                            : Center(child: CupertinoActivityIndicator()));
-                  },
-                ),
+                  : GetBuilder(
+                      builder: (PostDetailController controller) {
+                        print("Comment POst Detail Controller");
+                        return RefreshIndicator(
+                          onRefresh: () async {
+                            await controller.fetchComments();
+                          },
+                          child: controller.getComments.isEmpty
+                              ? Center(
+                                  child: GetPlatform.isIOS
+                                      ? CupertinoActivityIndicator()
+                                      : CircularProgressIndicator(
+                                          strokeWidth: 2,
+                                        ))
+                              : ListView.builder(
+                                  controller: scrollController,
+                                  physics: AlwaysScrollableScrollPhysics(),
+                                  itemCount: controller.getComments.length,
+                                  padding: EdgeInsets.only(bottom: 90),
+                                  itemBuilder: (context, index) {
+                                    return CommentView(
+                                        commentsData:
+                                            controller.getComments[index]);
+                                  },
+                                ),
+                        );
+                      },
+                    );
+            },
+          ),
           Positioned(
               bottom: 0,
               left: 0,
@@ -97,7 +132,8 @@ class ViewComments extends StatelessWidget {
                           postDetailController.commentText =
                               comment.text.trim();
                           comment.clear();
-                          postDetailController.addComments(postData);
+                          postDetailController.addComments(widget.postData);
+                          scrollController.jumpTo(0);
                         }
                       },
                     )

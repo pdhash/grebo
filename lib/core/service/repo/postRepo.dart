@@ -82,7 +82,8 @@ class PostRepo {
       return null;
   }
 
-  static Future<CommentModel?> fetchComments({required String postRef}) async {
+  static Future<CommentModel?> fetchComments(
+      {required String postRef, required int page}) async {
     var response = await API.apiHandler(
       url: APIRoutes.getComments,
       showLoader: false,
@@ -91,7 +92,7 @@ class PostRepo {
         'Content-Type': 'application/json',
       },
       body: jsonEncode(
-        {"postRef": postRef},
+        {"postRef": postRef, "page": page},
       ),
     );
     if (response != null) {

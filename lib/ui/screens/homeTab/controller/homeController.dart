@@ -71,9 +71,9 @@ class HomeController extends GetxController {
 
   addComment(PostData postData, String commentText) async {
     postData.comment += 1;
-    update();
     await PostRepo.addComments(
             postRef: currentPostRef, commentsText: commentText)
         .then((value) => print("============$value"));
+    update();
   }
 }

@@ -16,6 +16,9 @@ class ServiceOffered extends StatelessWidget {
   final bool isEdit;
   final ServiceOfferedController serviceOfferedController =
       Get.put(ServiceOfferedController());
+
+  static GlobalKey<PaginationViewState> paginationKey =
+      GlobalKey<PaginationViewState>();
   ServiceOffered({Key? key, this.isEdit = false}) : super(key: key);
 
   @override
@@ -34,6 +37,8 @@ class ServiceOffered extends StatelessWidget {
             : SizedBox()
       ]),
       body: PaginationView(
+        key: paginationKey,
+        physics: AlwaysScrollableScrollPhysics(),
         itemBuilder:
             (BuildContext context, ServiceList serviceList, int index) {
           return buildListTile(
