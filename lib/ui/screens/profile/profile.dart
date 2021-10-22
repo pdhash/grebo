@@ -2,20 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:grebo/core/constants/appSetting.dart';
 import 'package:grebo/core/constants/app_assets.dart';
+import 'package:grebo/core/service/apiRoutes.dart';
 import 'package:grebo/core/utils/config.dart';
-import 'package:grebo/ui/screens/homeTab/controller/homeController.dart';
+import 'package:grebo/ui/screens/baseScreen/controller/baseController.dart';
 import 'package:grebo/ui/screens/homeTab/businessprofile.dart';
+import 'package:grebo/ui/screens/homeTab/controller/homeController.dart';
 import 'package:grebo/ui/screens/homeTab/home.dart';
 import 'package:grebo/ui/screens/homeTab/serviceoffered.dart';
 import 'package:grebo/ui/screens/profile/provider/availability.dart';
 import 'package:grebo/ui/screens/profile/settings.dart';
-import 'package:grebo/ui/shared/postview.dart';
+import 'package:grebo/ui/shared/userController.dart';
 
 import '../../../main.dart';
 import 'editprofile.dart';
 
 class Profile extends StatelessWidget {
   final HomeController homeScreenController = Get.find<HomeController>();
+  final BaseController baseController = Get.find<BaseController>();
 
   final List<Map<String, dynamic>> list = [
     {
@@ -23,6 +26,7 @@ class Profile extends StatelessWidget {
       'onTap': () {
         Get.to(() => BusinessProfile(
               isShow: true,
+              businessRef: userController.user.id,
             ));
       },
       "image": AppImages.aboutBusiness
@@ -54,12 +58,32 @@ class Profile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
+      physics: BouncingScrollPhysics(),
       child: Column(
         children: [
           Stack(
             children: [
-              buildCircleProfile(
-                  height: 122, width: 122, image: AppImages.defaultProfile),
+              GetBuilder(
+                builder: (UserController controller) => ClipRRect(
+                  borderRadius: BorderRadius.circular(150),
+                  child: FadeInImage(
+                    placeholder: AssetImage(AppImages.placeHolder),
+                    image: NetworkImage(
+                        "${imageUrl + userController.user.picture}"),
+                    height: 122,
+                    width: 122,
+                    imageErrorBuilder: (context, error, stackTrace) {
+                      return Image.asset(
+                        AppImages.placeHolder,
+                        height: 122,
+                        width: 122,
+                        fit: BoxFit.cover,
+                      );
+                    },
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
               Positioned(
                   bottom: 0,
                   right: 0,
@@ -73,6 +97,7 @@ class Profile extends StatelessWidget {
           getHeightSizedBox(h: 20),
           Container(
             margin: EdgeInsets.symmetric(horizontal: kDefaultPadding),
+            padding: EdgeInsets.only(top: 15),
             decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(12),
@@ -82,25 +107,26 @@ class Profile extends StatelessWidget {
                       offset: Offset(0, 1),
                       blurRadius: 6)
                 ]),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: Column(
+            child: GetBuilder(
+              builder: (UserController controller) => Column(
                 children: [
                   buildSettingTile(
                     image: AppImages.user,
                     height: 21,
                     width: 17,
                     title: 'user_name'.tr,
-                    subtitle: 'Ranjit Singh',
+                    subtitle: userController.user.name,
                   ),
                   userController.user.userType == 1
-                      ? buildSettingTile(
-                          image: AppImages.location,
-                          height: 20,
-                          width: 14,
-                          title: 'location'.tr,
-                          subtitle:
-                              'Villaz Johns Street 11, California Johns Street 11, California',
+                      ? GetBuilder(
+                          builder: (BaseController controller) =>
+                              buildSettingTile(
+                            image: AppImages.location,
+                            height: 20,
+                            width: 14,
+                            title: 'location'.tr,
+                            subtitle: baseController.address,
+                          ),
                         )
                       : SizedBox(),
                   buildSettingTile(
@@ -108,7 +134,7 @@ class Profile extends StatelessWidget {
                     height: 20,
                     width: 20,
                     title: 'email_address'.tr,
-                    subtitle: 'example@mail.com',
+                    subtitle: userController.user.email,
                   ),
                 ],
               ),
@@ -144,31 +170,36 @@ Widget buildSettingTile(
     required String subtitle,
     required double height,
     required double width}) {
-  return Row(
-    crossAxisAlignment: CrossAxisAlignment.center,
-    children: [
-      buildWidget(image, height, width),
-      Expanded(
-        child: ListTile(
-          minVerticalPadding: 5,
-          tileColor: Colors.blue.shade50,
-          title: Text(
-            title,
-            style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: getProportionateScreenWidth(13)),
-          ),
-          subtitle: Padding(
-            padding: const EdgeInsets.only(top: 5),
-            child: Text(
-              subtitle,
-              style: TextStyle(
-                  color: Color(0xff6E6E6E).withOpacity(0.85),
-                  fontSize: getProportionateScreenWidth(14)),
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 15).copyWith(bottom: 15),
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        buildWidget(image, height, width),
+        Expanded(
+          child: Container(
+            margin: EdgeInsets.only(left: 15),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: getProportionateScreenWidth(13)),
+                ),
+                getHeightSizedBox(h: 7),
+                Text(
+                  subtitle,
+                  style: TextStyle(
+                      color: Color(0xff6E6E6E).withOpacity(0.85),
+                      fontSize: getProportionateScreenWidth(14)),
+                ),
+              ],
             ),
           ),
         ),
-      )
-    ],
+      ],
+    ),
   );
 }

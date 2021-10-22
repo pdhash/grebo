@@ -43,6 +43,7 @@ class PostData {
     required this.text,
     required this.thumbnail,
     required this.video,
+    required this.image,
     required this.createdAt,
     required this.updatedAt,
     required this.postUserDetail,
@@ -56,6 +57,8 @@ class PostData {
   String userRef;
   String text;
   String thumbnail;
+  String image;
+
   String video;
   DateTime createdAt;
   DateTime updatedAt;
@@ -68,6 +71,7 @@ class PostData {
         id: json["_id"],
         deleted: json["deleted"],
         userRef: json["userRef"],
+        image: json["image"] ?? "",
         text: json["text"],
         thumbnail: json["thumbnail"],
         video: json["video"],

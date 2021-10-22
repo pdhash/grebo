@@ -13,10 +13,25 @@ class APIRoutes {
   static const String imageDelete = url + "image/delete";
   static const String userUpdate = url + "user/update";
   static const String emailVerification = url + "user/resendVerification";
-  static const String myPost = url + "post/myList";
+  static const String providerPostList = url + "post/myList"; // provider
+  static const String userPostList = url + "post/list"; // provider
   static const String addPost = url + "post/add";
   static const String addServices = url + "services/add";
+  static const String updateServices = url + "services/update";
+  static const String updateLike = url + "like/update";
+  static const String serviceList = url + "services/list";
   static const String categoryList = url + "category/list";
+  static const String notificationList = url + "notification/list";
+  static const String notificationSeen = url + "notification/seen";
+  static const String getComments = url + "comment/list";
+  static const String addComments = url + "comment/add";
+  static const String socialLogin = url + "user/socialLogin";
+  static const String contactAdmin = url + "user/contactAdmin";
+  static const String review = url + "review/list";
+  static const String reviewUpdate = url + "review/update";
+  static const String userDetail = url + "user/details";
+  static const String follow = url + "follow/update";
+  static const String appData = url + "appDetail/list";
 }
 
 enum ContentType { jsonType }

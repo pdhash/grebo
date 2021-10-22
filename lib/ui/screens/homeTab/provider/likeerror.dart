@@ -3,11 +3,13 @@ import 'package:get/get.dart';
 import 'package:grebo/core/constants/app_assets.dart';
 import 'package:grebo/core/extension/customButtonextension.dart';
 import 'package:grebo/core/utils/config.dart';
+import 'package:grebo/ui/screens/baseScreen/controller/baseController.dart';
 import 'package:grebo/ui/screens/homeTab/home.dart';
 import 'package:grebo/ui/shared/appbar.dart';
 import 'package:grebo/ui/shared/custombutton.dart';
 
 class LikeError extends StatelessWidget {
+  final BaseController baseController=Get.find<BaseController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,7 +35,10 @@ class LikeError extends StatelessWidget {
             child: CustomButton(
                 type: CustomButtonType.colourButton,
                 text: 'go_to_profile'.tr,
-                onTap: () {}),
+                onTap: () {
+                  Get.back();
+                  baseController.currentTab=3
+;                }),
           ),
           Spacer(),
         ],

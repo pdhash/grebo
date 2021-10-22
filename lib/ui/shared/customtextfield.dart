@@ -115,12 +115,13 @@ class CustomTextField2 extends StatelessWidget {
       child: Container(
         height: 45,
         color: AppColor.textField2Color,
-        padding: EdgeInsets.only(right: 15),
+        // padding: EdgeInsets.only(right: 15),
         child: Row(
           children: [
             Expanded(
               child: TextFormField(
                 controller: comment,
+                textCapitalization: TextCapitalization.sentences,
                 decoration: InputDecoration(
                     contentPadding: EdgeInsets.only(
                       left: 20,
@@ -134,8 +135,8 @@ class CustomTextField2 extends StatelessWidget {
                     border: InputBorder.none),
               ),
             ),
-            GestureDetector(
-                onTap: send, child: buildWidget(AppImages.send, 20, 22))
+            IconButton(
+                onPressed: send, icon: buildWidget(AppImages.send, 20, 22))
           ],
         ),
       ),

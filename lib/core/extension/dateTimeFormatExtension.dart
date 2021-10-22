@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 enum DateTimeFormat { date, time }
+
+String timeFormat(DateTime timestamp) {
+  var outputFormat = DateFormat('h:mm a');
+  var outputDate = outputFormat.format(timestamp);
+  return outputDate;
+}
 
 extension DateTimeFormatExtension on DateTimeFormat {
   String get datePickerFormat {
@@ -10,19 +17,43 @@ extension DateTimeFormatExtension on DateTimeFormat {
         return 'yyyy-MMMM-dd';
       case DateTimeFormat.time:
         return "HH:mm";
-      // return "hh:mm a";
     }
-    return 'yyyy-MMMM-dd';
+  }
+
+  static String displayChatTimeFromTimestamp(DateTime timestamp) {
+    int v = timestamp.difference(DateTime.now()).inDays;
+    if (v > 1) {
+      return "${"today".tr} ${timeFormat(timestamp)}";
+    } else {
+      var outputFormat = DateFormat('dd-MM-yyyy');
+      var outputDate = outputFormat.format(timestamp);
+      return outputDate;
+    }
+  }
+
+  static String displayTimeFromTimestampForPost(DateTime timestamp) {
+    var v = DateTime.now();
+    if (v.day == timestamp.day) {
+      if (timestamp.minute < 60) {
+        var outputFormat = DateFormat('mm');
+        return "${outputFormat.format(v)}min";
+      } else {
+        var outputFormat = DateFormat('h');
+        return "${outputFormat.format(v)}hrs";
+      }
+    } else {
+      var outputFormat = DateFormat('dd-MM-yyyy');
+      var outputDate = outputFormat.format(timestamp);
+      return outputDate;
+    }
   }
 
   String get availabilityDateTimeFormat {
     switch (this) {
       case DateTimeFormat.date:
         return 'yyyy-MM-ddTHH:mm:ss';
-        break;
       case DateTimeFormat.time:
         return "h:mm a";
-        break;
     }
   }
 
@@ -30,11 +61,9 @@ extension DateTimeFormatExtension on DateTimeFormat {
     switch (this) {
       case DateTimeFormat.date:
         return 'yyyy-MM-ddTHH:mm:ss';
-        break;
       case DateTimeFormat.time:
         Duration duration = DateTime.now().timeZoneOffset;
         return "yyyy-MM-dd'T'HH:mm:ss${duration.isNegative ? "-" : "+"}${durationToString(duration.inMinutes)}";
-        break;
     }
   }
 
@@ -57,7 +86,6 @@ String appTimeFunDB(TimeOfDay timeOfDay) {
 
 String appTimeFun(String time) {
   final dateTime = DateTime.parse(time);
-  print("date========$dateTime");
 
   var outputFormat = DateFormat(DateTimeFormat.time.availabilityDateTimeFormat);
   var outputDate = outputFormat.format(dateTime);

@@ -36,6 +36,7 @@ class SignUp extends StatelessWidget {
               body: Form(
                 key: globalKey,
                 child: SingleChildScrollView(
+                  physics: BouncingScrollPhysics(),
                   child: Padding(
                     padding:
                         const EdgeInsets.symmetric(horizontal: kDefaultPadding),
@@ -63,7 +64,7 @@ class SignUp extends StatelessWidget {
                           'confirm_password'.tr,
                         ),
                         confirmPasswordField(),
-                        getHeightSizedBox(h: 200),
+                        getHeightSizedBox(h: 150),
                         CustomButton(
                             type: CustomButtonType.colourButton,
                             text: 'Signup'.tr,
@@ -237,6 +238,7 @@ class SignUp extends StatelessWidget {
           child: GestureDetector(
             onTap: () {
               disposeKeyboard();
+
               appImagePicker.openBottomSheet();
             },
             child: appImagePicker.imagePickerController.image == null

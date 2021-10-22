@@ -8,10 +8,12 @@ import 'package:grebo/core/constants/appcolor.dart';
 import 'package:grebo/core/service/repo/userRepo.dart';
 import 'package:grebo/core/utils/config.dart';
 import 'package:grebo/core/viewmodel/controller/selectservicecontoller.dart';
+import 'package:grebo/ui/screens/baseScreen/controller/baseController.dart';
 import 'package:grebo/ui/screens/homeTab/controller/homeController.dart';
 import 'package:grebo/ui/screens/homeTab/model/postModel.dart';
 import 'package:grebo/ui/screens/homeTab/viewAllCategories.dart';
 import 'package:grebo/ui/shared/custombutton.dart';
+import 'package:grebo/ui/shared/placeScreen.dart';
 import 'package:grebo/ui/shared/postview.dart';
 import 'package:pagination_view/pagination_view.dart';
 
@@ -19,6 +21,9 @@ import '../../../main.dart';
 
 class Home extends StatelessWidget {
   final HomeController homeController = Get.put(HomeController());
+  static GlobalKey<PaginationViewState> paginationViewKey =
+      GlobalKey<PaginationViewState>();
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -35,20 +40,33 @@ class Home extends StatelessWidget {
                         SizedBox(
                           width: getProportionateScreenWidth(9),
                         ),
-                        SizedBox(
-                            width: getProportionateScreenWidth(250),
-                            height: 18,
-                            child: Text(
-                              'yogeshwar soc society,shyamdham chowk, surat',
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                  fontSize: getProportionateScreenWidth(14),
-                                  color: AppColor.kDefaultFontColor
-                                      .withOpacity(0.75)),
-                            )),
+                        GetBuilder(
+                          builder: (BaseController controller) => SizedBox(
+                              width: getProportionateScreenWidth(250),
+                              height: 18,
+                              child: Text(
+                                controller.address,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                    fontSize: getProportionateScreenWidth(14),
+                                    color: AppColor.kDefaultFontColor
+                                        .withOpacity(0.75)),
+                              )),
+                        ),
                         Spacer(),
                         GestureDetector(
-                          onTap: () {},
+                          onTap: () async {
+                            await GoogleSearchPlace.buildGooglePlaceSearch()
+                                .then((value) async {
+                              if (!(value.long == 0 &&
+                                  value.late == 0 &&
+                                  value.address == "")) {
+                                print(value.long);
+                                Get.find<BaseController>().changeAddress(
+                                    value.late, value.long, value.address);
+                              }
+                            });
+                          },
                           child: Text(
                             'change'.tr,
                             style: TextStyle(
@@ -86,28 +104,41 @@ class Home extends StatelessWidget {
                     ),
                   ),
                   getHeightSizedBox(h: 12),
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    physics: BouncingScrollPhysics(),
-                    child: Padding(
-                      padding: EdgeInsets.only(left: kDefaultPadding),
-                      child: Row(
-                        children: categories
-                            .map((e) => BusinessCategories(
-                                  text: e,
-                                  textStyle: TextStyle(
-                                      fontSize: getProportionateScreenWidth(13),
-                                      color: AppColor.kDefaultFontColor),
-                                  onTap: () {},
-                                  height: 38,
-                                  backgroundColor: Colors.white,
-                                  border: Border.all(
-                                      color: AppColor.categoriesColor,
-                                      width: 1),
-                                ))
-                            .toList(),
-                      ),
-                    ),
+                  GetBuilder(
+                    builder: (HomeController controller) {
+                      return SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        physics: BouncingScrollPhysics(),
+                        child: Padding(
+                          padding: EdgeInsets.only(left: kDefaultPadding),
+                          child: Row(
+                            children: List.generate(
+                                userController.globalCategory.length, (index) {
+                              var catRef = userController.globalCategory[index];
+                              return BusinessCategories(
+                                text: catRef.name,
+                                textStyle: TextStyle(
+                                    fontSize: getProportionateScreenWidth(13),
+                                    color: controller.selectedCategory
+                                            .contains(catRef.id)
+                                        ? Colors.white
+                                        : AppColor.kDefaultFontColor),
+                                onTap: () {
+                                  controller.updateCategory(catRef.id);
+                                },
+                                height: 38,
+                                backgroundColor: controller.selectedCategory
+                                        .contains(catRef.id)
+                                    ? AppColor.categoriesColor
+                                    : Colors.white,
+                                border: Border.all(
+                                    color: AppColor.categoriesColor, width: 1),
+                              );
+                            }),
+                          ),
+                        ),
+                      );
+                    },
                   ),
                   getHeightSizedBox(h: 10),
                   Divider(
@@ -116,32 +147,34 @@ class Home extends StatelessWidget {
                 ],
               )
             : SizedBox(),
-        // Expanded(
-        //   child: ListView.builder(
-        //     itemCount: list.length,
-        //     physics: BouncingScrollPhysics(),
-        //     itemBuilder: (context, index) {
-        //       return PostView(index: index);
-        //     },
-        //   ),
-        // ),
         Expanded(
-            child: PaginationView(
-          itemBuilder: (BuildContext context, PostData postData, int index) {
-            return PostView(
-              index: index,
+          child: PaginationView(
+            key: paginationViewKey,
+            pullToRefresh: true,
+            physics: BouncingScrollPhysics(),
+            itemBuilder: (BuildContext context, PostData postData, int index) =>
+                PostView(
               postData: postData,
-            );
-          },
-          pullToRefresh: true,
-          pageFetch: homeController.fetchMyPost,
-          onEmpty: Center(
-            child: Text('no_post_found'.tr),
+            ),
+            pageFetch: userController.user.userType ==
+                    getServiceTypeCode(ServicesType.userType)
+                ? homeController.fetchUserPost
+                : homeController.fetchProviderPost,
+            onError: (error) {
+              print("Error $error");
+              return Center(child: Text(error));
+            },
+            onEmpty: Center(
+              child: Text("no_post_found".tr),
+            ),
+            initialLoader: GetPlatform.isAndroid
+                ? Center(
+                    child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                  ))
+                : Center(child: CupertinoActivityIndicator()),
           ),
-          onError: (error) {
-            return Center(child: Text(error));
-          },
-        ))
+        )
       ],
     );
   }

@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:grebo/core/constants/appSetting.dart';
+import 'package:grebo/core/constants/app_assets.dart';
 import 'package:grebo/core/constants/appcolor.dart';
+import 'package:grebo/core/service/apiRoutes.dart';
 import 'package:grebo/core/utils/config.dart';
-import 'package:grebo/ui/screens/homeTab/controller/homeController.dart';
-import 'package:grebo/ui/shared/postview.dart';
+import 'package:grebo/ui/screens/homeTab/model/commentModel.dart';
 
 class CommentView extends StatelessWidget {
-  final HomeController homeScreenController = Get.find<HomeController>();
-  final int currentPost;
-  final int index;
+  final CommentsData commentsData;
 
-  CommentView({Key? key, required this.currentPost, required this.index})
-      : super(key: key);
+  CommentView({Key? key, required this.commentsData}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -32,14 +29,30 @@ class CommentView extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 getHeightSizedBox(h: 15),
                 Row(
                   children: [
-                    buildCircleProfile(
-                        image: list[currentPost]['comment'][index]['profile'],
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(60),
+                      child: FadeInImage(
+                        placeholder: AssetImage(AppImages.placeHolder),
+                        image:
+                            NetworkImage("${imageUrl + commentsData.picture}"),
                         height: 40,
-                        width: 40),
+                        width: 40,
+                        imageErrorBuilder: (context, error, stackTrace) {
+                          return Image.asset(
+                            AppImages.placeHolder,
+                            height: 40,
+                            width: 40,
+                            fit: BoxFit.cover,
+                          );
+                        },
+                        fit: BoxFit.cover,
+                      ),
+                    ),
                     getHeightSizedBox(w: 9),
                     Padding(
                       padding: const EdgeInsets.only(top: 5),
@@ -47,14 +60,14 @@ class CommentView extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            list[currentPost]['comment'][index]['name'],
+                            commentsData.name,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: getProportionateScreenWidth(16)),
                           ),
                           getHeightSizedBox(h: 5),
                           Text(
-                            list[currentPost]['comment'][index]['time'],
+                            commentsData.createdAt.toString(),
                             style: TextStyle(
                                 color: AppColor.kDefaultFontColor
                                     .withOpacity(0.57),
@@ -65,9 +78,9 @@ class CommentView extends StatelessWidget {
                     ),
                   ],
                 ),
-                getHeightSizedBox(h: 7),
+                getHeightSizedBox(h: 10),
                 Text(
-                  list[currentPost]['comment'][index]['title'],
+                  commentsData.text,
                   style: TextStyle(
                       color: AppColor.kDefaultFontColor.withOpacity(0.89),
                       fontSize: getProportionateScreenWidth(14)),

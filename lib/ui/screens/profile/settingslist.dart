@@ -1,100 +1,57 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:grebo/core/constants/appSetting.dart';
 import 'package:grebo/core/constants/app_assets.dart';
 import 'package:grebo/core/constants/appcolor.dart';
-import 'package:grebo/core/extension/customButtonextension.dart';
 import 'package:grebo/core/utils/config.dart';
 import 'package:grebo/ui/screens/homeTab/home.dart';
-import 'package:grebo/ui/shared/alertdialogue.dart';
+import 'package:grebo/ui/screens/profile/controller/aboutUsController.dart';
 import 'package:grebo/ui/shared/appbar.dart';
-import 'package:grebo/ui/shared/custombutton.dart';
 
 enum DescriptionScreen { aboutUs, termsAndConditions }
 
-class AboutUsAndTAndC extends StatelessWidget {
+class AboutUsAndTAndC extends StatefulWidget {
   final DescriptionScreen screenType;
 
   const AboutUsAndTAndC({Key? key, required this.screenType}) : super(key: key);
+
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: appBar(DescriptionScreen.aboutUs == screenType
-          ? 'about_us'.tr
-          : 'terms_and_conditions'.tr),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding)
-            .copyWith(top: 5),
-        child: Text(
-          DescriptionScreen.aboutUs == screenType
-              ? 'aboutusdes'.tr
-              : 'termsandconditiondes'.tr,
-          style: TextStyle(
-              height: 1.3,
-              color: AppColor.kDefaultFontColor.withOpacity(0.81),
-              fontSize: getProportionateScreenWidth(15)),
-        ),
-      ),
-    );
-  }
+  _AboutUsAndTAndCState createState() => _AboutUsAndTAndCState();
 }
 
-class ContactAdmin extends StatelessWidget {
-  const ContactAdmin({Key? key}) : super(key: key);
-
+class _AboutUsAndTAndCState extends State<AboutUsAndTAndC> {
+  final AboutUsController aboutUsController = Get.put(AboutUsController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar('contact_admin'.tr),
-      body: SingleChildScrollView(
-          child: Column(
-        children: [
-          getHeightSizedBox(h: 10),
-          Container(
-            height: 187,
-            margin: EdgeInsets.symmetric(horizontal: kDefaultPadding),
-            width: Get.width,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: Color(0xffC4C4C4))),
-            child: TextField(
-              textInputAction: TextInputAction.go,
-              textCapitalization: TextCapitalization.sentences,
-              keyboardType: TextInputType.multiline,
-              maxLines: null,
-              decoration: InputDecoration(
-                  contentPadding:
-                      EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                  hintText: 'how_can_we_help'.tr,
-                  border: InputBorder.none,
-                  hintStyle: TextStyle(
-                      color: AppColor.kDefaultFontColor,
-                      fontSize: getProportionateScreenWidth(16))),
-            ),
-          ),
-          getHeightSizedBox(h: 40),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
-            child: CustomButton(
-                type: CustomButtonType.colourButton,
-                text: 'save'.tr,
-                onTap: () {
-                  disposeKeyboard();
-                  showCustomDialog(
-                      context: context,
-                      height: 150,
-                      content: 'dialog_msg'.tr,
-                      contentSize: 15,
-                      onTap: () {
-                        Get.back();
-                        Get.back();
-                      },
-                      color: AppColor.kDefaultColor,
-                      okText: 'ok'.tr);
-                }),
-          )
-        ],
-      )),
+      appBar: appBar(DescriptionScreen.aboutUs == widget.screenType
+          ? 'about_us'.tr
+          : 'terms_and_conditions'.tr),
+      body: GetBuilder(
+        builder: (AboutUsController controller) =>
+            controller.aboutUs == null && controller.tc == null
+                ? Center(
+                    child: GetPlatform.isIOS
+                        ? CupertinoActivityIndicator()
+                        : CircularProgressIndicator(
+                            strokeWidth: 2,
+                          ))
+                : Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: kDefaultPadding)
+                            .copyWith(top: 5),
+                    child: Text(
+                      DescriptionScreen.aboutUs == widget.screenType
+                          ? aboutUsController.aboutUs.toString()
+                          : aboutUsController.tc.toString(),
+                      style: TextStyle(
+                          height: 1.3,
+                          color: AppColor.kDefaultFontColor.withOpacity(0.81),
+                          fontSize: getProportionateScreenWidth(15)),
+                    ),
+                  ),
+      ),
     );
   }
 }

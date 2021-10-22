@@ -68,7 +68,9 @@ class AppLoader extends StatelessWidget {
     if (Platform.isIOS) {
       return CupertinoActivityIndicator();
     } else {
-      return CircularProgressIndicator();
+      return CircularProgressIndicator(
+        strokeWidth: 2,
+      );
     }
   }
 }

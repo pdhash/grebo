@@ -1,12 +1,17 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:grebo/core/constants/app_theme.dart';
 import 'package:grebo/core/service/repo/editProfileRepo.dart';
+import 'package:grebo/core/service/repo/userRepo.dart';
+import 'package:grebo/core/viewmodel/controller/selectservicecontoller.dart';
 import 'package:grebo/ui/global.dart';
 import 'package:grebo/ui/screens/baseScreen/baseScreen.dart';
+import 'package:grebo/ui/screens/editBusinessprofile/details1.dart';
 import 'package:grebo/ui/screens/onbording.dart';
+import 'package:grebo/ui/screens/selectservice.dart';
 import 'package:grebo/ui/shared/userController.dart';
 
 import 'core/utils/lang.dart';
@@ -17,7 +22,8 @@ late UserController userController;
 
 void main() async {
   globalVerbsInit();
-
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   await GetStorage.init();
 
   userController = Get.put(UserController());
@@ -25,7 +31,6 @@ void main() async {
 
   final ImagePickerController imagePickerController =
       Get.put(ImagePickerController());
-  // print(userController.userToken);
   runApp(MyApp());
 }
 
@@ -44,7 +49,15 @@ class MyApp extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
       title: 'Grebo',
-      home: getUserDetail() ? BaseScreen() : OnBoarding(),
+      home: getUserDetail()
+          ? userController.user.profileCompleted ||
+                  userController.user.userType ==
+                      getServiceTypeCode(ServicesType.userType)
+              ? BaseScreen()
+              : DetailsPage1()
+          : onBoardingHideRead()
+              ? ChooseServices()
+              : OnBoarding(),
       translations: Lang(),
       theme: AppTheme.defTheme,
       locale: Locale('en', 'US'), //Localizations.localeOf(context),

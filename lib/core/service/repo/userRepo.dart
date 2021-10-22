@@ -26,6 +26,42 @@ class UserRepo {
       return null;
   }
 
+  static Future userSocialLogin({
+    required String name,
+    required int userType,
+    required String email,
+    required String fcmToken,
+    required String image,
+    required String socialId,
+    required String socialToken,
+    required int socialIdentifier,
+  }) async {
+    var responseBody = await API.apiHandler(
+      url: APIRoutes.socialLogin,
+      header: {
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode(
+        {
+          "email": email,
+          "userType": userType,
+          "name": name,
+          "device": Platform.isAndroid ? "Android" : "IOS",
+          "fcmToken": fcmToken,
+          "image": image,
+          "referralId": "",
+          "socialId": socialId,
+          "socialToken": socialToken,
+          "socialIdentifier": socialIdentifier
+        },
+      ),
+    );
+    if (responseBody != null)
+      return responseBody;
+    else
+      return null;
+  }
+
   static Future userSignUp({
     required String email,
     required String name,

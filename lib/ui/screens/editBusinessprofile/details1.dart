@@ -16,6 +16,9 @@ import 'package:grebo/ui/shared/alertdialogue.dart';
 import 'package:grebo/ui/shared/appbar.dart';
 import 'package:grebo/ui/shared/custombutton.dart';
 import 'package:grebo/ui/shared/customtextfield.dart';
+import 'package:grebo/ui/shared/doubleTaptoback.dart';
+import 'package:grebo/ui/shared/loader.dart';
+import 'package:grebo/ui/shared/placeScreen.dart';
 
 import '../../global.dart';
 
@@ -30,6 +33,13 @@ class DetailsPage1 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    editProfileController.isNext = isNext;
+    return isNext
+        ? DoubleBackToCloseApp(child: scaffoldWidget())
+        : scaffoldWidget();
+  }
+
+  GestureDetector scaffoldWidget() {
     return GestureDetector(
       onTap: () {
         disposeKeyboard();
@@ -81,16 +91,10 @@ class DetailsPage1 extends StatelessWidget {
                             if (editProfileController
                                 .uploadMultiFile.isNotEmpty) {
                               if (editProfileController.websites.isNotEmpty) {
-                                if (isNext) {
-                                  appImagePicker.imagePickerController
-                                      .resetImage();
+                                appImagePicker.imagePickerController
+                                    .resetImage();
 
-                                  editProfileController.submitAllFields();
-                                } else {
-                                  appImagePicker.imagePickerController
-                                      .resetImage();
-                                  Get.back();
-                                }
+                                editProfileController.submitAllFields(isNext);
                               } else {
                                 flutterToast('select_image'.tr);
                               }
@@ -225,37 +229,50 @@ class DetailsPage1 extends StatelessWidget {
   }
 
   locationFiled() {
-    return TextFormField(
-      style: TextStyle(
-          fontSize: getProportionateScreenWidth(14), color: Color(0xff8F92A3)),
-      controller: editProfileController.location,
-      // validator: (val) => val!.isEmpty ? "enter_location".tr : null,
-      enabled: false,
-      textInputAction: TextInputAction.next,
-      onTap: () {},
-      textAlignVertical: TextAlignVertical.center,
-      decoration: InputDecoration(
-          errorStyle: TextStyle(
-            color: Theme.of(Get.context as BuildContext)
-                .errorColor, // or any other color
-          ),
-          errorBorder: UnderlineInputBorder(
-              borderSide: BorderSide(
-            width: 1,
-            color: Theme.of(Get.context as BuildContext).errorColor,
-          )),
-          disabledBorder: UnderlineInputBorder(
-              borderSide: BorderSide(
-            width: 0.5,
-          )),
-          hintStyle: TextStyle(
-              fontSize: getProportionateScreenWidth(14),
-              color: Color(0xff8F92A3)),
-          hintText: 'Villaz Johns Street 11, California..',
-          suffixIconConstraints: BoxConstraints.tight(Size(22, 22)),
-          suffixIcon: SvgPicture.asset(
-            AppImages.gps,
-          )),
+    return GestureDetector(
+      onTap: () {
+        GoogleSearchPlace.buildGooglePlaceSearch().then((value) async {
+          LoadingOverlay.of().show();
+          editProfileController.lat = value.late;
+          editProfileController.long = value.long;
+          editProfileController.location.text = value.address;
+          LoadingOverlay.of().hide();
+        });
+      },
+      child: TextFormField(
+        style: TextStyle(
+          fontSize: getProportionateScreenWidth(14),
+        ),
+        controller: editProfileController.location,
+        validator: (val) => val!.isEmpty ? "enter_location".tr : null,
+        enabled: false,
+        textInputAction: TextInputAction.next,
+        textAlignVertical: TextAlignVertical.center,
+        decoration: InputDecoration(
+            errorStyle: TextStyle(
+              color: Theme.of(Get.context as BuildContext)
+                  .errorColor, // or any other color
+            ),
+            errorBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+              width: 1,
+              color: Theme.of(Get.context as BuildContext).errorColor,
+            )),
+            disabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+              width: 0.5,
+            )),
+            hintStyle: TextStyle(
+                fontSize: getProportionateScreenWidth(14),
+                color: Color(0xff8F92A3)),
+            hintText: 'Villaz Johns Street 11, California..',
+            suffixIcon: Padding(
+              padding: const EdgeInsets.fromLTRB(10, 12, 0, 12),
+              child: SvgPicture.asset(
+                AppImages.gps,
+              ),
+            )),
+      ),
     );
   }
 
@@ -359,7 +376,7 @@ class DetailsPage1 extends StatelessWidget {
       aspectRatio: 1.8,
       child: GetBuilder(
         builder: (EditBProfileController controller) {
-          print("calling get builder");
+          print("CALLING GET BUILDER");
           return GridView.builder(
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3,
@@ -372,67 +389,106 @@ class DetailsPage1 extends StatelessWidget {
             ),
             clipBehavior: Clip.none,
             itemCount: 6,
-            itemBuilder: (context, index) => userController.user.images.length >
-                    index
-                ? Stack(
-                    clipBehavior: Clip.none,
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(7),
-                        child: FadeInImage(
-                          image: NetworkImage(
-                              "${imageUrl + userController.user.images[index]}"),
-                          height: 80,
-                          width: 100,
-                          fit: BoxFit.cover,
-                          placeholder: AssetImage(AppImages.placeHolder),
-                        ),
-                      ),
-                      Positioned(
-                          right: -4,
-                          top: -4,
-                          child: GestureDetector(
-                            onTap: () {
-                              controller.removeImageLocally(index);
-                            },
-                            child: buildWidget(AppImages.closeGreen, 20, 20),
-                          ))
-                    ],
-                  )
-                : controller.multiFile.length > (index)
-                    ? Stack(
-                        clipBehavior: Clip.none,
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(7),
-                            child: AspectRatio(
-                              aspectRatio: 100 / 80,
-                              child: Image.file(
-                                controller.multiFile[index],
-                                fit: BoxFit.cover,
+            itemBuilder: isNext
+                ? (context, index) {
+                    return controller.multiFile.length > (index)
+                        ? Stack(
+                            clipBehavior: Clip.none,
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(7),
+                                child: AspectRatio(
+                                  aspectRatio: 100 / 80,
+                                  child: Image.file(
+                                    controller.multiFile[index],
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                          Positioned(
-                              right: -4,
-                              top: -4,
-                              child: GestureDetector(
-                                onTap: () {
-                                  print("remove server");
+                              Positioned(
+                                  right: -4,
+                                  top: -4,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      controller.deleteImage(index);
+                                    },
+                                    child: buildWidget(
+                                        AppImages.closeGreen, 20, 20),
+                                  ))
+                            ],
+                          )
+                        : GestureDetector(
+                            onTap: () {
+                              controller.uploadImage();
+                            },
+                            child: buildWidget(AppImages.uploadImage, 80, 100),
+                          );
+                  }
+                : (context, index) {
+                    return controller.uploadMultiFile.length > index
+                        ? Stack(
+                            clipBehavior: Clip.none,
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(7),
+                                child: FadeInImage(
+                                  image: NetworkImage(
+                                      "${imageUrl + controller.uploadMultiFile[index]}"),
+                                  height: 80,
+                                  width: 100,
+                                  fit: BoxFit.cover,
+                                  placeholder:
+                                      AssetImage(AppImages.placeHolder),
+                                ),
+                              ),
+                              Positioned(
+                                  right: -4,
+                                  top: -4,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      controller.removeImageLocally(index);
+                                    },
+                                    child: buildWidget(
+                                        AppImages.closeGreen, 20, 20),
+                                  ))
+                            ],
+                          )
+                        : controller.multiFile.length > (index)
+                            ? Stack(
+                                clipBehavior: Clip.none,
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(7),
+                                    child: AspectRatio(
+                                      aspectRatio: 100 / 80,
+                                      child: Image.file(
+                                        controller.multiFile[index],
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                                  Positioned(
+                                      right: -4,
+                                      top: -4,
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          print("remove server");
 
-                                  controller.deleteImage(index);
+                                          controller.deleteImage(index);
+                                        },
+                                        child: buildWidget(
+                                            AppImages.closeGreen, 20, 20),
+                                      ))
+                                ],
+                              )
+                            : GestureDetector(
+                                onTap: () {
+                                  controller.uploadImage();
                                 },
                                 child:
-                                    buildWidget(AppImages.closeGreen, 20, 20),
-                              ))
-                        ],
-                      )
-                    : GestureDetector(
-                        onTap: () {
-                          controller.uploadImage();
-                        },
-                        child: buildWidget(AppImages.uploadImage, 80, 100),
-                      ),
+                                    buildWidget(AppImages.uploadImage, 80, 100),
+                              );
+                  },
           );
         },
       ),

@@ -20,6 +20,7 @@ class ForgotPassword extends StatelessWidget {
       child: Scaffold(
         appBar: appBar('forgot_password'.tr),
         body: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
             child: Column(
@@ -59,18 +60,6 @@ class ForgotPassword extends StatelessWidget {
                           onTap: () {
                             disposeKeyboard();
                             forgotPasswordController.userForgotPassword();
-
-                            // showCustomDialog(
-                            //     context: context,
-                            //     color: AppColor.kDefaultColor,
-                            //     content: 'a_link_to..'.tr,
-                            //     contentSize: 16,
-                            //     okText: 'save'.tr,
-                            //     onTap: () {
-                            //       Get.back();
-                            //       Get.back();
-                            //     },
-                            //     height: getProportionateScreenWidth(180));
                           }),
                       getHeightSizedBox(h: 70)
                     ],

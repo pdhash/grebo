@@ -45,6 +45,25 @@ dependencies:
   get_storage: ^2.0.3
   path: ^1.8.0
   pagination_view: ^2.0.0
+  path_provider: ^2.0.2
+  video_compress: ^3.1.0
+  firebase_auth: ^3.1.3
+  google_sign_in:
+  firebase_core: ^1.7.0
+  sign_in_with_apple: ^3.2.0
+  firebase_messaging: ^10.0.8
+  flutter_facebook_auth: ^3.5.2
+  http_parser: ^4.0.0
+  mime_type: ^1.0.0
+  chewie: ^1.2.2
+  flutter_google_places: ^0.3.0
+  permission_handler:
+  google_maps_webservice: ^0.0.19
+  geolocator: 7.5.0
+  google_api_headers: ^1.1.1
+  location: ^4.3.0
+  geocoding: ^2.0.1
+  google_maps_flutter: ^2.0.6
 
 dev_dependencies:
   flutter_test:

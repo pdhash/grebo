@@ -4,17 +4,17 @@ import 'package:grebo/core/utils/appFunctions.dart';
 import '../screens/login/model/currentUserModel.dart';
 
 class UserController extends GetxController {
-  late User _user;
+  late UserModel _user;
 
-  User get user => _user;
+  UserModel get user => _user;
 
-  set user(User value) {
+  set user(UserModel value) {
     _user = value;
     updateDetails();
     update();
   }
 
-  String _userToken = "";
+  late String _userToken;
 
   String get userToken => _userToken;
 
@@ -33,6 +33,7 @@ class UserController extends GetxController {
   }
 
   List<String> getAvailabilityDay = [];
+  List<String> getCloseDay = [];
 
   void updateDetails() {
     print("update userController");
@@ -45,5 +46,8 @@ class UserController extends GetxController {
         }
       }
     }
+    getCloseDay = weekDayList
+        .where((element) => !getAvailabilityDay.contains(element))
+        .toList();
   }
 }

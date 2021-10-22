@@ -1,5 +1,7 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:grebo/core/constants/appSetting.dart';
+import 'package:grebo/core/extension/dateTimeFormatExtension.dart';
 import 'package:grebo/core/service/repo/editProfileRepo.dart';
 import 'package:grebo/core/utils/sharedpreference.dart';
 import 'package:grebo/main.dart';
@@ -42,7 +44,7 @@ class AvailabilityController extends GetxController {
   }
 
   ///=============== DB
-  String _startTime = "";
+  late String _startTime;
 
   String get startTime => _startTime;
 
@@ -51,7 +53,7 @@ class AvailabilityController extends GetxController {
     update();
   }
 
-  String _endTime = "";
+  late String _endTime;
 
   String get endTime => _endTime;
 
@@ -60,7 +62,7 @@ class AvailabilityController extends GetxController {
     update();
   }
 
-  Future submitAllFields() async {
+  Future submitAllFields(bool isNext) async {
     daysCount.sort();
     var v = await EditProfileRepo.updateUser(
       map: {
@@ -70,9 +72,13 @@ class AvailabilityController extends GetxController {
       },
     );
     if (v != null) {
-      updateUserDetail(User.fromJson(v['data']));
-
-      Get.to(() => DetailsPage3());
+      print(v);
+      updateUserDetail(UserModel.fromJson(v['data']));
+      if (isNext) {
+        Get.to(() => DetailsPage3());
+      } else {
+        Get.back();
+      }
     }
   }
 
@@ -80,11 +86,14 @@ class AvailabilityController extends GetxController {
   void onInit() {
     if (userController.user.profileCompleted) {
       daysCount = userController.user.workingDays;
-      defaultTime = dateFormat.format(userController.user.startTime.toLocal());
-      defaultTimeEnd = dateFormat.format(userController.user.endTime.toLocal());
-      //startTime=appTimeFunDB(TimeOfDay.fromDateTime(date))
-      print(userController.user.startTime);
-      print(userController.user.endTime);
+      defaultTime = dateFormat
+          .format(DateTime.parse(userController.user.startTime).toLocal());
+      defaultTimeEnd = dateFormat
+          .format(DateTime.parse(userController.user.endTime).toLocal());
+      startTime = appTimeFunDB(TimeOfDay.fromDateTime(
+          DateTime.parse(userController.user.startTime).toLocal()));
+      endTime = appTimeFunDB(TimeOfDay.fromDateTime(
+          DateTime.parse(userController.user.endTime).toLocal()));
     }
 
     super.onInit();

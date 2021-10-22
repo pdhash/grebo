@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:grebo/ui/screens/login/model/currentUserModel.dart';
 
@@ -7,12 +8,23 @@ import '../apiHandler.dart';
 import '../apiRoutes.dart';
 
 class EditProfileRepo {
-  static Future updateUser({required Map<String, dynamic> map}) async {
+  static Future updateUser(
+      {required Map<String, dynamic> map, File? image}) async {
     String field = jsonEncode(map);
-    var responseBody = await API.multiPartAPIHandler(
-        url: APIRoutes.userUpdate,
-        header: {'Authorization': userController.userToken},
-        field: {"data": field});
+    var responseBody;
+    if (image == null) {
+      responseBody = await API.multiPartAPIHandler(
+          url: APIRoutes.userUpdate,
+          header: {'Authorization': userController.userToken},
+          field: {"data": field});
+    } else
+      responseBody = await API.multiPartAPIHandler(
+          url: APIRoutes.userUpdate,
+          header: {'Authorization': userController.userToken},
+          field: {"data": field},
+          multiPartImageKeyName: "picture",
+          fileImage: [image]);
+
     if (responseBody != null)
       return responseBody;
     else
@@ -22,8 +34,11 @@ class EditProfileRepo {
   static Future serviceUpdate({required Map<String, dynamic> map}) async {
     String field = jsonEncode(map);
     var responseBody = await API.apiHandler(
-        url: APIRoutes.addServices,
-        header: {"Authorization": userController.userToken},
+        url: APIRoutes.updateServices,
+        header: {
+          "Authorization": userController.userToken,
+          'Content-Type': 'application/json',
+        },
         body: field);
     if (responseBody != null)
       return responseBody;
@@ -39,5 +54,18 @@ class EditProfileRepo {
           responseBody["data"].map((x) => Category.fromJson(x)));
     else
       return [Category()];
+  }
+
+  static Future getServices({String? userRef}) async {
+    var responseBody = await API.apiHandler(
+        url: APIRoutes.serviceList,
+        showLoader: false,
+        header: {"Authorization": userController.userToken},
+        body: userRef == null ? null : {"userRef": userRef});
+    print("getServices $responseBody");
+    if (responseBody != null)
+      return responseBody;
+    else
+      return [ServiceList()];
   }
 }
