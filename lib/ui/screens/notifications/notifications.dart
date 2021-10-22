@@ -15,25 +15,27 @@ class AllNotification extends StatelessWidget {
       Get.put(NotificationController());
   @override
   Widget build(BuildContext context) {
-    return PaginationView(
-        itemBuilder: (BuildContext context, Datum notifyData, int index) {
-          return notifyListTile(notifyData: notifyData);
-        },
-        physics: AlwaysScrollableScrollPhysics(),
-        pullToRefresh: true,
-        pageFetch: notificationController.fetchNotification,
-        onEmpty: Center(
-          child: Text('no_post_found'.tr),
-        ),
-        onError: (error) {
-          return Center(child: Text(error));
-        },
-        initialLoader: GetPlatform.isAndroid
-            ? Center(
-                child: CircularProgressIndicator(
-                strokeWidth: 2,
-              ))
-            : Center(child: CupertinoActivityIndicator()));
+    return GetBuilder(
+      builder: (NotificationController controller) => PaginationView(
+          itemBuilder: (BuildContext context, Datum notifyData, int index) {
+            return notifyListTile(notifyData: notifyData);
+          },
+          physics: AlwaysScrollableScrollPhysics(),
+          pullToRefresh: true,
+          pageFetch: notificationController.fetchNotification,
+          onEmpty: Center(
+            child: Text('no_post_found'.tr),
+          ),
+          onError: (error) {
+            return Center(child: Text(error));
+          },
+          initialLoader: GetPlatform.isAndroid
+              ? Center(
+                  child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                ))
+              : Center(child: CupertinoActivityIndicator())),
+    );
   }
 
   notifyListTile({required Datum notifyData}) {
@@ -42,6 +44,13 @@ class AllNotification extends StatelessWidget {
         ListTile(
           horizontalTitleGap: 12,
           minVerticalPadding: 17,
+          onTap: () {
+            print(notifyData.seen);
+            if (notifyData.seen == false) {
+              notificationController.readNotification(
+                  notifyData.id, notifyData);
+            }
+          },
           contentPadding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
           leading: Stack(
             clipBehavior: Clip.none,
@@ -66,16 +75,18 @@ class AllNotification extends StatelessWidget {
               Positioned(
                 bottom: 0,
                 right: -3,
-                child: CircleAvatar(
-                  radius: getProportionateScreenWidth(8),
-                  backgroundColor: Colors.white,
-                  child: Center(
-                    child: CircleAvatar(
-                      radius: getProportionateScreenWidth(6.5),
-                      backgroundColor: Color(0xff8BC53F),
-                    ),
-                  ),
-                ),
+                child: notifyData.seen
+                    ? SizedBox()
+                    : CircleAvatar(
+                        radius: getProportionateScreenWidth(8),
+                        backgroundColor: Colors.white,
+                        child: Center(
+                          child: CircleAvatar(
+                            radius: getProportionateScreenWidth(6.5),
+                            backgroundColor: Color(0xff8BC53F),
+                          ),
+                        ),
+                      ),
               )
             ],
           ),

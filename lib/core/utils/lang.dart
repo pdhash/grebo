@@ -111,6 +111,7 @@ class Lang extends Translations {
           'services_offered': 'Services Offered',
           'customer_reviews': 'Customer Reviews',
           'warning': 'Warning',
+          'unverified': 'Unverified',
           //edit profile business
           'edit_business_profile': 'Edit Business Profile',
           'business_details': 'Business Details',
@@ -184,6 +185,8 @@ class Lang extends Translations {
           'please_enter_email': 'Please enter email',
           'please_enter_password': 'Please enter password',
           'please_enter_valid_email': 'Please enter valid email',
+          'please_enter_review': 'Please enter review',
+          'please_provide_rating': 'Please enter rating',
 
           //toasts
           'please_select_working_days': 'Please select working days',
@@ -191,6 +194,8 @@ class Lang extends Translations {
           'no_post_found': 'No post found',
           'please_enter_service': 'Please Enter Service',
           'weblink_toast': "You can add max 3 website link",
+          'no_data_found': 'No data found',
+          'press_again_to_close_app': 'Press again to close app',
           //
           'today': 'Today',
           'managed_by': 'Managed By',

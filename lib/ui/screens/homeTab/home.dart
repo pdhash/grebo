@@ -8,10 +8,12 @@ import 'package:grebo/core/constants/appcolor.dart';
 import 'package:grebo/core/service/repo/userRepo.dart';
 import 'package:grebo/core/utils/config.dart';
 import 'package:grebo/core/viewmodel/controller/selectservicecontoller.dart';
+import 'package:grebo/ui/screens/baseScreen/controller/baseController.dart';
 import 'package:grebo/ui/screens/homeTab/controller/homeController.dart';
 import 'package:grebo/ui/screens/homeTab/model/postModel.dart';
 import 'package:grebo/ui/screens/homeTab/viewAllCategories.dart';
 import 'package:grebo/ui/shared/custombutton.dart';
+import 'package:grebo/ui/shared/placeScreen.dart';
 import 'package:grebo/ui/shared/postview.dart';
 import 'package:pagination_view/pagination_view.dart';
 
@@ -19,6 +21,9 @@ import '../../../main.dart';
 
 class Home extends StatelessWidget {
   final HomeController homeController = Get.put(HomeController());
+  static GlobalKey<PaginationViewState> paginationViewKey =
+      GlobalKey<PaginationViewState>();
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -35,20 +40,33 @@ class Home extends StatelessWidget {
                         SizedBox(
                           width: getProportionateScreenWidth(9),
                         ),
-                        SizedBox(
-                            width: getProportionateScreenWidth(250),
-                            height: 18,
-                            child: Text(
-                              'yogeshwar soc society,shyamdham chowk, surat',
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                  fontSize: getProportionateScreenWidth(14),
-                                  color: AppColor.kDefaultFontColor
-                                      .withOpacity(0.75)),
-                            )),
+                        GetBuilder(
+                          builder: (BaseController controller) => SizedBox(
+                              width: getProportionateScreenWidth(250),
+                              height: 18,
+                              child: Text(
+                                controller.address,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                    fontSize: getProportionateScreenWidth(14),
+                                    color: AppColor.kDefaultFontColor
+                                        .withOpacity(0.75)),
+                              )),
+                        ),
                         Spacer(),
                         GestureDetector(
-                          onTap: () {},
+                          onTap: () async {
+                            await GoogleSearchPlace.buildGooglePlaceSearch()
+                                .then((value) async {
+                              if (!(value.long == 0 &&
+                                  value.late == 0 &&
+                                  value.address == "")) {
+                                print(value.long);
+                                Get.find<BaseController>().changeAddress(
+                                    value.late, value.long, value.address);
+                              }
+                            });
+                          },
                           child: Text(
                             'change'.tr,
                             style: TextStyle(
@@ -131,7 +149,7 @@ class Home extends StatelessWidget {
             : SizedBox(),
         Expanded(
           child: PaginationView(
-            // key: widget.paginationViewKey,
+            key: paginationViewKey,
             pullToRefresh: true,
             physics: BouncingScrollPhysics(),
             itemBuilder: (BuildContext context, PostData postData, int index) =>

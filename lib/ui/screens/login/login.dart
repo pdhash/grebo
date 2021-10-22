@@ -8,9 +8,11 @@ import 'package:grebo/core/constants/appSetting.dart';
 import 'package:grebo/core/constants/app_assets.dart';
 import 'package:grebo/core/constants/appcolor.dart';
 import 'package:grebo/core/extension/customButtonextension.dart';
+import 'package:grebo/core/service/auth/fbAuth.dart';
 import 'package:grebo/core/service/auth/googleAuth.dart';
 import 'package:grebo/core/utils/config.dart';
 import 'package:grebo/core/viewmodel/controller/selectservicecontoller.dart';
+import 'package:grebo/ui/global.dart';
 import 'package:grebo/ui/screens/login/controller/loginController.dart';
 import 'package:grebo/ui/screens/login/signup.dart';
 import 'package:grebo/ui/shared/appbar.dart';
@@ -136,6 +138,7 @@ class LoginScreen extends StatelessWidget {
         text: 'create_an_account'.tr,
         onTap: () {
           disposeKeyboard();
+          appImagePicker.imagePickerController.resetImage();
           Get.to(() => SignUp());
         });
   }
@@ -161,7 +164,7 @@ class LoginScreen extends StatelessWidget {
         Spacer(),
         socialButton(AppImages.facebook, () {
           disposeKeyboard();
-          GoogleAuth.signOut();
+          FBAuth.fbLogin();
         }),
         Spacer(),
         socialButton(AppImages.google, () async {

@@ -24,8 +24,10 @@ import 'package:readmore/readmore.dart';
 class PostView extends StatelessWidget {
   final PostData postData;
   final HomeController homeScreenController = Get.find<HomeController>();
+  final bool isPostDetail;
 
-  PostView({Key? key, required this.postData}) : super(key: key);
+  PostView({Key? key, required this.postData, this.isPostDetail = false})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -43,11 +45,13 @@ class PostView extends StatelessWidget {
                 Expanded(
                   child: GestureDetector(
                     onTap: () {
-                      homeScreenController.currentPostRef = postData.id;
+                      if (isPostDetail == false) {
+                        homeScreenController.currentPostRef = postData.id;
 
-                      Get.to(() => PostDetails(
-                            postData: postData,
-                          ));
+                        Get.to(() => PostDetails(
+                              postData: postData,
+                            ));
+                      }
                     },
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -59,7 +63,7 @@ class PostView extends StatelessWidget {
                             GestureDetector(
                               onTap: () {
                                 Get.to(() => BusinessProfile(
-                                      user: userController.user,
+                                      businessRef: postData.userRef,
                                     ));
                               },
                               child: Text(
@@ -92,10 +96,16 @@ class PostView extends StatelessWidget {
                             ? SizedBox()
                             : GestureDetector(
                                 onTap: () {
-                                  if (postData.image == "") {
-                                    print("ok");
-                                    Get.to(() => VideoScreen(
-                                        path: "${videoUrl + postData.video}"));
+                                  if (isPostDetail) {
+                                    if (postData.image == "") {
+                                      print("ok");
+                                      Get.to(() => VideoScreen(
+                                          path:
+                                              "${videoUrl + postData.video}"));
+                                    }
+                                  } else {
+                                    Get.to(
+                                        () => PostDetails(postData: postData));
                                   }
                                 },
                                 child: Stack(
@@ -166,9 +176,8 @@ class PostView extends StatelessWidget {
                             GestureDetector(
                               onTap: () async {
                                 disposeKeyboard();
-                                homeScreenController.likeUpdate(postData);
 
-                                //Get.to(() => LikeError());
+                                homeScreenController.likeUpdate(postData);
                               },
                               child: Container(
                                 color: Colors.transparent,
@@ -196,11 +205,12 @@ class PostView extends StatelessWidget {
                             GestureDetector(
                                 onTap: () {
                                   disposeKeyboard();
+                                  homeScreenController.currentPostRef =
+                                      postData.id;
+
                                   Get.to(() => ViewComments(
                                         postData: postData,
                                       ));
-                                  homeScreenController.currentPostRef =
-                                      postData.id;
                                 },
                                 child: Container(
                                   color: Colors.transparent,
@@ -239,7 +249,7 @@ class PostView extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Get.to(() => BusinessProfile(
-              user: userController.user,
+              businessRef: postData.userRef,
             ));
       },
       child: ClipRRect(

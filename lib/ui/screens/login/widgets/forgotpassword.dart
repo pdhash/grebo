@@ -60,18 +60,6 @@ class ForgotPassword extends StatelessWidget {
                           onTap: () {
                             disposeKeyboard();
                             forgotPasswordController.userForgotPassword();
-
-                            // showCustomDialog(
-                            //     context: context,
-                            //     color: AppColor.kDefaultColor,
-                            //     content: 'a_link_to..'.tr,
-                            //     contentSize: 16,
-                            //     okText: 'save'.tr,
-                            //     onTap: () {
-                            //       Get.back();
-                            //       Get.back();
-                            //     },
-                            //     height: getProportionateScreenWidth(180));
                           }),
                       getHeightSizedBox(h: 70)
                     ],

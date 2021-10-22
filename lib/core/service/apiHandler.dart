@@ -89,7 +89,6 @@ class API {
           fileImage.forEach((element) async {
             String? mimeType = mime(element.path);
             print(mimeType);
-            print("VIDEO ================ ${element.path}");
             request.files.add(await http.MultipartFile.fromPath(
                 multiPartImageKeyName, element.path,
                 contentType: mimeee.MediaType(

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:grebo/ui/screens/notifications/model/notificationModel.dart';
 
 import '../../../main.dart';
@@ -14,9 +12,27 @@ class NotificationRepo {
         header: {
           "Authorization": userController.userToken,
         },
-        body: jsonEncode({"page": page}));
+        body: {
+          "page": "${page.toString()}"
+        });
     if (response != null) {
       return NotificationModel.fromJson(response);
+    } else
+      return null;
+  }
+
+  static Future readNotification(String id) async {
+    var response = await API.apiHandler(
+        url: APIRoutes.notificationSeen,
+        showLoader: false,
+        header: {
+          "Authorization": userController.userToken,
+        },
+        body: {
+          "notificationId": id
+        });
+    if (response != null) {
+      return response;
     } else
       return null;
   }

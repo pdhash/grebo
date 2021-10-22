@@ -1,5 +1,6 @@
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoScreen extends StatelessWidget {
@@ -40,8 +41,11 @@ class _ChewieListItemState extends State<ChewieListItem> {
       aspectRatio: widget.videoPlayerController.value.aspectRatio,
       // Prepare the video to be played and display the first frame
       autoInitialize: true, autoPlay: true, showControls: true,
-      fullScreenByDefault: true,
       looping: false,
+      deviceOrientationsOnEnterFullScreen: [
+        DeviceOrientation.portraitDown,
+        DeviceOrientation.portraitUp
+      ],
       // Errors can occur for example when trying to play a video
       // from a non-existent URL
       errorBuilder: (context, errorMessage) {

@@ -1,23 +1,16 @@
-// class FBAuth {
-//   Future<Resource?> signInWithFacebook() async {
-//     try {
-//       final LoginResult result = await FacebookAuth.instance.login();
-//       switch (result.status) {
-//         case LoginStatus.success:
-//           final AuthCredential facebookCredential =
-//               FacebookAuthProvider.credential(result.accessToken!.token);
-//           final userCredential =
-//               await _auth.signInWithCredential(facebookCredential);
-//           return Resource(status: Status.Success);
-//         case LoginStatus.cancelled:
-//           return Resource(status: Status.Cancelled);
-//         case LoginStatus.failed:
-//           return Resource(status: Status.Error);
-//         default:
-//           return null;
-//       }
-//     } on FirebaseAuthException catch (e) {
-//       throw e;
-//     }
-//   }
-// }
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+
+class FBAuth {
+  static fbLogin() async {
+    final LoginResult result = await FacebookAuth.instance
+        .login(); // by default we request the email and the public profile
+// or FacebookAuth.i.login()
+    if (result.status == LoginStatus.success) {
+      // you are logged
+      final AccessToken accessToken = result.accessToken!;
+    } else {
+      print(result.status);
+      print(result.message);
+    }
+  }
+}

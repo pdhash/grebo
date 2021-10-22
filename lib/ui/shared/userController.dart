@@ -38,16 +38,16 @@ class UserController extends GetxController {
   void updateDetails() {
     print("update userController");
     getAvailabilityDay.clear();
-    getCloseDay.clear();
     for (int i = 0; i < user.workingDays.length; i++) {
       var v = user.workingDays[i] - 1;
       for (int j = 0; j < 7; j++) {
         if (v == j) {
           getAvailabilityDay.add(weekDayList[v]);
-        } else {
-          getCloseDay.add(weekDayList[v]);
         }
       }
     }
+    getCloseDay = weekDayList
+        .where((element) => !getAvailabilityDay.contains(element))
+        .toList();
   }
 }

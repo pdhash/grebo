@@ -6,6 +6,7 @@ import 'package:grebo/core/service/repo/userRepo.dart';
 import 'package:grebo/core/utils/sharedpreference.dart';
 import 'package:grebo/core/viewmodel/controller/selectservicecontoller.dart';
 import 'package:grebo/ui/screens/baseScreen/baseScreen.dart';
+import 'package:grebo/ui/screens/editBusinessprofile/details1.dart';
 import 'package:grebo/ui/screens/login/model/currentUserModel.dart';
 
 class LoginController extends GetxController {
@@ -30,7 +31,16 @@ class LoginController extends GetxController {
       currentUserModel = CurrentUserModel.fromJson(response);
       saveUserDetails(currentUserModel!.data);
 
-      Get.offAll(() => BaseScreen());
+      if (currentUserModel!.data.user.userType ==
+          getServiceTypeCode(ServicesType.providerType)) {
+        if (currentUserModel!.data.user.profileCompleted) {
+          Get.offAll(() => BaseScreen());
+        } else {
+          Get.offAll(() => DetailsPage1());
+        }
+      } else {
+        Get.offAll(() => BaseScreen());
+      }
     }
   }
 
@@ -60,8 +70,16 @@ class LoginController extends GetxController {
 
       currentUserModel = CurrentUserModel.fromJson(response);
       saveUserDetails(currentUserModel!.data);
-
-      Get.offAll(() => BaseScreen());
+      if (currentUserModel!.data.user.userType ==
+          getServiceTypeCode(ServicesType.providerType)) {
+        if (currentUserModel!.data.user.profileCompleted) {
+          Get.offAll(() => BaseScreen());
+        } else {
+          Get.offAll(() => DetailsPage1());
+        }
+      } else {
+        Get.offAll(() => BaseScreen());
+      }
     }
   }
 }

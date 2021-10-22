@@ -14,15 +14,18 @@ import 'home.dart';
 
 class ServiceOffered extends StatelessWidget {
   final bool isEdit;
+  final String? businessRef;
   final ServiceOfferedController serviceOfferedController =
       Get.put(ServiceOfferedController());
 
   static GlobalKey<PaginationViewState> paginationKey =
       GlobalKey<PaginationViewState>();
-  ServiceOffered({Key? key, this.isEdit = false}) : super(key: key);
+  ServiceOffered({Key? key, this.isEdit = false, this.businessRef})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    serviceOfferedController.userRef = businessRef;
     return Scaffold(
       appBar: appBar('services_offered'.tr, [
         isEdit
@@ -30,7 +33,7 @@ class ServiceOffered extends StatelessWidget {
                 padding: EdgeInsets.only(right: 22),
                 onPressed: () {
                   Get.to(() => DetailsPage3(
-                        isShow: false,
+                        isNext: false,
                       ));
                 },
                 icon: buildWidget(AppImages.editProfile, 19, 19))

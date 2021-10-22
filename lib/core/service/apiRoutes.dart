@@ -22,9 +22,16 @@ class APIRoutes {
   static const String serviceList = url + "services/list";
   static const String categoryList = url + "category/list";
   static const String notificationList = url + "notification/list";
+  static const String notificationSeen = url + "notification/seen";
   static const String getComments = url + "comment/list";
   static const String addComments = url + "comment/add";
   static const String socialLogin = url + "user/socialLogin";
+  static const String contactAdmin = url + "user/contactAdmin";
+  static const String review = url + "review/list";
+  static const String reviewUpdate = url + "review/update";
+  static const String userDetail = url + "user/details";
+  static const String follow = url + "follow/update";
+  static const String appData = url + "appDetail/list";
 }
 
 enum ContentType { jsonType }

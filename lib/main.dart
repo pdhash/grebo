@@ -5,8 +5,11 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:grebo/core/constants/app_theme.dart';
 import 'package:grebo/core/service/repo/editProfileRepo.dart';
+import 'package:grebo/core/service/repo/userRepo.dart';
+import 'package:grebo/core/viewmodel/controller/selectservicecontoller.dart';
 import 'package:grebo/ui/global.dart';
 import 'package:grebo/ui/screens/baseScreen/baseScreen.dart';
+import 'package:grebo/ui/screens/editBusinessprofile/details1.dart';
 import 'package:grebo/ui/screens/onbording.dart';
 import 'package:grebo/ui/screens/selectservice.dart';
 import 'package:grebo/ui/shared/userController.dart';
@@ -47,7 +50,11 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Grebo',
       home: getUserDetail()
-          ? BaseScreen()
+          ? userController.user.profileCompleted ||
+                  userController.user.userType ==
+                      getServiceTypeCode(ServicesType.userType)
+              ? BaseScreen()
+              : DetailsPage1()
           : onBoardingHideRead()
               ? ChooseServices()
               : OnBoarding(),

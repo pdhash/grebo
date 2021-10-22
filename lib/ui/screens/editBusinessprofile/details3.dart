@@ -4,21 +4,18 @@ import 'package:grebo/core/constants/appSetting.dart';
 import 'package:grebo/core/constants/appcolor.dart';
 import 'package:grebo/core/extension/customButtonextension.dart';
 import 'package:grebo/core/utils/config.dart';
-import 'package:grebo/ui/screens/baseScreen/controller/baseController.dart';
 import 'package:grebo/ui/screens/editBusinessprofile/controller/addservicecontroller.dart';
-import 'package:grebo/ui/screens/homeTab/serviceoffered.dart';
-import 'package:grebo/ui/shared/alertdialogue.dart';
 import 'package:grebo/ui/shared/appbar.dart';
 import 'package:grebo/ui/shared/custombutton.dart';
 
 import 'details1.dart';
 
 class DetailsPage3 extends StatelessWidget {
-  final bool isShow;
+  final bool isNext;
   final AddServiceController addServiceController =
       Get.put(AddServiceController());
 
-  DetailsPage3({Key? key, this.isShow = true}) : super(key: key);
+  DetailsPage3({Key? key, this.isNext = true}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +25,7 @@ class DetailsPage3 extends StatelessWidget {
         appBar: appBar(
           'add_services_offered'.tr,
           [
-            isShow
+            isNext
                 ? Padding(
                     padding: const EdgeInsets.only(top: 22, right: 25),
                     child: Text(
@@ -85,34 +82,11 @@ class DetailsPage3 extends StatelessWidget {
                             .copyWith(top: 10, bottom: 10),
                         child: CustomButton(
                             type: CustomButtonType.colourButton,
-                            text: isShow ? 'submit'.tr : 'save'.tr,
+                            text: isNext ? 'submit'.tr : 'save'.tr,
                             onTap: () {
                               disposeKeyboard();
 
-                              controller.submitAllFields().then((value) {
-                                if (value != null) {
-                                  if (isShow) {
-                                    showCustomDialog(
-                                        context: context,
-                                        content: 'dialogue_msg'.tr,
-                                        contentSize: 15,
-                                        onTap: () {
-                                          Get.back();
-                                          Get.back();
-                                          Get.back();
-                                          final BaseController baseController =
-                                              Get.find<BaseController>();
-                                          baseController.currentTab = 0;
-                                        },
-                                        color: AppColor.kDefaultColor,
-                                        okText: 'ok'.tr);
-                                  } else {
-                                    Get.back();
-                                    ServiceOffered.paginationKey.currentState!
-                                        .refresh();
-                                  }
-                                }
-                              });
+                              controller.submitAllFields(isNext);
                             }),
                       ),
                     ),

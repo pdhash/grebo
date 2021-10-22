@@ -19,7 +19,7 @@ class Availability extends StatelessWidget {
         IconButton(
             padding: EdgeInsets.only(right: 22),
             onPressed: () {
-              Get.to(() => DetailsPage2(showEdit: false));
+              Get.to(() => DetailsPage2(isNext: false));
             },
             icon: buildWidget(AppImages.editProfile, 19, 19))
       ]),
@@ -60,66 +60,68 @@ class Availability extends StatelessWidget {
           ),
           getHeightSizedBox(h: 16),
           GetBuilder(
-            builder: (UserController controller) => buildContainer(Column(
-              children: [
-                getHeightSizedBox(h: 20),
-                buildWidget(AppImages.workingHours, 91, 100),
-                getHeightSizedBox(h: 15),
-                SizedBox(
-                  height: 40,
-                  child: Row(
-                    children: [
-                      Spacer(),
-                      Column(
-                        children: [
-                          Text(
-                            'starts'.tr,
-                            style: TextStyle(
-                                fontSize: getProportionateScreenWidth(15),
-                                color: AppColor.kDefaultFontColor
-                                    .withOpacity(0.78)),
-                          ),
-                          Text(
-                            dateFormat.format(
-                                DateTime.parse(controller.user.startTime)
-                                    .toLocal()),
-                            style: TextStyle(
-                                fontSize: getProportionateScreenWidth(16),
-                                fontWeight: FontWeight.bold),
-                          )
-                        ],
-                      ),
-                      Spacer(),
-                      VerticalDivider(
-                        width: 0,
-                      ),
-                      Spacer(),
-                      Column(
-                        children: [
-                          Text(
-                            'end'.tr,
-                            style: TextStyle(
-                                fontSize: getProportionateScreenWidth(15),
-                                color: AppColor.kDefaultFontColor
-                                    .withOpacity(0.78)),
-                          ),
-                          Text(
-                            dateFormat.format(
-                                DateTime.parse(controller.user.endTime)
-                                    .toLocal()),
-                            style: TextStyle(
-                                fontSize: getProportionateScreenWidth(16),
-                                fontWeight: FontWeight.bold),
-                          )
-                        ],
-                      ),
-                      Spacer(),
-                    ],
+            builder: (UserController controller) {
+              return buildContainer(Column(
+                children: [
+                  getHeightSizedBox(h: 20),
+                  buildWidget(AppImages.workingHours, 91, 100),
+                  getHeightSizedBox(h: 15),
+                  SizedBox(
+                    height: 40,
+                    child: Row(
+                      children: [
+                        Spacer(),
+                        Column(
+                          children: [
+                            Text(
+                              'starts'.tr,
+                              style: TextStyle(
+                                  fontSize: getProportionateScreenWidth(15),
+                                  color: AppColor.kDefaultFontColor
+                                      .withOpacity(0.78)),
+                            ),
+                            Text(
+                              dateFormat.format(
+                                  DateTime.parse(controller.user.startTime)
+                                      .toLocal()),
+                              style: TextStyle(
+                                  fontSize: getProportionateScreenWidth(16),
+                                  fontWeight: FontWeight.bold),
+                            )
+                          ],
+                        ),
+                        Spacer(),
+                        VerticalDivider(
+                          width: 0,
+                        ),
+                        Spacer(),
+                        Column(
+                          children: [
+                            Text(
+                              'end'.tr,
+                              style: TextStyle(
+                                  fontSize: getProportionateScreenWidth(15),
+                                  color: AppColor.kDefaultFontColor
+                                      .withOpacity(0.78)),
+                            ),
+                            Text(
+                              dateFormat.format(
+                                  DateTime.parse(controller.user.endTime)
+                                      .toLocal()),
+                              style: TextStyle(
+                                  fontSize: getProportionateScreenWidth(16),
+                                  fontWeight: FontWeight.bold),
+                            )
+                          ],
+                        ),
+                        Spacer(),
+                      ],
+                    ),
                   ),
-                ),
-                getHeightSizedBox(h: 23),
-              ],
-            )),
+                  getHeightSizedBox(h: 23),
+                ],
+              ));
+            },
           )
         ],
       ),

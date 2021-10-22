@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
@@ -5,70 +8,126 @@ import 'package:grebo/core/constants/appSetting.dart';
 import 'package:grebo/core/constants/app_assets.dart';
 import 'package:grebo/core/constants/appcolor.dart';
 import 'package:grebo/core/extension/customButtonextension.dart';
+import 'package:grebo/core/service/apiRoutes.dart';
+import 'package:grebo/core/service/repo/userRepo.dart';
 import 'package:grebo/core/utils/config.dart';
+import 'package:grebo/core/viewmodel/controller/selectservicecontoller.dart';
+import 'package:grebo/main.dart';
+import 'package:grebo/ui/screens/homeTab/controller/reviewController.dart';
+import 'package:grebo/ui/screens/homeTab/model/reviewModel.dart';
 import 'package:grebo/ui/shared/appbar.dart';
 import 'package:grebo/ui/shared/custombutton.dart';
-import 'package:grebo/ui/shared/postview.dart';
+import 'package:pagination_view/pagination_view.dart';
 
 import 'givefeedback.dart';
 
-class CustomerReviewed extends StatelessWidget {
+class CustomerReviewed extends StatefulWidget {
+  final String businessRef;
+
+  CustomerReviewed({Key? key, required this.businessRef}) : super(key: key);
+
+  @override
+  _CustomerReviewedState createState() => _CustomerReviewedState();
+}
+
+class _CustomerReviewedState extends State<CustomerReviewed> {
+  final ReviewController reviewController = Get.put(ReviewController());
+  final scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    reviewController.selectedBusinessRef = widget.businessRef;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar('customer_reviews'.tr),
-      body: Stack(
-        fit: StackFit.expand,
-        children: [
-          Column(
-            children: [
-              Expanded(
-                child: ListView.builder(
-                  physics: BouncingScrollPhysics(),
-                  itemCount: 5,
-                  itemBuilder: (context, index) {
-                    return reviewBox();
-                  },
-                ),
-              ),
-              getHeightSizedBox(h: 90),
-            ],
-          ),
-          Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: Container(
-                decoration: BoxDecoration(color: Colors.white, boxShadow: [
-                  BoxShadow(
-                      blurRadius: 6,
-                      offset: Offset(0, -2),
-                      color: AppColor.kDefaultFontColor.withOpacity(0.05))
-                ]),
-                child: Column(
+        appBar: appBar('customer_reviews'.tr),
+        body: GetBuilder(
+          builder: (ReviewController controller) => controller.isFetching
+              ? Center(
+                  child: Platform.isIOS
+                      ? CupertinoActivityIndicator()
+                      : CircularProgressIndicator(
+                          strokeWidth: 2,
+                        ))
+              : Stack(
+                  fit: StackFit.expand,
                   children: [
-                    getHeightSizedBox(h: 12),
-                    SafeArea(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 30),
-                        child: CustomButton(
-                            type: CustomButtonType.colourButton,
-                            text: 'give_feedback'.tr,
-                            onTap: () {
-                              Get.to(() => GiveFeedback());
-                            }),
-                      ),
+                    Column(
+                      children: [
+                        Expanded(
+                          child: PaginationView(
+                            key: Key(DateTime.now().toString()),
+                            pullToRefresh: true,
+                            physics: AlwaysScrollableScrollPhysics(),
+                            itemBuilder: (BuildContext context,
+                                    ReviewData reviewData, int index) =>
+                                reviewBox(reviewData),
+                            pageFetch: reviewController.fetchReviews,
+                            onError: (error) {
+                              print("Error $error");
+                              return Center(child: Text(error));
+                            },
+                            onEmpty: Center(
+                              child: Text("no_post_found".tr),
+                            ),
+                            initialLoader: GetPlatform.isAndroid
+                                ? Center(
+                                    child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                  ))
+                                : Center(child: CupertinoActivityIndicator()),
+                          ),
+                        ),
+                        getHeightSizedBox(h: 90),
+                      ],
                     ),
-                    getHeightSizedBox(h: 12),
+                    userController.user.userType ==
+                            getServiceTypeCode(ServicesType.providerType)
+                        ? SizedBox()
+                        : Positioned(
+                            bottom: 0,
+                            left: 0,
+                            right: 0,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  boxShadow: [
+                                    BoxShadow(
+                                        blurRadius: 6,
+                                        offset: Offset(0, -2),
+                                        color: AppColor.kDefaultFontColor
+                                            .withOpacity(0.05))
+                                  ]),
+                              child: Column(
+                                children: [
+                                  getHeightSizedBox(h: 12),
+                                  SafeArea(
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 30),
+                                      child: CustomButton(
+                                          type: CustomButtonType.colourButton,
+                                          text: 'give_feedback'.tr,
+                                          onTap: () {
+                                            Get.to(() => GiveFeedback(
+                                                businessRef: widget.businessRef
+                                                    .toString()));
+                                          }),
+                                    ),
+                                  ),
+                                  getHeightSizedBox(h: 12),
+                                ],
+                              ),
+                            ))
                   ],
                 ),
-              ))
-        ],
-      ),
-    );
+        ));
   }
 
-  Widget reviewBox() {
+  Widget reviewBox(ReviewData reviewData) {
     return Container(
       decoration: BoxDecoration(
           color: Colors.white,
@@ -84,24 +143,42 @@ class CustomerReviewed extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
-                buildCircleProfile(
-                    image: AppImages.defaultProfile, height: 40, width: 40),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(60),
+                  child: FadeInImage(
+                    placeholder: AssetImage(AppImages.placeHolder),
+                    image:
+                        NetworkImage("${imageUrl + reviewData.user.picture}"),
+                    height: 40,
+                    width: 40,
+                    imageErrorBuilder: (context, error, stackTrace) {
+                      return Image.asset(
+                        AppImages.placeHolder,
+                        height: 40,
+                        width: 40,
+                        fit: BoxFit.cover,
+                      );
+                    },
+                    fit: BoxFit.cover,
+                  ),
+                ),
                 getHeightSizedBox(w: 5),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Sanjay Saini',
+                      reviewData.user.name,
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: getProportionateScreenWidth(14)),
                     ),
                     getHeightSizedBox(h: 4),
                     RatingBar.builder(
-                      initialRating: 3,
+                      initialRating: 1,
                       minRating: 1,
                       direction: Axis.horizontal,
                       allowHalfRating: true,
@@ -122,7 +199,7 @@ class CustomerReviewed extends StatelessWidget {
             ),
             getHeightSizedBox(h: 10),
             Text(
-              "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
+              reviewData.text,
               style: TextStyle(
                 fontSize: getProportionateScreenWidth(13),
               ),

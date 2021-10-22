@@ -36,6 +36,7 @@ class PostDetails extends StatelessWidget {
                 children: [
                   PostView(
                     postData: postData,
+                    isPostDetail: true,
                   ),
                   getHeightSizedBox(h: 10),
                   Padding(

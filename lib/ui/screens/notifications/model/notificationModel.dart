@@ -7,7 +7,6 @@ class NotificationModel {
     required this.code,
     required this.message,
     required this.data,
-    required this.page,
     required this.limit,
     required this.size,
     required this.hasMore,
@@ -18,7 +17,6 @@ class NotificationModel {
   int code;
   String message;
   List<Datum> data;
-  int page;
   int limit;
   int size;
   bool hasMore;
@@ -30,7 +28,6 @@ class NotificationModel {
         code: json["code"],
         message: json["message"],
         data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
-        page: json["page"],
         limit: json["limit"],
         size: json["size"],
         hasMore: json["hasMore"],
@@ -42,7 +39,6 @@ class NotificationModel {
         "code": code,
         "message": message,
         "data": List<dynamic>.from(data.map((x) => x.toJson())),
-        "page": page,
         "limit": limit,
         "size": size,
         "hasMore": hasMore,

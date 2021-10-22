@@ -9,13 +9,19 @@ class NotificationController extends GetxController {
     if (offset == 0) page = 1;
     if (page == -1) return [];
     List<Datum> getNotify = [];
-    print("PAGE calling api+++++++++ $page");
 
     var request = await NotificationRepo.fetchNotification(page);
     getNotify = request!.data;
-    print("HAS MORE ${request.data.length}");
+
     page = request.hasMore ? page + 1 : -1;
-    print("PAGE +++++++++ $page");
+
     return getNotify;
+  }
+
+  Future readNotification(String notificationId, Datum notifyData) async {
+    notifyData.seen = true;
+    update();
+
+    var request = await NotificationRepo.readNotification(notificationId);
   }
 }

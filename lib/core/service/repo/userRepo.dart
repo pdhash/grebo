@@ -49,8 +49,8 @@ class UserRepo {
           "device": Platform.isAndroid ? "Android" : "IOS",
           "fcmToken": fcmToken,
           "image": image,
-          "referralId":"",
-              "socialId": socialId,
+          "referralId": "",
+          "socialId": socialId,
           "socialToken": socialToken,
           "socialIdentifier": socialIdentifier
         },

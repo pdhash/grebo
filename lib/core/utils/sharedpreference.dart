@@ -1,3 +1,4 @@
+import 'package:geocoding/geocoding.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:grebo/main.dart';
 import 'package:grebo/ui/screens/login/model/currentUserModel.dart';
@@ -9,6 +10,18 @@ saveUserDetails(Datum data) {
   userController.userToken = data.accessToken;
   sharedPreference.write("GreboUser", data.user.toJson());
   sharedPreference.write("UserToken", data.accessToken);
+}
+
+saveUserLastLateLong(double late, double long) {
+  sharedPreference.write("userLate", late);
+  sharedPreference.write("userLong", long);
+}
+
+Location readLastLateLong() {
+  return Location(
+      latitude: sharedPreference.read("userLate"),
+      longitude: sharedPreference.read("userLong"),
+      timestamp: DateTime.now());
 }
 
 onBoardingHide() {
@@ -28,7 +41,10 @@ updateUserDetail(UserModel user) async {
 }
 
 removerUserDetail() async {
-  sharedPreference.erase();
+  sharedPreference.remove("GreboUser");
+  sharedPreference.remove("UserToken");
+  sharedPreference.remove("userLate");
+  sharedPreference.remove("userLong");
 }
 
 bool getUserDetail() {

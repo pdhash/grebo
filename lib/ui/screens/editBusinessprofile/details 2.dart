@@ -18,11 +18,11 @@ import 'package:keyboard_actions/external/platform_check/platform_check.dart';
 import 'details1.dart';
 
 class DetailsPage2 extends StatelessWidget {
-  final bool showEdit;
+  final bool isNext;
   final AvailabilityController availabilityController =
       Get.put(AvailabilityController());
 
-  DetailsPage2({Key? key, this.showEdit = true}) : super(key: key);
+  DetailsPage2({Key? key, this.isNext = true}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +32,7 @@ class DetailsPage2 extends StatelessWidget {
           appBar: appBar(
             'set_availability'.tr,
             [
-              showEdit
+              isNext
                   ? Padding(
                       padding: const EdgeInsets.only(top: 22, right: 25),
                       child: Text(
@@ -125,6 +125,7 @@ class DetailsPage2 extends StatelessWidget {
                       text: 'opening_hour'.tr,
                       context: context,
                       onTap: () {
+                        print("okkkkk");
                         if (PlatformCheck.isIOS) {
                           DatePicker.showTime12hPicker(
                             context,
@@ -207,10 +208,21 @@ class DetailsPage2 extends StatelessWidget {
                     child: CustomButton(
                   text: 'next'.tr,
                   onTap: () {
+                    // print("START ${DateTime.parse(controller.startTime)}");
+                    // print("END ${DateTime.parse(controller.endTime)}");
+                    // print(
+                    //     "COMPARE ${DateTime.parse(controller.startTime).compareTo(DateTime.parse(controller.endTime))}");
+                    // if (DateTime.parse(controller.startTime)
+                    //         .compareTo(DateTime.parse(controller.endTime)) <
+                    //     0) {
+                    //   print("Start time must be before end time");
+                    //   return;
+                    // }
+
                     if (controller.defaultTime != "00:00 AM" &&
                         controller.defaultTimeEnd != "00:00 PM") {
                       if (controller.daysCount.isNotEmpty) {
-                        controller.submitAllFields();
+                        controller.submitAllFields(isNext);
                       } else {
                         flutterToast('please_select_working_days');
                       }

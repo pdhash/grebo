@@ -16,7 +16,6 @@ import '../../../global.dart';
 import '../details 2.dart';
 
 class EditBProfileController extends GetxController {
-  EditBProfileController() {}
   final TextEditingController businessName = TextEditingController();
   final TextEditingController businessCategory = TextEditingController();
   final TextEditingController mobileNumber = TextEditingController();
@@ -30,6 +29,8 @@ class EditBProfileController extends GetxController {
     _selectedCountry = value;
     update();
   }
+
+  late bool isNext;
 
   List<CountryModel>? _countries;
   List<CountryModel>? get countries => _countries;
@@ -61,11 +62,10 @@ class EditBProfileController extends GetxController {
   }
 
   List<File> multiFile = <File>[];
-  late List<String> uploadMultiFile;
+  List<String> uploadMultiFile = <String>[];
 
   void removeImage(int index) {
     multiFile.removeAt(index);
-
     uploadMultiFile.removeAt(index);
     update();
   }
@@ -91,6 +91,9 @@ class EditBProfileController extends GetxController {
     _selectValue = value;
     update();
   }
+
+  double lat = -1;
+  double long = -1;
 
   int _categorySelect = 1;
 
@@ -123,9 +126,11 @@ class EditBProfileController extends GetxController {
         ImageRepo.uploadImage(
                 fileImage: [appImagePicker.imagePickerController.image as File])
             .then((value) {
-          flutterToast(value["message"]);
-          multiAddImages(appImagePicker.imagePickerController.image as File,
-              value["data"].toString());
+          if (value != null) {
+            flutterToast(value["message"]);
+            multiAddImages(appImagePicker.imagePickerController.image as File,
+                value["data"]);
+          }
         });
       }
     });
@@ -133,19 +138,23 @@ class EditBProfileController extends GetxController {
 
   deleteImage(int index) {
     ImageRepo.deleteImage(imageId: uploadMultiFile[index]).then((value) {
-      flutterToast(value["message"]);
-      removeImage(index);
+      if (value != null) {
+        flutterToast(value["message"]);
+        removeImage(index);
+      }
     });
   }
 
-  Future submitAllFields() async {
+  Future submitAllFields(bool isNext) async {
+    appImagePicker.imagePickerController.resetImage();
+
     var v = await EditProfileRepo.updateUser(
       map: {
-        "name": "userName",
         "businessName": businessName.text.trim(),
         "images": uploadMultiFile,
-        "latitude": 21.1702,
-        "longitude": 72.8311,
+        "latitude": lat,
+        "longitude": long,
+        "address": location.text.trim(),
         "categories": [userController.globalCategory[categorySelect].id],
         "websites": websites,
         "phoneCode": kDefaultCountry,
@@ -156,17 +165,22 @@ class EditBProfileController extends GetxController {
     if (v != null) {
       updateUserDetail(UserModel.fromJson(v['data']));
 
-      Get.to(() => DetailsPage2());
+      if (isNext)
+        Get.to(() => DetailsPage2());
+      else {
+        Get.back();
+      }
     }
   }
 
   @override
   void onInit() {
     loadCountryJsonFile();
-    print("image length ${userController.user.images.length}");
-    if (userController.user.profileCompleted == true) {
+
+    if (userController.user.profileCompleted) {
       businessName.text = userController.user.businessName;
       mobileNumber.text = userController.user.phoneNumber;
+      location.text = userController.user.location.address;
       description.text = userController.user.description;
       uploadMultiFile = userController.user.images;
       websites = userController.user.websites;

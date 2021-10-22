@@ -1,11 +1,17 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:grebo/core/constants/appcolor.dart';
 import 'package:grebo/core/service/repo/editProfileRepo.dart';
 import 'package:grebo/core/service/repo/imageRepo.dart';
+import 'package:grebo/ui/screens/baseScreen/baseScreen.dart';
+import 'package:grebo/ui/screens/baseScreen/controller/baseController.dart';
 import 'package:grebo/ui/screens/editBusinessprofile/model/addSeviceModel.dart';
 import 'package:grebo/ui/screens/editBusinessprofile/model/serviceListModel.dart';
 import 'package:grebo/ui/screens/editBusinessprofile/widgets/addServiceView.dart';
+import 'package:grebo/ui/screens/homeTab/serviceoffered.dart';
+import 'package:grebo/ui/shared/alertdialogue.dart';
 
 class AddServiceController extends GetxController {
   List<AddServiceView> addServiceViews = [];
@@ -56,7 +62,7 @@ class AddServiceController extends GetxController {
     update();
   }
 
-  Future<dynamic> submitAllFields() async {
+  Future<dynamic> submitAllFields(bool isNext) async {
     if (validateForm()) {
       List<Map<String, dynamic>> uploadData = [];
       for (int i = 0; i < addServiceModels.length; i++) {
@@ -74,12 +80,30 @@ class AddServiceController extends GetxController {
           }
         }
       }
-      print("serviceUpdate ${uploadData.length}");
-      var v = await EditProfileRepo.serviceUpdate(
-        map: {"services": uploadData},
-      );
 
-      return v;
+      var p = await EditProfileRepo.updateUser(
+        map: {
+          "services": uploadData,
+          "profile": true,
+        },
+      );
+      print("okkkkkkkkkkkkk ====== >>>>>>>>>>> $p");
+      if (p != null) {
+        if (isNext) {
+          showCustomDialog(
+              context: Get.context as BuildContext,
+              content: 'dialogue_msg'.tr,
+              contentSize: 15,
+              onTap: () {
+                Get.offAll(()=>BaseScreen());
+              },
+              color: AppColor.kDefaultColor,
+              okText: 'ok'.tr);
+        } else {
+          Get.back();
+          ServiceOffered.paginationKey.currentState!.refresh();
+        }
+      }
     }
   }
 
@@ -93,10 +117,10 @@ class AddServiceController extends GetxController {
           services.forEach((element) {
             Future.delayed(Duration(milliseconds: 20), addData(element));
           });
-          update();
         } else {
           addDefault();
         }
+        update();
       }
     });
   }

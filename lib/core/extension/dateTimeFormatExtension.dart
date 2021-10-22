@@ -80,14 +80,12 @@ String appTimeFunDB(TimeOfDay timeOfDay) {
   var outputFormat =
       DateFormat(DateTimeFormat.time.availabilityDBDateTimeFormat);
   var outputDate = outputFormat.format(dt);
-  print("==============$outputDate");
 
   return outputDate;
 }
 
 String appTimeFun(String time) {
   final dateTime = DateTime.parse(time);
-  print("date========$dateTime");
 
   var outputFormat = DateFormat(DateTimeFormat.time.availabilityDateTimeFormat);
   var outputDate = outputFormat.format(dateTime);

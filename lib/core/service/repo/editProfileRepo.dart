@@ -56,11 +56,12 @@ class EditProfileRepo {
       return [Category()];
   }
 
-  static Future getServices() async {
+  static Future getServices({String? userRef}) async {
     var responseBody = await API.apiHandler(
         url: APIRoutes.serviceList,
         showLoader: false,
-        header: {"Authorization": userController.userToken});
+        header: {"Authorization": userController.userToken},
+        body: userRef == null ? null : {"userRef": userRef});
     print("getServices $responseBody");
     if (responseBody != null)
       return responseBody;

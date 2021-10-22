@@ -62,7 +62,7 @@ class AvailabilityController extends GetxController {
     update();
   }
 
-  Future submitAllFields() async {
+  Future submitAllFields(bool isNext) async {
     daysCount.sort();
     var v = await EditProfileRepo.updateUser(
       map: {
@@ -74,8 +74,11 @@ class AvailabilityController extends GetxController {
     if (v != null) {
       print(v);
       updateUserDetail(UserModel.fromJson(v['data']));
-
-      Get.to(() => DetailsPage3());
+      if (isNext) {
+        Get.to(() => DetailsPage3());
+      } else {
+        Get.back();
+      }
     }
   }
 

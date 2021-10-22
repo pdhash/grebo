@@ -4,6 +4,7 @@ import 'package:grebo/core/constants/appSetting.dart';
 import 'package:grebo/core/constants/app_assets.dart';
 import 'package:grebo/core/service/apiRoutes.dart';
 import 'package:grebo/core/utils/config.dart';
+import 'package:grebo/ui/screens/baseScreen/controller/baseController.dart';
 import 'package:grebo/ui/screens/homeTab/businessprofile.dart';
 import 'package:grebo/ui/screens/homeTab/controller/homeController.dart';
 import 'package:grebo/ui/screens/homeTab/home.dart';
@@ -17,6 +18,7 @@ import 'editprofile.dart';
 
 class Profile extends StatelessWidget {
   final HomeController homeScreenController = Get.find<HomeController>();
+  final BaseController baseController = Get.find<BaseController>();
 
   final List<Map<String, dynamic>> list = [
     {
@@ -24,7 +26,7 @@ class Profile extends StatelessWidget {
       'onTap': () {
         Get.to(() => BusinessProfile(
               isShow: true,
-              user: userController.user,
+              businessRef: userController.user.id,
             ));
       },
       "image": AppImages.aboutBusiness
@@ -116,13 +118,15 @@ class Profile extends StatelessWidget {
                     subtitle: userController.user.name,
                   ),
                   userController.user.userType == 1
-                      ? buildSettingTile(
-                          image: AppImages.location,
-                          height: 20,
-                          width: 14,
-                          title: 'location'.tr,
-                          subtitle:
-                              'Villaz Johns Street 11, California Johns Street 11, California',
+                      ? GetBuilder(
+                          builder: (BaseController controller) =>
+                              buildSettingTile(
+                            image: AppImages.location,
+                            height: 20,
+                            width: 14,
+                            title: 'location'.tr,
+                            subtitle: baseController.address,
+                          ),
                         )
                       : SizedBox(),
                   buildSettingTile(

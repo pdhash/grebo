@@ -16,7 +16,7 @@ List<Widget> tabNavigation = [
 ];
 late AppImagePicker appImagePicker;
 
-globalVerbsInit() {
+globalVerbsInit() async {
   userController = Get.put(UserController());
   appImagePicker = AppImagePicker();
 }
