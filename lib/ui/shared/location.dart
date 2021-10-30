@@ -24,7 +24,7 @@ class GetLocationController extends GetxController {
         print("GETTING LOCATION isServiceEnable $isServiceEnable");
         bool isShow = false;
         Timer.periodic(Duration(milliseconds: 500), (timer) async {
-          if(!isShow) {
+          if (!isShow) {
             isShow = true;
             _locationData = await currentLocation.getLocation();
           }
@@ -39,12 +39,15 @@ class GetLocationController extends GetxController {
             Get.find<BaseController>().getAddressFromLatLong(_locationData);
           }
         });
-
       }
 
       if (permissionStatus != PermissionStatus.granted) {
-        _locationData = await currentLocation.getLocation();
+        bool isShow = false;
         Timer.periodic(Duration(milliseconds: 500), (timer) async {
+          if (!isShow) {
+            isShow = true;
+            _locationData = await currentLocation.getLocation();
+          }
           // Stop the timer when it matches a condition
           permissionStatus = await currentLocation.hasPermission();
           print("TIMER permissionStatus ${permissionStatus} ");

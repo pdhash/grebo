@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:grebo/core/constants/app_assets.dart';
 import 'package:grebo/core/service/repo/userRepo.dart';
 import 'package:grebo/core/viewmodel/controller/selectservicecontoller.dart';
 import 'package:grebo/main.dart';
 import 'package:grebo/ui/screens/baseScreen/controller/baseController.dart';
+import 'package:grebo/ui/screens/homeTab/controller/homeController.dart';
 import 'package:grebo/ui/screens/homeTab/provider/likeerror.dart';
+import 'package:grebo/ui/screens/messagesTab/controller/allChatController.dart';
+import 'package:grebo/ui/screens/notifications/controller/allNotificationController.dart';
 import 'package:grebo/ui/shared/bottomabar.dart';
 import 'package:grebo/ui/shared/doubleTaptoback.dart';
 import 'package:grebo/ui/shared/location.dart';
@@ -20,7 +24,12 @@ class BaseScreen extends StatefulWidget {
 }
 
 class _BaseScreenState extends State<BaseScreen> {
-  final BaseController baseController = Get.put(BaseController());
+  final BaseController baseController = Get.find<BaseController>();
+  final HomeController homeController = Get.put(HomeController());
+  final AllChatController allChatController = Get.put(AllChatController());
+  final NotificationController notificationController =
+      Get.put(NotificationController());
+
   @override
   void initState() {
     GetLocationController getLocationController =
@@ -35,8 +44,16 @@ class _BaseScreenState extends State<BaseScreen> {
       child: Scaffold(
         appBar: buildAppBar(),
         body: GetBuilder(
-            builder: (BaseController controller) =>
-                tabNavigation[controller.currentTab]),
+          builder: (BaseController controller) {
+            print(userController.isGuest);
+            return IndexedStack(
+              children: userController.isGuest
+                  ? tabNavigationForGuest
+                  : tabNavigation,
+              index: controller.currentTab,
+            );
+          },
+        ),
         bottomNavigationBar: BuildBottomBar(),
         floatingActionButton: userController.user.userType ==
                 getServiceTypeCode(ServicesType.providerType)
@@ -51,7 +68,7 @@ class _BaseScreenState extends State<BaseScreen> {
       builder: (BaseController controller) => controller.currentTab == 0
           ? GestureDetector(
               onTap: () {
-                if (userController.user.verified)
+                if (userController.user.verifiedByAdmin)
                   Get.to(() => CreatePost());
                 else
                   Get.to(() => LikeError());
@@ -70,9 +87,13 @@ class _BaseScreenState extends State<BaseScreen> {
       'profile'.tr
     ];
     return AppBar(
+      systemOverlayStyle: SystemUiOverlayStyle.dark,
       title: GetBuilder(
-          builder: (BaseController controller) =>
-              Text(appTitle[controller.currentTab])),
+          builder: (BaseController controller) => Text(
+                appTitle[controller.currentTab],
+                style:
+                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+              )),
     );
   }
 }

@@ -49,6 +49,7 @@ class ReviewModel {
 
 class ReviewData {
   ReviewData({
+    this.rating = 0,
     this.id = "",
     required this.user,
     this.isMine = false,
@@ -62,6 +63,7 @@ class ReviewData {
   String id;
   ReviewUser user;
   bool isMine;
+  int rating;
   String businessRef;
   String text;
   String image;
@@ -73,6 +75,7 @@ class ReviewData {
         user: ReviewUser.fromJson(json["user"]),
         isMine: json["isMine"],
         businessRef: json["businessRef"],
+        rating: json["rating"],
         text: json["text"],
         image: json["image"],
         deleted: json["deleted"],
@@ -83,6 +86,7 @@ class ReviewData {
         "_id": id,
         "user": user.toJson(),
         "isMine": isMine,
+        "rating": rating,
         "businessRef": businessRef,
         "text": text,
         "image": image,

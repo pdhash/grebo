@@ -7,6 +7,15 @@ import 'package:grebo/ui/screens/homeTab/model/postModel.dart';
 import '../../../../main.dart';
 
 class PostDetailController extends GetxController {
+  PostData _postDataModel = PostData(createdAt: DateTime.now());
+
+  PostData get postDataModel => _postDataModel;
+
+  set postDataModel(PostData value) {
+    _postDataModel = value;
+    update();
+  }
+
   int commentPage = 1;
 
   PostDetailController() {
@@ -60,6 +69,12 @@ class PostDetailController extends GetxController {
     update();
     homeController.addComment(postData, commentText);
     commentText = "";
+  }
+
+  Future getPostDetails(String postRef) async {
+    print("GTE POST DETAIL");
+    PostData? postData = await PostRepo.getPostDetails(postRef);
+    postDataModel = postData!;
   }
 
   Future fetchComments() async {

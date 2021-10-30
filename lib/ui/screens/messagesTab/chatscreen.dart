@@ -1,106 +1,203 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:grebo/core/constants/appSetting.dart';
 import 'package:grebo/core/constants/appcolor.dart';
+import 'package:grebo/core/extension/dateTimeFormatExtension.dart';
 import 'package:grebo/core/utils/config.dart';
+import 'package:grebo/ui/screens/messagesTab/controller/allChatController.dart';
+import 'package:grebo/ui/screens/messagesTab/controller/chatScreenController.dart';
+import 'package:grebo/ui/screens/messagesTab/model/chatListModel.dart';
+import 'package:grebo/ui/screens/messagesTab/model/messageModel.dart';
 import 'package:grebo/ui/shared/appbar.dart';
 import 'package:grebo/ui/shared/postdetailbottom.dart';
 
-class ChatView extends StatelessWidget {
-  final int index;
-  final TextEditingController comment = TextEditingController();
+import '../../../main.dart';
 
-  ChatView({Key? key, required this.index}) : super(key: key);
+class ChatView extends StatefulWidget {
+  final String businessRef;
+  final String userName;
+  final AllChatData? allChatData;
+
+  ChatView(
+      {Key? key,
+      required this.businessRef,
+      required this.userName,
+      this.allChatData})
+      : super(key: key);
+
+  @override
+  _ChatViewState createState() => _ChatViewState();
+}
+
+class _ChatViewState extends State<ChatView> {
+  final ChatScreenController chatScreenController =
+      Get.put(ChatScreenController());
+  @override
+  void initState() {
+    chatScreenController.businessRef = widget.businessRef;
+    chatScreenController.fetchChannel();
+    scrollController.addListener(scrollListener);
+    super.initState();
+  }
+
+  final scrollController = ScrollController();
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
+  }
+
+  void scrollListener() {
+    if (scrollController.offset >=
+            scrollController.position.maxScrollExtent / 2 &&
+        !scrollController.position.outOfRange) {
+      if (chatScreenController.hasNext) {
+        chatScreenController.fetchNextMessages();
+      }
+    }
+  }
+
+  @override
+  void deactivate() {
+    if (chatScreenController.lastMessage != null) {
+      AllChatController controller = Get.find<AllChatController>();
+      int index = controller.getChatList.indexWhere(
+          (element) => element.chatUserDetail.id == widget.businessRef);
+      if (index != -1) {
+        controller.getChatList[index].lastMessage =
+            chatScreenController.lastMessage!;
+        controller.update();
+      }
+    }
+
+    super.deactivate();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: appBar('Samira Sehgal'),
-        body: Stack(
-          fit: StackFit.expand,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
-              child: Wrap(
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      getHeightSizedBox(h: 10),
-                      receiveChatBox('Hi!, Samir, How are you'),
-                      getHeightSizedBox(h: 10),
-                      receiveChatBox('the Last session was great'),
-                      getHeightSizedBox(h: 10),
-                      Text(' 08:25 Am'),
-                    ],
-                  ),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
+    return GestureDetector(
+      onTap: () {
+        disposeKeyboard();
+      },
+      child: Scaffold(
+          appBar: appBar(widget.userName),
+          body: GetBuilder(
+            builder: (ChatScreenController controller) {
+              return controller.channelRef == "" &&
+                      controller.getMessages.isEmpty
+                  ? GetPlatform.isAndroid
+                      ? Center(
+                          child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                        ))
+                      : Center(child: CupertinoActivityIndicator())
+                  : Stack(
                       children: [
-                        getHeightSizedBox(h: 25),
-                        sendChatBox(
-                          "I' Am Fine, Thanks Margie Friesen",
+                        ListView.builder(
+                          controller: scrollController,
+                          reverse: true,
+                          physics: BouncingScrollPhysics(),
+                          itemCount: controller.getMessages.length,
+                          padding:
+                              EdgeInsets.only(bottom: 90, left: 13, right: 13),
+                          itemBuilder: (context, index) {
+                            return messageBoxView(
+                              controller.getMessages[index],
+                            );
+                          },
                         ),
-                        getHeightSizedBox(h: 10),
-                        Text('08:25 Am '),
+                        Positioned(
+                            bottom: 0,
+                            right: 0,
+                            left: 0,
+                            child: SafeArea(
+                              child: PostDetailsBottomView(
+                                comment: chatScreenController.messageText,
+                                send: () {
+                                  if (chatScreenController.messageText.text
+                                      .trim()
+                                      .isNotEmpty) {
+                                    chatScreenController.sendMessages();
+                                  }
+                                },
+                                hintText: 'textfieldmsg2'.tr,
+                              ),
+                            ))
                       ],
-                    ),
-                  )
-                ],
-              ),
-            ),
-            Positioned(
-                bottom: 0,
-                right: 0,
-                left: 0,
-                child: SafeArea(
-                  child: PostDetailsBottomView(
-                    comment: comment,
-                    send: () {},
-                    hintText: 'textfieldmsg2'.tr,
-                  ),
-                ))
-          ],
-        ));
+                    );
+            },
+          )),
+    );
   }
-}
 
-Widget receiveChatBox(String title) {
-  return Padding(
-    padding: const EdgeInsets.only(right: 10),
-    child: Container(
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(25), color: Color(0xffF3F3F3)),
-      child: Padding(
-        padding:
-            const EdgeInsets.only(top: 18, bottom: 15, right: 20, left: 20),
-        child: Text(
-          title,
-          style: TextStyle(fontSize: getProportionateScreenWidth(14)),
-        ),
-      ),
-    ),
-  );
-}
+  messageBoxView(MessageData messageData) {
+    if (messageData.userId == userController.user.id) {
+      // Right (my message)
 
-Widget sendChatBox(String title) {
-  return Padding(
-    padding: const EdgeInsets.only(left: 50),
-    child: Container(
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(25),
-          color: AppColor.kDefaultColor),
-      child: Padding(
-        padding:
-            const EdgeInsets.only(top: 18, bottom: 15, right: 20, left: 20),
-        child: Text(
-          title,
-          style: TextStyle(
-              color: Colors.white, fontSize: getProportionateScreenWidth(14)),
-        ),
-      ),
-    ),
-  );
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Container(
+            decoration: BoxDecoration(
+                color: AppColor.kDefaultColor,
+                borderRadius: BorderRadius.circular(22)),
+            padding: EdgeInsets.all(15),
+            margin: EdgeInsets.only(left: 50),
+            child: Text(messageData.message,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: getProportionateScreenWidth(14),
+                )),
+          ),
+          getHeightSizedBox(h: 7),
+          Padding(
+            padding: const EdgeInsets.only(right: 7),
+            child: Text(
+              DateTimeFormatExtension.displayMSGTimeFromTimestamp(
+                  messageData.createdAt.toLocal()),
+              style: TextStyle(
+                  color: Color(0xff7C8392),
+                  fontSize: getProportionateScreenWidth(11)),
+            ),
+          ),
+          getHeightSizedBox(h: 4),
+        ],
+      );
+    } else {
+      // Left (defence message)
+
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            decoration: BoxDecoration(
+                color: Color(0xffF3F3F3),
+                borderRadius: BorderRadius.circular(22)),
+            margin: EdgeInsets.only(right: 50),
+            padding: EdgeInsets.all(15),
+
+            child: Text(messageData.message,
+                style: TextStyle(
+                  fontSize: getProportionateScreenWidth(14),
+                )),
+            // margin: const EdgeInsets.only(left: 10.0),
+          ),
+          getHeightSizedBox(h: 7),
+          Padding(
+            padding: const EdgeInsets.only(right: 7),
+            child: Text(
+              DateTimeFormatExtension.displayMSGTimeFromTimestamp(
+                  messageData.createdAt.toLocal()),
+              style: TextStyle(
+                  color: Color(0xff7C8392),
+                  fontSize: getProportionateScreenWidth(11)),
+            ),
+          ),
+          getHeightSizedBox(h: 4),
+        ],
+      );
+    }
+  }
 }

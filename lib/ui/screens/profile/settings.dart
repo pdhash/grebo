@@ -1,7 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:grebo/core/constants/appSetting.dart';
 import 'package:grebo/core/constants/app_assets.dart';
+import 'package:grebo/core/service/repo/userRepo.dart';
 import 'package:grebo/core/utils/config.dart';
 import 'package:grebo/core/utils/sharedpreference.dart';
 import 'package:grebo/ui/screens/baseScreen/controller/baseController.dart';
@@ -10,6 +12,9 @@ import 'package:grebo/ui/screens/profile/contactAdminScreen.dart';
 import 'package:grebo/ui/screens/profile/settingslist.dart';
 import 'package:grebo/ui/screens/selectservice.dart';
 import 'package:grebo/ui/shared/appbar.dart';
+import 'package:keyboard_actions/external/platform_check/platform_check.dart';
+
+import 'faqs.dart';
 
 class Settings extends StatelessWidget {
   final List<Map<String, dynamic>> list = [
@@ -49,9 +54,12 @@ class Settings extends StatelessWidget {
       'image': buildWidget(AppImages.logOut, 20, 20),
       'title': 'logOut'.tr,
       'onTap': () {
-        removerUserDetail();
-        Get.find<BaseController>().currentTab = 0;
-        Get.offAll(() => ChooseServices());
+        logoutConfirmation(yesTap: () {
+          UserRepo.userLogout();
+          removerUserDetail();
+          Get.find<BaseController>().resetInitialTab();
+          Get.offAll(() => ChooseServices());
+        });
       }
     },
   ];
@@ -91,4 +99,47 @@ class Settings extends StatelessWidget {
       ),
     );
   }
+}
+
+logoutConfirmation({required Function() yesTap}) {
+  showDialog(
+    context: Get.context as BuildContext,
+    builder: (ctx) => PlatformCheck.isAndroid
+        ? AlertDialog(
+            title: Text("logout".tr),
+            content: Text("logOutMsg".tr),
+            actions: <Widget>[
+              TextButton(
+                onPressed: yesTap,
+                child: Text("yes".tr),
+              ),
+              TextButton(
+                onPressed: () {
+                  Get.back();
+                },
+                child: Text("no".tr),
+              ),
+            ],
+          )
+        : CupertinoAlertDialog(
+            title: new Text("logout".tr),
+            content: new Text("logOutMsg".tr),
+            actions: <Widget>[
+              CupertinoDialogAction(
+                isDefaultAction: true,
+                onPressed: yesTap,
+                child: Text("logoutPop".tr),
+              ),
+              CupertinoDialogAction(
+                child: Text(
+                  "cancel".tr,
+                  style: TextStyle(color: Colors.red),
+                ),
+                onPressed: () {
+                  Get.back();
+                },
+              )
+            ],
+          ),
+  );
 }

@@ -36,15 +36,15 @@ class NotificationModel {
       );
 
   Map<String, dynamic> toJson() => {
-        "code": code,
-        "message": message,
-        "data": List<dynamic>.from(data.map((x) => x.toJson())),
-        "limit": limit,
-        "size": size,
-        "hasMore": hasMore,
-        "format": format,
-        "timestamp": timestamp,
-      };
+    "code": code,
+    "message": message,
+    "data": List<dynamic>.from(data.map((x) => x.toJson())),
+    "limit": limit,
+    "size": size,
+    "hasMore": hasMore,
+    "format": format,
+    "timestamp": timestamp,
+  };
 }
 
 class Datum {
@@ -52,6 +52,8 @@ class Datum {
     required this.id,
     required this.seen,
     required this.userRef,
+    required this.image,
+    required this.name,
     required this.type,
     required this.sourceRef,
     required this.text,
@@ -64,6 +66,8 @@ class Datum {
   String id;
   bool seen;
   String userRef;
+  String image;
+  String name;
   int type;
   String sourceRef;
   String text;
@@ -73,28 +77,32 @@ class Datum {
   bool deleted;
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-        id: json["_id"],
-        seen: json["seen"],
-        userRef: json["userRef"],
-        type: json["type"],
-        sourceRef: json["sourceRef"],
-        text: json["text"],
-        createdAt: DateTime.parse(json["createdAt"]),
-        updatedAt: DateTime.parse(json["updatedAt"]),
-        v: json["__v"],
-        deleted: json["deleted"],
-      );
+    id: json["_id"],
+    seen: json["seen"],
+    userRef: json["userRef"],
+    image: json["image"] ?? "",
+    name: json["name"] ?? "",
+    type: json["type"],
+    sourceRef: json["sourceRef"],
+    text: json["text"],
+    createdAt: DateTime.parse(json["createdAt"]),
+    updatedAt: DateTime.parse(json["updatedAt"]),
+    v: json["__v"],
+    deleted: json["deleted"],
+  );
 
   Map<String, dynamic> toJson() => {
-        "_id": id,
-        "seen": seen,
-        "userRef": userRef,
-        "type": type,
-        "sourceRef": sourceRef,
-        "text": text,
-        "createdAt": createdAt.toIso8601String(),
-        "updatedAt": updatedAt.toIso8601String(),
-        "__v": v,
-        "deleted": deleted,
-      };
+    "_id": id,
+    "seen": seen,
+    "userRef": userRef,
+    "image": image,
+    "name": name,
+    "type": type,
+    "sourceRef": sourceRef,
+    "text": text,
+    "createdAt": createdAt.toIso8601String(),
+    "updatedAt": updatedAt.toIso8601String(),
+    "__v": v,
+    "deleted": deleted,
+  };
 }

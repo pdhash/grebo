@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:grebo/core/service/googleAdd/addServices.dart';
 import 'package:grebo/core/utils/config.dart';
 
 import 'customtextfield.dart';
@@ -39,16 +40,40 @@ class PostDetailsBottomView extends StatelessWidget {
             ),
           ),
           getHeightSizedBox(h: 15),
-          isAddRequired
-              ? Container(
-                  height: 50,
-                  width: Get.width,
-                  color: Colors.red,
-                  child: Center(child: Text('Advertisment')),
-                )
-              : SizedBox()
+          isAddRequired ? BannerAddOverlay() : SizedBox()
         ],
       ),
+    );
+  }
+}
+
+class BannerAddOverlay extends StatefulWidget {
+  @override
+  State<BannerAddOverlay> createState() => _BannerAddOverlayState();
+}
+
+class _BannerAddOverlayState extends State<BannerAddOverlay> {
+  @override
+  void dispose() {
+    GoogleAddService.disposeBannerAdd();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<Widget>(
+      future: GoogleAddService.getBannerWidget(),
+      builder: (_, snapshot) {
+        if (!snapshot.hasData) {
+          return SizedBox();
+        } else {
+          return Container(
+            height: 50,
+            width: MediaQuery.of(context).size.width,
+            child: snapshot.data,
+          );
+        }
+      },
     );
   }
 }

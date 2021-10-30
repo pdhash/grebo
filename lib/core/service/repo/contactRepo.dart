@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:grebo/main.dart';
+import 'package:grebo/ui/screens/profile/model/faqsModel.dart';
 
 import '../apiHandler.dart';
 import '../apiRoutes.dart';
@@ -22,6 +25,18 @@ class ContactRepo {
         await API.apiHandler(url: APIRoutes.appData, showLoader: false);
     if (responseBody != null)
       return responseBody;
+    else
+      return null;
+  }
+
+  static Future<FaqsModel?> fetchFaqs(int page) async {
+    var responseBody = await API.apiHandler(
+        url: APIRoutes.faqs,
+        showLoader: false,
+        body: jsonEncode({"page": page}));
+    print(responseBody);
+    if (responseBody != null)
+      return FaqsModel.fromJson(responseBody);
     else
       return null;
   }

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:grebo/core/service/apiHandler.dart';
 import 'package:grebo/core/service/apiRoutes.dart';
 import 'package:grebo/core/viewmodel/controller/selectservicecontoller.dart';
@@ -9,6 +10,7 @@ class UserRepo {
   static Future userLogin({
     required String email,
     required String password,
+    required String fcmToken,
     required int userType,
   }) async {
     var responseBody = await API.apiHandler(
@@ -17,7 +19,13 @@ class UserRepo {
         'Content-Type': 'application/json',
       },
       body: jsonEncode(
-        {"email": email, "password": password, "userType": userType},
+        {
+          "email": email,
+          "password": password,
+          "device": Platform.isAndroid ? "Android" : "IOS",
+          "userType": userType,
+          "fcmToken": fcmToken,
+        },
       ),
     );
     if (responseBody != null)
@@ -31,31 +39,31 @@ class UserRepo {
     required int userType,
     required String email,
     required String fcmToken,
-    required String image,
+    String? image,
     required String socialId,
     required String socialToken,
     required int socialIdentifier,
   }) async {
     var responseBody = await API.apiHandler(
-      url: APIRoutes.socialLogin,
-      header: {
-        'Content-Type': 'application/json',
-      },
-      body: jsonEncode(
-        {
-          "email": email,
-          "userType": userType,
-          "name": name,
-          "device": Platform.isAndroid ? "Android" : "IOS",
-          "fcmToken": fcmToken,
-          "image": image,
-          "referralId": "",
-          "socialId": socialId,
-          "socialToken": socialToken,
-          "socialIdentifier": socialIdentifier
+        url: APIRoutes.socialLogin,
+        header: {
+          'Content-Type': 'application/json',
         },
-      ),
-    );
+        showLoader: false,
+        body: jsonEncode(
+          {
+            "email": email,
+            "userType": userType,
+            "name": name,
+            "device": Platform.isAndroid ? "android" : "ios",
+            "fcmToken": fcmToken,
+            "image": image,
+            "referralId": "",
+            "socialId": socialId,
+            "socialToken": socialToken,
+            "socialIdentifier": socialIdentifier
+          },
+        ));
     if (responseBody != null)
       return responseBody;
     else
@@ -104,6 +112,12 @@ class UserRepo {
       ),
     );
     if (responseBody != null) return responseBody;
+  }
+
+  static Future userLogout() async {
+    if (FirebaseAuth.instance.currentUser != null) {
+      await FirebaseAuth.instance.signOut();
+    }
   }
 }
 

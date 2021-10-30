@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:grebo/core/viewmodel/controller/imagepickercontoller.dart';
 import 'package:grebo/main.dart';
 import 'package:grebo/ui/screens/homeTab/home.dart';
+import 'package:grebo/ui/screens/homeTab/widget/guestLoginScreen.dart';
 import 'package:grebo/ui/screens/messagesTab/allmessages.dart';
 import 'package:grebo/ui/screens/notifications/notifications.dart';
 import 'package:grebo/ui/screens/profile/profile.dart';
@@ -14,9 +15,18 @@ List<Widget> tabNavigation = [
   AllNotification(),
   Profile(),
 ];
+List<Widget> tabNavigationForGuest = [
+  Home(),
+  GuestLoginScreen(),
+  GuestLoginScreen(),
+  GuestLoginScreen(),
+];
 late AppImagePicker appImagePicker;
 
 globalVerbsInit() async {
   userController = Get.put(UserController());
   appImagePicker = AppImagePicker();
 }
+
+int initialTab = 0;
+late bool navigationScreen;

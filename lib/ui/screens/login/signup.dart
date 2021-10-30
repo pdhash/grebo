@@ -18,9 +18,12 @@ import 'package:grebo/ui/shared/postview.dart';
 import '../../global.dart';
 
 class SignUp extends StatelessWidget {
+  final bool isBack;
   final GlobalKey<FormState> globalKey = GlobalKey<FormState>();
 
   final SignUpController signUpController = Get.put(SignUpController());
+
+  SignUp({Key? key, required this.isBack}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -120,7 +123,7 @@ class SignUp extends StatelessWidget {
                         type: CustomButtonType.colourButton,
                         text: 'ok'.tr,
                         onTap: () {
-                          Get.back();
+                          isBack ? Get.back() : Get.off(() => LoginScreen());
 
                           controller.emailVer = true;
                         }),
@@ -161,7 +164,7 @@ class SignUp extends StatelessWidget {
     return Obx(
       () => CustomTextField(
         controller: signUpController.confirmPassword,
-        validator: (val) => val!.isEmpty
+        validator: (val) => val!.trim().isEmpty
             ? "please_enter_password".tr
             : signUpController.password.text.trim() == val
                 ? null
@@ -191,7 +194,8 @@ class SignUp extends StatelessWidget {
           suffixWidth: 40,
           textInputAction: TextInputAction.next,
           hintText: 'XXXXXXXX',
-          validator: (val) => val!.isEmpty ? "please_enter_password".tr : null,
+          validator: (val) =>
+              val!.trim().isEmpty ? "please_enter_password".tr : null,
           //  keyboardType: TextInputType.visiblePassword,
           obSecureText: signUpController.showText.value,
           suffix: IconButton(
@@ -211,7 +215,7 @@ class SignUp extends StatelessWidget {
     return CustomTextField(
         keyboardType: TextInputType.emailAddress,
         textInputAction: TextInputAction.next,
-        validator: (val) => val!.isEmpty
+        validator: (val) => val!.trim().isEmpty
             ? "please_enter_email".tr
             : val.isValidEmail()
                 ? null
@@ -224,7 +228,7 @@ class SignUp extends StatelessWidget {
   nameField() {
     return CustomTextField(
       controller: signUpController.name,
-      validator: (val) => val!.isEmpty ? "please_enter_name".tr : null,
+      validator: (val) => val!.trim().isEmpty ? "please_enter_name".tr : null,
       textInputAction: TextInputAction.next,
       hintText: 'John smith',
       textCapitalization: TextCapitalization.sentences,

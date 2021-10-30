@@ -5,11 +5,30 @@ import 'package:grebo/core/service/apiHandler.dart';
 import 'package:grebo/core/service/apiRoutes.dart';
 import 'package:grebo/main.dart';
 import 'package:grebo/ui/screens/homeTab/model/commentModel.dart';
+import 'package:grebo/ui/screens/homeTab/model/postDetialModel.dart';
 import 'package:grebo/ui/screens/homeTab/model/postModel.dart';
 import 'package:grebo/ui/screens/homeTab/model/reviewModel.dart';
 import 'package:grebo/ui/screens/login/model/currentUserModel.dart';
 
 class PostRepo {
+  static Future<PostData?> getPostDetails(String postRef) async {
+    var response = await API.apiHandler(
+        url: userController.isGuest
+            ? APIRoutes.guestPostDetail
+            : APIRoutes.postDetails,
+        showLoader: false,
+        header: {
+          "Authorization": userController.userToken,
+          "Content-Type": 'application/json',
+        },
+        body: jsonEncode({"postRef": postRef}));
+    if (response != null) {
+      print("getPostDetails $response");
+      return PostDetailModel.fromJson(response).postData;
+    } else
+      return null;
+  }
+
   static Future<PostModel?> fetchProviderPost(int page) async {
     var response = await API.apiHandler(
         url: APIRoutes.providerPostList,
@@ -29,7 +48,9 @@ class PostRepo {
       required double latitude,
       List<String>? categoryRefs}) async {
     var response = await API.apiHandler(
-      url: APIRoutes.userPostList,
+      url: userController.isGuest
+          ? APIRoutes.guestPostList
+          : APIRoutes.userPostList,
       showLoader: false,
       header: {
         "Authorization": userController.userToken,
@@ -53,16 +74,27 @@ class PostRepo {
       return null;
   }
 
-  static Future postUpload(File image, Map<String, dynamic> caption,
-      bool isImage, File? thumbnail) async {
+  static Future postUpload(
+      {File? image,
+      required Map<String, dynamic> caption,
+      required int isImage,
+      File? thumbnail}) async {
     String map = jsonEncode(caption);
-    var response = await API.multiPartAPIHandler(
-        url: APIRoutes.addPost,
-        thumbnail: thumbnail,
-        multiPartImageKeyName: isImage ? "image" : "video",
-        fileImage: [image],
-        field: {"data": map},
-        header: {"Authorization": userController.userToken});
+    var response;
+    if (isImage == 1 || isImage == 2) {
+      response = await API.multiPartAPIHandler(
+          url: APIRoutes.addPost,
+          thumbnail: thumbnail,
+          multiPartImageKeyName: isImage == 2 ? "image" : "video",
+          fileImage: [image as File],
+          field: {"data": map},
+          header: {"Authorization": userController.userToken});
+    } else
+      response = await API.multiPartAPIHandler(
+          url: APIRoutes.addPost,
+          field: {"data": map},
+          header: {"Authorization": userController.userToken});
+
     if (response != null) {
       return response;
     } else
@@ -87,7 +119,9 @@ class PostRepo {
   static Future<CommentModel?> fetchComments(
       {required String postRef, required int page}) async {
     var response = await API.apiHandler(
-      url: APIRoutes.getComments,
+      url: userController.isGuest
+          ? APIRoutes.guestCommentList
+          : APIRoutes.getComments,
       showLoader: false,
       header: {
         "Authorization": userController.userToken,
@@ -139,18 +173,12 @@ class PostRepo {
 
   static Future updateReview(Map<String, dynamic> review, File? image) async {
     String map = jsonEncode(review);
-    var response;
-    if (image == null) {
-      response = await API.multiPartAPIHandler(
-          url: APIRoutes.reviewUpdate,
-          header: {"Authorization": userController.userToken},
-          field: {"data": map});
-    } else
-      response = await API.multiPartAPIHandler(
-          url: APIRoutes.review,
-          header: {"Authorization": userController.userToken},
-          field: {"data": map},
-          fileImage: [image]);
+    var response = await API.multiPartAPIHandler(
+        url: APIRoutes.reviewUpdate,
+        header: {"Authorization": userController.userToken},
+        multiPartImageKeyName: "image",
+        field: {"data": map},
+        fileImage: image != null ? [image] : null);
     if (response != null) {
       return response;
     } else
@@ -162,7 +190,7 @@ class PostRepo {
         url: APIRoutes.userDetail,
         showLoader: false,
         header: {"Authorization": userController.userToken},
-        body: jsonEncode({"businessRef": businessRef}));
+        body: {"userRef": businessRef});
     if (response != null) {
       return UserModel.fromJson(response["data"]);
     } else

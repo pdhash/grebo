@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:grebo/core/constants/appSetting.dart';
 import 'package:grebo/core/constants/app_assets.dart';
@@ -10,11 +11,12 @@ import 'package:grebo/core/service/repo/userRepo.dart';
 import 'package:grebo/core/utils/config.dart';
 import 'package:grebo/core/viewmodel/controller/imagepickercontoller.dart';
 import 'package:grebo/core/viewmodel/controller/selectservicecontoller.dart';
-import 'package:grebo/ui/screens/homeTab/home.dart';
 import 'package:grebo/ui/screens/profile/controller/ProfileChangeController.dart';
 import 'package:grebo/ui/shared/appbar.dart';
 import 'package:grebo/ui/shared/custombutton.dart';
 import 'package:grebo/ui/shared/customtextfield.dart';
+import 'package:grebo/ui/shared/loader.dart';
+import 'package:grebo/ui/shared/placeScreen.dart';
 
 import '../../../main.dart';
 import '../../global.dart';
@@ -93,7 +95,8 @@ class _EditProfileState extends State<EditProfile> {
                     fontSize: getProportionateScreenWidth(16)),
               ),
               CustomTextField(
-                  controller: profileChangeController.name,textCapitalization: TextCapitalization.sentences,
+                  controller: profileChangeController.name,
+                  textCapitalization: TextCapitalization.sentences,
                   hintText: 'John smith'),
               getHeightSizedBox(h: 18),
               Text(
@@ -122,27 +125,7 @@ class _EditProfileState extends State<EditProfile> {
                         Get.height < 800
                             ? getHeightSizedBox(h: 10)
                             : SizedBox(),
-                        CustomTextField(
-                            controller: profileChangeController.location,
-                            enabled: false,
-                            onFieldTap: () {
-                              print('hello');
-                            },
-                            hintText: 'Villaz Johns Street 11, California..',
-                            textSize: 14,
-                            suffixWidth: 19,
-                            suffix: GestureDetector(
-                              // alignment: Alignment.centerRight,
-                              onTap: () {
-                                print('ok');
-                              },
-                              //padding: EdgeInsets.zero,
-                              child: Container(
-                                  padding: EdgeInsets.all(0),
-                                  //color: Colors.red,
-                                  //alignment: Alignment.centerRight,
-                                  child: buildWidget(AppImages.gps, 19, 19)),
-                            )),
+                        locationFiled(),
                       ],
                     )
                   : SizedBox(),
@@ -159,6 +142,54 @@ class _EditProfileState extends State<EditProfile> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  locationFiled() {
+    return GestureDetector(
+      onTap: () {
+        GoogleSearchPlace.buildGooglePlaceSearch().then((value) async {
+          LoadingOverlay.of().show();
+          profileChangeController.lat = value.late;
+          profileChangeController.long = value.long;
+          profileChangeController.location.text = value.address;
+          LoadingOverlay.of().hide();
+        });
+      },
+      child: TextFormField(
+        style: TextStyle(
+          fontSize: getProportionateScreenWidth(14),
+        ),
+        controller: profileChangeController.location,
+        validator: (val) => val!.isEmpty ? "enter_location".tr : null,
+        enabled: false,
+        textInputAction: TextInputAction.next,
+        textAlignVertical: TextAlignVertical.center,
+        decoration: InputDecoration(
+            errorStyle: TextStyle(
+              color: Theme.of(Get.context as BuildContext)
+                  .errorColor, // or any other color
+            ),
+            errorBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+              width: 1,
+              color: Theme.of(Get.context as BuildContext).errorColor,
+            )),
+            disabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+              width: 0.5,
+            )),
+            hintStyle: TextStyle(
+                fontSize: getProportionateScreenWidth(14),
+                color: Color(0xff8F92A3)),
+            hintText: 'Villaz Johns Street 11, California..',
+            suffixIcon: Padding(
+              padding: const EdgeInsets.fromLTRB(10, 12, 0, 12),
+              child: SvgPicture.asset(
+                AppImages.gps,
+              ),
+            )),
       ),
     );
   }

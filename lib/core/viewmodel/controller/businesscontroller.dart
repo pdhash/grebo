@@ -1,8 +1,6 @@
 import 'package:get/get.dart';
 import 'package:grebo/core/service/repo/postRepo.dart';
-import 'package:grebo/core/service/repo/userRepo.dart';
 import 'package:grebo/core/utils/appFunctions.dart';
-import 'package:grebo/core/viewmodel/controller/selectservicecontoller.dart';
 import 'package:grebo/main.dart';
 import 'package:grebo/ui/screens/login/model/currentUserModel.dart';
 
@@ -19,13 +17,15 @@ class BusinessController extends GetxController {
   List<String> getAvailabilityDay = [];
   List<String> getCloseDay = [];
 
-  String businessRef = "";
-  UserModel userModel =
-      userController.user.userType == getServiceTypeCode(ServicesType.userType)
-          ? UserModel()
-          : userController.user;
+  String businessRefID = "";
+  UserModel userModel = UserModel();
+  updateUserModelList() {
+    userModel = userController.user;
+    update();
+  }
 
-  Future fetchUserDetail() async {
+  Future fetchUserDetail(String businessRef) async {
+    businessRefID = businessRef;
     var response = await PostRepo.fetchUserDetail(businessRef);
     if (response != null) {
       userModel = response;
@@ -45,8 +45,11 @@ class BusinessController extends GetxController {
     }
   }
 
-  Future follow() async {
-    var response = await PostRepo.followProvider(businessRef, true);
+  Future follow(bool isFollow) async {
+    userModel.isFollow = isFollow;
+    update();
+
+    var response = await PostRepo.followProvider(businessRefID, isFollow);
     if (response != null) {
       flutterToast(response["message"]);
     }

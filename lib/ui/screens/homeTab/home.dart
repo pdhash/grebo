@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:grebo/core/constants/appSetting.dart';
 import 'package:grebo/core/constants/app_assets.dart';
 import 'package:grebo/core/constants/appcolor.dart';
+import 'package:grebo/core/service/googleAdd/addServices.dart';
 import 'package:grebo/core/service/repo/userRepo.dart';
 import 'package:grebo/core/utils/config.dart';
 import 'package:grebo/core/viewmodel/controller/selectservicecontoller.dart';
@@ -15,14 +16,27 @@ import 'package:grebo/ui/screens/homeTab/viewAllCategories.dart';
 import 'package:grebo/ui/shared/custombutton.dart';
 import 'package:grebo/ui/shared/placeScreen.dart';
 import 'package:grebo/ui/shared/postview.dart';
+import 'package:grebo/ui/shared/userController.dart';
 import 'package:pagination_view/pagination_view.dart';
 
 import '../../../main.dart';
 
-class Home extends StatelessWidget {
-  final HomeController homeController = Get.put(HomeController());
+class Home extends StatefulWidget {
   static GlobalKey<PaginationViewState> paginationViewKey =
       GlobalKey<PaginationViewState>();
+
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  final HomeController homeController = Get.find<HomeController>();
+  @override
+  void initState() {
+    GoogleAddService.createInterstitialAd();
+    GoogleAddService.showInterstitialAd();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +75,6 @@ class Home extends StatelessWidget {
                               if (!(value.long == 0 &&
                                   value.late == 0 &&
                                   value.address == "")) {
-                                print(value.long);
                                 Get.find<BaseController>().changeAddress(
                                     value.late, value.long, value.address);
                               }
@@ -111,30 +124,36 @@ class Home extends StatelessWidget {
                         physics: BouncingScrollPhysics(),
                         child: Padding(
                           padding: EdgeInsets.only(left: kDefaultPadding),
-                          child: Row(
-                            children: List.generate(
-                                userController.globalCategory.length, (index) {
-                              var catRef = userController.globalCategory[index];
-                              return BusinessCategories(
-                                text: catRef.name,
-                                textStyle: TextStyle(
-                                    fontSize: getProportionateScreenWidth(13),
-                                    color: controller.selectedCategory
-                                            .contains(catRef.id)
-                                        ? Colors.white
-                                        : AppColor.kDefaultFontColor),
-                                onTap: () {
-                                  controller.updateCategory(catRef.id);
-                                },
-                                height: 38,
-                                backgroundColor: controller.selectedCategory
-                                        .contains(catRef.id)
-                                    ? AppColor.categoriesColor
-                                    : Colors.white,
-                                border: Border.all(
-                                    color: AppColor.categoriesColor, width: 1),
-                              );
-                            }),
+                          child: GetBuilder(
+                            builder: (UserController c) => Row(
+                              children: List.generate(
+                                  userController.globalCategory.length,
+                                  (index) {
+                                var catRef =
+                                    userController.globalCategory[index];
+
+                                return BusinessCategories(
+                                  text: catRef.name,
+                                  textStyle: TextStyle(
+                                      fontSize: getProportionateScreenWidth(13),
+                                      color: controller.selectedCategory
+                                              .contains(catRef.id)
+                                          ? Colors.white
+                                          : AppColor.kDefaultFontColor),
+                                  onTap: () {
+                                    controller.updateCategory(catRef.id);
+                                  },
+                                  height: 38,
+                                  backgroundColor: controller.selectedCategory
+                                          .contains(catRef.id)
+                                      ? AppColor.categoriesColor
+                                      : Colors.white,
+                                  border: Border.all(
+                                      color: AppColor.categoriesColor,
+                                      width: 1),
+                                );
+                              }),
+                            ),
                           ),
                         ),
                       );
@@ -149,9 +168,9 @@ class Home extends StatelessWidget {
             : SizedBox(),
         Expanded(
           child: PaginationView(
-            key: paginationViewKey,
+            key: Home.paginationViewKey,
             pullToRefresh: true,
-            physics: BouncingScrollPhysics(),
+            physics: AlwaysScrollableScrollPhysics(),
             itemBuilder: (BuildContext context, PostData postData, int index) =>
                 PostView(
               postData: postData,
@@ -161,7 +180,6 @@ class Home extends StatelessWidget {
                 ? homeController.fetchUserPost
                 : homeController.fetchProviderPost,
             onError: (error) {
-              print("Error $error");
               return Center(child: Text(error));
             },
             onEmpty: Center(

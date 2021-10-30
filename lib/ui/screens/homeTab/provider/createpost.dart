@@ -40,9 +40,10 @@ class _CreatePostState extends State<CreatePost> {
                     onPressed: () {
                       disposeKeyboard();
                       if (controller.uploadFile != null ||
-                          controller.uploadFile != null) {
+                          controller.postCaption.text.isNotEmpty) {
                         controller.addPost().then((value) {
                           if (value != null) {
+                            Home.paginationViewKey.currentState!.refresh();
                             showCustomDialog(
                                 context: Get.context as BuildContext,
                                 height: 160,
@@ -153,7 +154,7 @@ class _CreatePostState extends State<CreatePost> {
                               child: Container(
                                 width: getProportionateScreenWidth(325),
                                 height: getProportionateScreenWidth(130),
-                                child: controller.isImage == true
+                                child: controller.isImage == 2
                                     ? Image.file(
                                         controller.uploadFile as File,
                                         fit: BoxFit.cover,
@@ -169,6 +170,7 @@ class _CreatePostState extends State<CreatePost> {
                                 top: -5,
                                 child: GestureDetector(
                                     onTap: () {
+                                      controller.isImage = 0;
                                       controller.uploadFile = null;
                                       controller.thumbnail = null;
                                     },

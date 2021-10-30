@@ -68,6 +68,8 @@ class AppImages {
   static final availability = 'assets/image/profile/ic_availability.svg';
   static final aboutBusiness = 'assets/image/profile/ic_about-business.svg';
   static final dropdownClose = 'assets/image/profile/ic_dropdown_close.svg';
+  static final guestLogin =
+      'assets/image/home/ic_guest_mode_illustration (1).svg';
   static final workingDays =
       'assets/image/editBusinessProfile/ic_working-days_icon.svg';
   static final workingHours =

@@ -1,13 +1,17 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:grebo/core/service/auth/googleAuth.dart';
 import 'package:grebo/core/service/repo/userRepo.dart';
 import 'package:grebo/core/utils/sharedpreference.dart';
 import 'package:grebo/core/viewmodel/controller/selectservicecontoller.dart';
+import 'package:grebo/main.dart';
 import 'package:grebo/ui/screens/baseScreen/baseScreen.dart';
 import 'package:grebo/ui/screens/editBusinessprofile/details1.dart';
 import 'package:grebo/ui/screens/login/model/currentUserModel.dart';
+import 'package:grebo/ui/shared/loader.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class LoginController extends GetxController {
   final TextEditingController email = TextEditingController();
@@ -18,15 +22,18 @@ class LoginController extends GetxController {
 
   Future userLogin() async {
     final ServiceController serviceController = Get.find<ServiceController>();
+    String? fcmToken = await FirebaseMessaging.instance.getToken();
+
+    // String? fcmToken = "";
 
     var response = await UserRepo.userLogin(
         email: email.text.trim(),
         password: password.text.trim(),
-        userType: serviceController.servicesType == ServicesType.providerType
-            ? 2
-            : 1);
+        userType:
+            serviceController.servicesType == ServicesType.providerType ? 2 : 1,
+        fcmToken: fcmToken.toString());
     if (response != null) {
-      print(response);
+      userController.isGuest = false;
 
       currentUserModel = CurrentUserModel.fromJson(response);
       saveUserDetails(currentUserModel!.data);
@@ -44,32 +51,89 @@ class LoginController extends GetxController {
     }
   }
 
-  Future socialLogin() async {
+  Future googleLogin() async {
+    LoadingOverlay.of().show();
+
     final ServiceController serviceController = Get.find<ServiceController>();
+    String? fcmToken = await FirebaseMessaging.instance.getToken();
+    print("FCM TOKEN ${fcmToken}");
+    // // String? fcmToken = "";
     String socialId = "";
     User? userFireBase;
+    if (fcmToken != null) {
+      await GoogleAuth.signInWithGoogle().then((value) async {
+        print("on gogole signin $value");
+        if (value != null) {
+          socialId = await value.getIdToken();
+          userFireBase = value;
+        }
+      }).then((value) {
+        if (value == null) LoadingOverlay.of().hide();
+      });
+      var response = await UserRepo.userSocialLogin(
+          name: userFireBase!.displayName.toString(),
+          userType: getServiceTypeCode(serviceController.servicesType),
+          email: userFireBase!.email.toString(),
+          fcmToken: fcmToken.toString(),
+          image: userFireBase!.photoURL.toString(),
+          socialId: userFireBase!.uid,
+          socialToken: socialId,
+          socialIdentifier: getSocialIdentifier(SocialIdentifier.Google));
+      if (response != null) {
+        userController.isGuest = false;
+        currentUserModel = CurrentUserModel.fromJson(response);
+        saveUserDetails(currentUserModel!.data);
+        LoadingOverlay.of().hide();
+        if (currentUserModel!.data.user.userType ==
+            getServiceTypeCode(ServicesType.providerType)) {
+          if (currentUserModel!.data.user.profileCompleted) {
+            Get.offAll(() => BaseScreen());
+          } else {
+            Get.offAll(() => DetailsPage1());
+          }
+        } else {
+          Get.offAll(() => BaseScreen());
+        }
+      } else
+        LoadingOverlay.of().hide();
+    } else
+      LoadingOverlay.of().hide();
+  }
 
-    await GoogleAuth.signInWithGoogle().then((value) async {
-      if (value != null) {
-        socialId = await value.getIdToken();
-        userFireBase = value;
-      }
-    });
+  Future appleLogin() async {
+    LoadingOverlay.of().show();
+    final ServiceController serviceController = Get.find<ServiceController>();
+    String? fcmToken = await FirebaseMessaging.instance.getToken();
+    // String? fcmToken = "ok";
 
-    var response = await UserRepo.userSocialLogin(
-        name: userFireBase!.displayName.toString(),
-        userType: getServiceTypeCode(serviceController.servicesType),
-        email: userFireBase!.email.toString(),
-        fcmToken: "12345",
-        image: userFireBase!.photoURL.toString(),
-        socialId: userFireBase!.uid,
-        socialToken: socialId,
-        socialIdentifier: getSocialIdentifier(SocialIdentifier.Google));
+    var response;
+    if (fcmToken != null) {
+      final credential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+      ).catchError((e) {
+        LoadingOverlay.of().hide();
+      });
+      print("USER IDENTITY ${credential.userIdentifier}");
+      print("USER IDENTITY 2 ${credential.authorizationCode}");
+      print("USER SOCIAL TOKEN ${credential.identityToken}");
+      response = await UserRepo.userSocialLogin(
+          name: credential.givenName.toString(),
+          userType: getServiceTypeCode(serviceController.servicesType),
+          email: credential.email.toString(),
+          fcmToken: fcmToken.toString(),
+          socialId: credential.userIdentifier.toString(),
+          socialToken: credential.identityToken.toString(),
+          socialIdentifier: getSocialIdentifier(SocialIdentifier.Apple));
+    }
+
     if (response != null) {
-      print(response);
-
+      userController.isGuest = false;
       currentUserModel = CurrentUserModel.fromJson(response);
       saveUserDetails(currentUserModel!.data);
+      LoadingOverlay.of().hide();
       if (currentUserModel!.data.user.userType ==
           getServiceTypeCode(ServicesType.providerType)) {
         if (currentUserModel!.data.user.profileCompleted) {
@@ -81,6 +145,7 @@ class LoginController extends GetxController {
         Get.offAll(() => BaseScreen());
       }
     }
+    LoadingOverlay.of().hide();
   }
 }
 
@@ -96,7 +161,7 @@ int getSocialIdentifier(SocialIdentifier socialIdentifier) {
       code = 2;
       break;
     case SocialIdentifier.Apple:
-      code = 3;
+      code = 2;
       break;
   }
   return code;

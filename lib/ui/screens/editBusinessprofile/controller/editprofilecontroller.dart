@@ -9,6 +9,7 @@ import 'package:grebo/core/service/repo/editProfileRepo.dart';
 import 'package:grebo/core/service/repo/imageRepo.dart';
 import 'package:grebo/core/utils/appFunctions.dart';
 import 'package:grebo/core/utils/sharedpreference.dart';
+import 'package:grebo/core/viewmodel/controller/businesscontroller.dart';
 import 'package:grebo/main.dart';
 import 'package:grebo/ui/screens/login/model/currentUserModel.dart';
 
@@ -65,13 +66,17 @@ class EditBProfileController extends GetxController {
   List<String> uploadMultiFile = <String>[];
 
   void removeImage(int index) {
-    multiFile.removeAt(index);
+    if (multiFile.length > index) {
+      print("validate");
+      multiFile.removeAt(index);
+    }
     uploadMultiFile.removeAt(index);
-    update();
-  }
+    print("BEFOREE ${userController.user.images}");
 
-  void removeImageLocally(index) {
-    uploadMultiFile.removeAt(index);
+    userController.user.images = uploadMultiFile;
+    updateUserDetail(userController.user);
+    print("AFTER  ${userController.user.images}");
+
     update();
   }
 
@@ -92,8 +97,8 @@ class EditBProfileController extends GetxController {
     update();
   }
 
-  double lat = -1;
-  double long = -1;
+  double lat = 0;
+  double long = 0;
 
   int _categorySelect = 1;
 
@@ -137,12 +142,14 @@ class EditBProfileController extends GetxController {
   }
 
   deleteImage(int index) {
-    ImageRepo.deleteImage(imageId: uploadMultiFile[index]).then((value) {
-      if (value != null) {
-        flutterToast(value["message"]);
-        removeImage(index);
-      }
-    });
+    if (uploadMultiFile.length > 1) {
+      ImageRepo.deleteImage(imageId: uploadMultiFile[index]).then((value) {
+        if (value != null) {
+          flutterToast(value["message"]);
+          removeImage(index);
+        }
+      });
+    }
   }
 
   Future submitAllFields(bool isNext) async {
@@ -168,6 +175,7 @@ class EditBProfileController extends GetxController {
       if (isNext)
         Get.to(() => DetailsPage2());
       else {
+        Get.find<BusinessController>().updateUserModelList();
         Get.back();
       }
     }
@@ -176,13 +184,17 @@ class EditBProfileController extends GetxController {
   @override
   void onInit() {
     loadCountryJsonFile();
+    print(userController.user.location.coordinates);
 
     if (userController.user.profileCompleted) {
       businessName.text = userController.user.businessName;
       mobileNumber.text = userController.user.phoneNumber;
       location.text = userController.user.location.address;
+      lat = userController.user.location.coordinates[0];
+      long = userController.user.location.coordinates[1];
       description.text = userController.user.description;
       uploadMultiFile = userController.user.images;
+      multiFile.addAll(userController.user.images.map((e) => File("")));
       websites = userController.user.websites;
       for (int i = 0; i < userController.user.categories.length; i++) {
         for (int j = 0; j < userController.globalCategory.length; j++) {

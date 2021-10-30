@@ -71,13 +71,13 @@ class CommentsData {
   DateTime updatedAt;
 
   factory CommentsData.fromJson(Map<String, dynamic> json) => CommentsData(
-        id: json["_id"],
-        name: json["name"],
-        picture: json["picture"],
-        isMine: json["isMine"],
-        postRef: json["postRef"],
-        text: json["text"],
-        deleted: json["deleted"],
+        id: json["_id"]??"",
+        name: json["name"]??"",
+        picture: json["picture"]??"",
+        isMine: json["isMine"]??false,
+        postRef: json["postRef"]??"",
+        text: json["text"]??"",
+        deleted: json["deleted"]??false,
         createdAt: DateTime.parse(json["createdAt"]).toLocal(),
         updatedAt: DateTime.parse(json["updatedAt"]),
       );
