@@ -84,22 +84,28 @@ class _GiveFeedbackState extends State<GiveFeedback> {
                       color: AppColor.kDefaultFontColor.withOpacity(0.77)),
                 ),
                 getHeightSizedBox(h: 17),
-                RatingBar.builder(
-                  initialRating: 0,
-                  minRating: 1,
-                  glow: false,
-                  direction: Axis.horizontal,
-                  allowHalfRating: false,
-                  itemCount: 5,
-                  itemSize: 33,
-                  unratedColor: Color(0xffE8E8E8),
-                  itemPadding: EdgeInsets.only(right: 5.0),
-                  itemBuilder: (context, _) => Icon(
-                    Icons.star,
-                    color: Color(0xffFAAA01),
-                  ),
-                  onRatingUpdate: (rating) {
-                    feedbackController.rating = rating;
+                GetBuilder(
+                  builder: (FeedbackController controller) {
+                    return RatingBar.builder(
+                      initialRating: controller.rating,
+                      minRating: 1,
+                      glow: false,
+                      direction: Axis.horizontal,
+                      allowHalfRating: false,
+                      itemCount: 5,
+                      itemSize: 33,
+                      unratedColor: Color(0xffE8E8E8),
+                      itemPadding: EdgeInsets.only(right: 5.0),
+                      itemBuilder: (context, _) {
+                        return Icon(
+                          Icons.star,
+                          color: Color(0xffFAAA01),
+                        );
+                      },
+                      onRatingUpdate: (rating) {
+                        feedbackController.rating = rating;
+                      },
+                    );
                   },
                 ),
                 getHeightSizedBox(h: 20),
@@ -125,8 +131,9 @@ class _GiveFeedbackState extends State<GiveFeedback> {
                       TextFormField(
                         controller: feedbackController.description,
                         textInputAction: TextInputAction.done,
-                        validator: (val) =>
-                            val!.isEmpty ? "please_enter_review".tr : null,
+                        validator: (val) => val!.trim().isEmpty
+                            ? "please_enter_review".tr
+                            : null,
                         textCapitalization: TextCapitalization.sentences,
                         maxLines: 2,
                         minLines: 1,

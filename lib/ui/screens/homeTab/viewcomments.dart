@@ -4,7 +4,9 @@ import 'package:get/get.dart';
 import 'package:grebo/core/constants/appSetting.dart';
 import 'package:grebo/core/constants/app_assets.dart';
 import 'package:grebo/core/extension/customButtonextension.dart';
+import 'package:grebo/core/service/repo/userRepo.dart';
 import 'package:grebo/core/utils/config.dart';
+import 'package:grebo/core/viewmodel/controller/selectservicecontoller.dart';
 import 'package:grebo/ui/screens/homeTab/controller/homeController.dart';
 import 'package:grebo/ui/screens/homeTab/controller/postDetailController.dart';
 import 'package:grebo/ui/shared/appbar.dart';
@@ -118,12 +120,13 @@ class _ViewCommentsState extends State<ViewComments> {
                     );
             },
           ),
+
           Positioned(
               bottom: 0,
               left: 0,
               right: 0,
-              child: userController.user.profileCompleted
-                  ? PostDetailsBottomView(
+              child: userController.user.userType==getServiceTypeCode(ServicesType.userType)?
+                   PostDetailsBottomView(
                       comment: comment,
                       hintText: 'textfieldmsg1'.tr,
                       send: () {
@@ -137,7 +140,20 @@ class _ViewCommentsState extends State<ViewComments> {
                         }
                       },
                     )
-                  : Container(
+                  : userController.user.verifiedByAdmin?PostDetailsBottomView(
+                comment: comment,
+                hintText: 'textfieldmsg1'.tr,
+                send: () {
+                  if (comment.text.isNotEmpty) {
+                    disposeKeyboard();
+                    postDetailController.commentText =
+                        comment.text.trim();
+                    comment.clear();
+                    postDetailController.addComments(widget.postData);
+                    scrollController.jumpTo(0);
+                  }
+                },
+              ):Container(
                       color: Color(0xffF9F9F9),
                       child: Column(
                         children: [

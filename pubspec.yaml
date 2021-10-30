@@ -64,10 +64,21 @@ dependencies:
   location: ^4.3.0
   geocoding: ^2.0.1
   google_maps_flutter: ^2.0.6
+  video_viewer: ^1.2.6
+  socket_io_client: ^1.0.1
+  notification_permissions: ^0.6.1
+  google_mobile_ads: ^0.13.5
+
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons:
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/splash/icon.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -117,3 +128,6 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+
+

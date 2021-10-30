@@ -84,7 +84,7 @@ class DetailsPage1 extends StatelessWidget {
                     getHeightSizedBox(h: 30),
                     CustomButton(
                         type: CustomButtonType.colourButton,
-                        text: 'save'.tr,
+                        text: isNext ? 'next'.tr : 'save'.tr,
                         onTap: () async {
                           if (formKey.currentState!.validate()) {
                             formKey.currentState!.save();
@@ -191,7 +191,7 @@ class DetailsPage1 extends StatelessWidget {
                       Get.back();
                     },
                     onOk: () {
-                      if (controller.weblinks.text.isNotEmpty) {
+                      if (controller.weblinks.text.trim().isNotEmpty) {
                         controller.addWebsite(controller.weblinks.text);
                         controller.weblinks.clear();
 
@@ -244,7 +244,7 @@ class DetailsPage1 extends StatelessWidget {
           fontSize: getProportionateScreenWidth(14),
         ),
         controller: editProfileController.location,
-        validator: (val) => val!.isEmpty ? "enter_location".tr : null,
+        validator: (val) => val!.trim().isEmpty ? "enter_location".tr : null,
         enabled: false,
         textInputAction: TextInputAction.next,
         textAlignVertical: TextAlignVertical.center,
@@ -280,7 +280,7 @@ class DetailsPage1 extends StatelessWidget {
     return TextFormField(
       controller: editProfileController.description,
       textInputAction: TextInputAction.done,
-      validator: (val) => val!.isEmpty ? "enter_description".tr : null,
+      validator: (val) => val!.trim().isEmpty ? "enter_description".tr : null,
       style: TextStyle(
         fontSize: getProportionateScreenWidth(14),
       ),
@@ -364,7 +364,7 @@ class DetailsPage1 extends StatelessWidget {
     return CustomTextField(
       controller: editProfileController.businessName,
       textInputAction: TextInputAction.next,
-      validator: (val) => val!.isEmpty ? "enter_business_name".tr : null,
+      validator: (val) => val!.trim().isEmpty ? "enter_business_name".tr : null,
       textCapitalization: TextCapitalization.sentences,
       hintText: 'Smith Hospitality',
       textSize: 14,
@@ -425,6 +425,9 @@ class DetailsPage1 extends StatelessWidget {
                           );
                   }
                 : (context, index) {
+                    print("length of multifile ${controller.multiFile.length}");
+                    print(
+                        "length of upload file ${controller.uploadMultiFile.length}");
                     return controller.uploadMultiFile.length > index
                         ? Stack(
                             clipBehavior: Clip.none,
@@ -446,7 +449,7 @@ class DetailsPage1 extends StatelessWidget {
                                   top: -4,
                                   child: GestureDetector(
                                     onTap: () {
-                                      controller.removeImageLocally(index);
+                                      controller.deleteImage(index);
                                     },
                                     child: buildWidget(
                                         AppImages.closeGreen, 20, 20),
@@ -500,7 +503,8 @@ class DetailsPage1 extends StatelessWidget {
       builder: (EditBProfileController controller) => TextFormField(
         controller: controller.mobileNumber,
         textInputAction: TextInputAction.next,
-        validator: (val) => val!.isEmpty ? "enter_mobile_number".tr : null,
+        validator: (val) =>
+            val!.trim().isEmpty ? "enter_mobile_number".tr : null,
         style: TextStyle(
           fontSize: getProportionateScreenWidth(14),
         ),

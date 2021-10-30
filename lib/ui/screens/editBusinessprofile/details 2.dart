@@ -206,7 +206,7 @@ class DetailsPage2 extends StatelessWidget {
                 Spacer(),
                 SafeArea(
                     child: CustomButton(
-                  text: 'next'.tr,
+                  text: isNext?'next'.tr:'save'.tr,
                   onTap: () {
                     // print("START ${DateTime.parse(controller.startTime)}");
                     // print("END ${DateTime.parse(controller.endTime)}");

@@ -22,14 +22,14 @@ class PostModel {
   String timestamp;
 
   factory PostModel.fromJson(Map<String, dynamic> json) => PostModel(
-        code: json["code"],
-        message: json["message"],
+        code: json["code"] ?? 0,
+        message: json["message"] ?? "",
         postData:
             List<PostData>.from(json["data"].map((x) => PostData.fromJson(x))),
-        page: json["page"],
-        limit: json["limit"],
-        size: json["size"],
-        hasMore: json["hasMore"],
+        page: json["page"] ?? 0,
+        limit: json["limit"] ?? 0,
+        size: json["size"] ?? 0,
+        hasMore: json["hasMore"] ?? false,
         format: json["format"],
         timestamp: json["timestamp"],
       );
@@ -37,20 +37,20 @@ class PostModel {
 
 class PostData {
   PostData({
-    required this.id,
-    required this.deleted,
-    required this.userRef,
-    required this.text,
-    required this.thumbnail,
-    required this.video,
-    required this.image,
+    this.id = "",
+    this.deleted = false,
+    this.userRef = "",
+    this.text = "",
+    this.thumbnail = "",
+    this.video = "",
+    this.image = "",
     required this.createdAt,
-    required this.updatedAt,
-    required this.postUserDetail,
-    required this.comment,
-    required this.like,
-    required this.isLike,
-  });
+    this.updatedAt,
+    postUserDetail,
+    this.comment = 0,
+    this.like = 0,
+    this.isLike = false,
+  }) : this.postUserDetail = postUserDetail ?? PostUserDetail();
 
   String id;
   bool deleted;
@@ -61,35 +61,35 @@ class PostData {
 
   String video;
   DateTime createdAt;
-  DateTime updatedAt;
+  DateTime? updatedAt;
   PostUserDetail postUserDetail;
   int comment;
   int like;
   bool isLike;
 
   factory PostData.fromJson(Map<String, dynamic> json) => PostData(
-        id: json["_id"],
-        deleted: json["deleted"],
-        userRef: json["userRef"],
+        id: json["_id"] ?? "",
+        deleted: json["deleted"] ?? false,
+        userRef: json["userRef"] ?? "",
         image: json["image"] ?? "",
-        text: json["text"],
-        thumbnail: json["thumbnail"],
-        video: json["video"],
+        text: json["text"] ?? "",
+        thumbnail: json["thumbnail"] ?? "",
+        video: json["video"] ?? "",
         createdAt: DateTime.parse(json["createdAt"]),
         updatedAt: DateTime.parse(json["updatedAt"]),
         postUserDetail: PostUserDetail.fromJson(json["user"]),
-        comment: json["comment"],
-        like: json["like"],
-        isLike: json["isLike"],
+        comment: json["comment"] ?? 0,
+        like: json["like"] ?? 0,
+        isLike: json["isLike"] ?? false,
       );
 }
 
 class PostUserDetail {
   PostUserDetail({
-    required this.id,
-    required this.name,
-    required this.picture,
-    required this.verifiedByAdmin,
+    this.id = "",
+    this.name = "",
+    this.picture = "",
+    this.verifiedByAdmin = false,
   });
 
   String id;
@@ -98,9 +98,9 @@ class PostUserDetail {
   bool verifiedByAdmin;
 
   factory PostUserDetail.fromJson(Map<String, dynamic> json) => PostUserDetail(
-        id: json["_id"],
-        name: json["name"],
-        picture: json["picture"],
-        verifiedByAdmin: json["verifiedByAdmin"],
+        id: json["_id"] ?? "",
+        name: json["name"] ?? "",
+        picture: json["picture"] ?? "",
+        verifiedByAdmin: json["verifiedByAdmin"] ?? false,
       );
 }

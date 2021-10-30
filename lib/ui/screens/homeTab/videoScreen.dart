@@ -1,6 +1,7 @@
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoScreen extends StatelessWidget {
@@ -10,8 +11,19 @@ class VideoScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: ChewieListItem(
-      videoPlayerController: VideoPlayerController.network(path),
+        body: SafeArea(
+      child: Stack(
+        children: [
+          ChewieListItem(
+            videoPlayerController: VideoPlayerController.network(path),
+          ),
+          IconButton(
+              onPressed: () {
+                Get.back();
+              },
+              icon: Icon(Icons.clear))
+        ],
+      ),
     ));
   }
 }
@@ -39,9 +51,15 @@ class _ChewieListItemState extends State<ChewieListItem> {
     chewieController = ChewieController(
       videoPlayerController: widget.videoPlayerController,
       aspectRatio: widget.videoPlayerController.value.aspectRatio,
+      showOptions: true,
       // Prepare the video to be played and display the first frame
-      autoInitialize: true, autoPlay: true, showControls: true,
+      autoInitialize: true, showControls: true, autoPlay: true,
+      fullScreenByDefault: true,
       looping: false,
+      customControls: IconButton(
+        icon: Icon(Icons.cancel),
+        onPressed: () {},
+      ),
       deviceOrientationsOnEnterFullScreen: [
         DeviceOrientation.portraitDown,
         DeviceOrientation.portraitUp

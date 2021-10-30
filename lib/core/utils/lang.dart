@@ -75,6 +75,11 @@ class Lang extends Translations {
               "Hey, You can't post & comment on news feeds until your profile is verified",
           'go_to_profile': "Go to Profile",
           'view_profile': 'View Profile',
+          'just_now': 'Just now',
+          'sign_in_sign_up': 'Sign In or Sign Up',
+          'please_signup':
+              'Please sign up to proceed further. If you are an existing user please login.',
+
           //create Post
           'create_post': 'Create Post',
           'take_a_photo': 'Take a photo',
@@ -98,6 +103,7 @@ class Lang extends Translations {
           'basic_information': 'Basic Information',
           'phone': 'Phone',
           'follow': 'Follow',
+          'unfollow': 'Unfollow',
           'contact': 'Contact',
           'message': 'Message',
           'description': 'Description',
@@ -199,6 +205,11 @@ class Lang extends Translations {
           //
           'today': 'Today',
           'managed_by': 'Managed By',
+          'logOutMsg': 'Are you sure want to log out?',
+          'logout': 'Log out?',
+          'logoutPop': 'Log out',
+          'yes': "Yes",
+          'no': 'No',
         },
       };
 }

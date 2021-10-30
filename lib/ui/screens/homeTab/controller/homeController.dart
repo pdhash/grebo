@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
+import 'package:grebo/core/service/repo/editProfileRepo.dart';
 import 'package:grebo/core/service/repo/postRepo.dart';
+import 'package:grebo/main.dart';
 import 'package:grebo/ui/screens/baseScreen/controller/baseController.dart';
 import 'package:grebo/ui/screens/homeTab/model/postModel.dart';
 
@@ -7,7 +9,6 @@ import '../home.dart';
 
 class HomeController extends GetxController {
   int page = 1;
-
 
   HomeController() {
     page = 1;
@@ -39,11 +40,12 @@ class HomeController extends GetxController {
 
   //for user posts
   Future<List<PostData>> fetchUserPost(int offset) async {
+    if (userController.globalCategory.length == 0) {
+      userController.globalCategory = await EditProfileRepo.getCategories();
+    }
     double lat = Get.find<BaseController>().latitude;
     double lang = Get.find<BaseController>().longitude;
-    if( lat == 0 && lang == 0)
-        return [];
-    print(selectedCategory.length);
+    if (lat == 0 && lang == 0) return [];
     if (offset == 0) page = 1;
     if (page == -1) return [];
     List<PostData> getPost = [];

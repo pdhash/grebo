@@ -47,9 +47,8 @@ class PostView extends StatelessWidget {
                     onTap: () {
                       if (isPostDetail == false) {
                         homeScreenController.currentPostRef = postData.id;
-
                         Get.to(() => PostDetails(
-                              postData: postData,
+                              postRef: postData.id,
                             ));
                       }
                     },
@@ -62,6 +61,7 @@ class PostView extends StatelessWidget {
                           children: [
                             GestureDetector(
                               onTap: () {
+                                print(postData.userRef);
                                 Get.to(() => BusinessProfile(
                                       businessRef: postData.userRef,
                                     ));
@@ -104,8 +104,11 @@ class PostView extends StatelessWidget {
                                               "${videoUrl + postData.video}"));
                                     }
                                   } else {
-                                    Get.to(
-                                        () => PostDetails(postData: postData));
+                                    homeScreenController.currentPostRef =
+                                        postData.id;
+                                    Get.to(() => PostDetails(
+                                          postRef: postData.id,
+                                        ));
                                   }
                                 },
                                 child: Stack(

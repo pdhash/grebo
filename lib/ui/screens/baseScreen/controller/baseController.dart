@@ -1,21 +1,25 @@
 import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
 import 'package:grebo/core/utils/sharedpreference.dart';
+import 'package:grebo/ui/global.dart';
 import 'package:grebo/ui/screens/homeTab/home.dart';
 import 'package:location/location.dart';
 
 class BaseController extends GetxController {
-
   double latitude = 0;
   double longitude = 0;
 
-  int _current = 0;
+  int _current = initialTab;
 
   int get currentTab => _current;
 
   set currentTab(int value) {
     _current = value;
     update();
+  }
+
+  resetInitialTab() {
+    currentTab = 0;
   }
 
   String _address = "";
@@ -27,7 +31,16 @@ class BaseController extends GetxController {
     update();
   }
 
-  changeAddress(double lat, double long, String address){
+  String _baseAddress = "";
+
+  String get baseAddress => _baseAddress;
+
+  set baseAddress(String value) {
+    _baseAddress = value;
+    update();
+  }
+
+  changeAddress(double lat, double long, String address) {
     this.latitude = lat;
     this.longitude = long;
     this.address = address;
@@ -47,6 +60,7 @@ class BaseController extends GetxController {
     List<Placemark> placeMarks =
         await placemarkFromCoordinates(lat.toDouble(), long.toDouble());
     Placemark place = placeMarks[0];
-    changeAddress(lat, long, '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}');
+    changeAddress(lat, long,
+        '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}');
   }
 }

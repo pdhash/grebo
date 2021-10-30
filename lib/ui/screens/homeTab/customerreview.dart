@@ -178,10 +178,9 @@ class _CustomerReviewedState extends State<CustomerReviewed> {
                     ),
                     getHeightSizedBox(h: 4),
                     RatingBar.builder(
-                      initialRating: 1,
+                      initialRating: reviewData.rating.toDouble(),
                       minRating: 1,
                       direction: Axis.horizontal,
-                      allowHalfRating: true,
                       ignoreGestures: true,
                       itemCount: 5,
                       unratedColor: Color(0xffE8E8E8),

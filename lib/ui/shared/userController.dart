@@ -4,7 +4,7 @@ import 'package:grebo/core/utils/appFunctions.dart';
 import '../screens/login/model/currentUserModel.dart';
 
 class UserController extends GetxController {
-  late UserModel _user;
+  UserModel _user = UserModel();
 
   UserModel get user => _user;
 
@@ -14,12 +14,21 @@ class UserController extends GetxController {
     update();
   }
 
-  late String _userToken;
+  String _userToken = "";
 
   String get userToken => _userToken;
 
   set userToken(String value) {
     _userToken = value;
+    update();
+  }
+
+  bool _isGuest = false;
+
+  bool get isGuest => _isGuest;
+
+  set isGuest(bool value) {
+    _isGuest = value;
     update();
   }
 

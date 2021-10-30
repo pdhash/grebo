@@ -29,23 +29,22 @@ class AddPostController extends GetxController {
   }
 
   Future addPost() async {
-    print("ahgdhjgvshvds");
-    var response;
-
-    response = await PostRepo.postUpload(uploadFile as File,
-        {"text": postCaption.text.trim()}, isImage, thumbnail);
+    var response = await PostRepo.postUpload(
+        caption: {"text": postCaption.text.trim()},
+        isImage: isImage,
+        image: uploadFile,
+        thumbnail: thumbnail);
 
     if (response != null) {
-      print(response);
       return response;
     }
   }
 
-  late bool _isImage;
+  int _isImage = 0;
 
-  bool get isImage => _isImage;
+  int get isImage => _isImage;
 
-  set isImage(bool value) {
+  set isImage(int value) {
     _isImage = value;
     update();
   }
@@ -53,7 +52,7 @@ class AddPostController extends GetxController {
   browseImage(ImageSource imageSource, bool isVideo) async {
     ImagePicker imagePicker = ImagePicker();
     if (isVideo) {
-      isImage = false;
+      isImage = 1;
       var pickedVideo = await imagePicker.pickVideo(
         source: imageSource,
       );
@@ -76,7 +75,7 @@ class AddPostController extends GetxController {
 
       update();
     } else {
-      isImage = true;
+      isImage = 2;
 
       var pickedFile =
           await imagePicker.pickImage(source: imageSource, imageQuality: 50);

@@ -10,11 +10,17 @@ import '../../../global.dart';
 
 class FeedbackController extends GetxController {
   String businessRef = "";
-  double rating = 0;
+  double rating = 1;
 
   final TextEditingController description = TextEditingController();
 
   File? get image => appImagePicker.imagePickerController.image;
+  resetVar() {
+    appImagePicker.imagePickerController.resetImage();
+    rating = 1;
+    description.clear();
+    update();
+  }
 
   submitAllFields() async {
     print(businessRef);
@@ -36,6 +42,7 @@ class FeedbackController extends GetxController {
             Get.back();
             Get.back();
           });
-    }
+    } else
+      resetVar();
   }
 }

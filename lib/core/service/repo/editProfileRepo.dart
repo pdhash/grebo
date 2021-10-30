@@ -53,7 +53,7 @@ class EditProfileRepo {
       return List<Category>.from(
           responseBody["data"].map((x) => Category.fromJson(x)));
     else
-      return [Category()];
+      return [];
   }
 
   static Future getServices({String? userRef}) async {

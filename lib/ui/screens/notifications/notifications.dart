@@ -5,14 +5,18 @@ import 'package:grebo/core/constants/appSetting.dart';
 import 'package:grebo/core/constants/app_assets.dart';
 import 'package:grebo/core/constants/appcolor.dart';
 import 'package:grebo/core/extension/dateTimeFormatExtension.dart';
+import 'package:grebo/core/service/apiRoutes.dart';
 import 'package:grebo/core/utils/config.dart';
+import 'package:grebo/ui/screens/homeTab/businessprofile.dart';
+import 'package:grebo/ui/screens/homeTab/controller/homeController.dart';
+import 'package:grebo/ui/screens/homeTab/postdetails.dart';
 import 'package:grebo/ui/screens/notifications/controller/allNotificationController.dart';
 import 'package:grebo/ui/screens/notifications/model/notificationModel.dart';
 import 'package:pagination_view/pagination_view.dart';
 
 class AllNotification extends StatelessWidget {
   final NotificationController notificationController =
-      Get.put(NotificationController());
+      Get.find<NotificationController>();
   @override
   Widget build(BuildContext context) {
     return GetBuilder(
@@ -50,6 +54,17 @@ class AllNotification extends StatelessWidget {
               notificationController.readNotification(
                   notifyData.id, notifyData);
             }
+            if (notifyData.type == 3) {
+              Get.to(() => BusinessProfile(
+                    businessRef: notifyData.sourceRef,
+                    isShow: false,
+                  ));
+            } else if (notifyData.type == 4) {
+              Get.find<HomeController>().currentPostRef = notifyData.sourceRef;
+              Get.to(() => PostDetails(
+                    postRef: notifyData.sourceRef,
+                  ));
+            }
           },
           contentPadding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
           leading: Stack(
@@ -58,8 +73,9 @@ class AllNotification extends StatelessWidget {
               ClipRRect(
                 borderRadius: BorderRadius.circular(50),
                 child: FadeInImage(
-                  placeholder: AssetImage(AppImages.defaultProfile),
-                  image: NetworkImage(""),
+                  placeholder: AssetImage(AppImages.placeHolder),
+                  image: NetworkImage(imageUrl + notifyData.image),
+                  fit: BoxFit.cover,
                   imageErrorBuilder: (context, error, stackTrace) {
                     return Image.asset(
                       AppImages.placeHolder,
