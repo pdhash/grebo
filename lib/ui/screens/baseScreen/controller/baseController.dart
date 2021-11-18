@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:grebo/core/utils/sharedpreference.dart';
 import 'package:grebo/ui/global.dart';
 import 'package:grebo/ui/screens/homeTab/home.dart';
-import 'package:location/location.dart';
+import 'package:grebo/ui/shared/location.dart';
 
 class BaseController extends GetxController {
   double latitude = 0;
@@ -47,7 +47,7 @@ class BaseController extends GetxController {
     Home.paginationViewKey.currentState!.refresh();
   }
 
-  getAddressFromLatLong(LocationData locationData) async {
+  getAddressFromLatLong(LatLongCoordinate locationData) async {
     if (!locationData.isNull) {
       print("location is not null");
       saveUserLastLateLong(locationData.latitude!.toDouble(),

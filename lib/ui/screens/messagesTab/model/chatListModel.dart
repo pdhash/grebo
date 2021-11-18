@@ -83,21 +83,28 @@ class ChatUserDetail {
   ChatUserDetail({
     required this.name,
     required this.id,
+    required this.businessName,
     required this.picture,
   });
 
   String id;
   String picture;
   String name;
+  String businessName;
 
   factory ChatUserDetail.fromJson(Map<String, dynamic> json) => ChatUserDetail(
         id: json["_id"] ?? "",
         picture: json["picture"] ?? "",
         name: json["name"] ?? "",
+        businessName: json["businessName"] ?? "",
       );
 
-  Map<String, dynamic> toJson() =>
-      {"_id": id, "picture": picture, "name": name};
+  Map<String, dynamic> toJson() => {
+        "_id": id,
+        "picture": picture,
+        "name": name,
+        "businessName": businessName
+      };
 }
 
 class LastMessage {
@@ -127,6 +134,7 @@ class LastMessage {
 
 class User {
   User({
+    required this.businessName,
     required this.id,
     required this.name,
     required this.picture,
@@ -135,16 +143,18 @@ class User {
   String id;
   String name;
   String picture;
+  String businessName;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
-        id: json["_id"] ?? "",
-        name: json["name"] ?? "",
-        picture: json["picture"] ?? "",
-      );
+      id: json["_id"] ?? "",
+      name: json["name"] ?? "",
+      picture: json["picture"] ?? "",
+      businessName: json["businessName"] ?? "");
 
   Map<String, dynamic> toJson() => {
         "_id": id,
         "name": name,
         "picture": picture,
+        "businessName": businessName,
       };
 }

@@ -58,9 +58,12 @@ Future getUserDetail() async {
     userController.user = UserModel.fromJson(userData);
     userController.userToken = userToken;
     if (!userController.user.verifiedByAdmin) {
-      final p = await PostRepo.fetchUserDetail(userController.user.id);
-      if (p!.verifiedByAdmin) {
-        updateUserDetail(p);
+      final p =
+          await PostRepo.fetchUserDetail(businessRef: userController.user.id);
+      if (p != null) {
+        if (p.verifiedByAdmin) {
+          updateUserDetail(p);
+        }
       }
     }
     navigationScreen = true;

@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -11,6 +10,7 @@ import 'package:grebo/core/constants/appcolor.dart';
 import 'package:grebo/core/service/apiRoutes.dart';
 import 'package:grebo/core/service/googleAdd/addServices.dart';
 import 'package:grebo/core/service/repo/userRepo.dart';
+import 'package:grebo/core/utils/appFunctions.dart';
 import 'package:grebo/core/utils/config.dart';
 import 'package:grebo/core/viewmodel/controller/businesscontroller.dart';
 import 'package:grebo/core/viewmodel/controller/selectservicecontoller.dart';
@@ -46,13 +46,10 @@ class _BusinessProfileState extends State<BusinessProfile> {
 
   @override
   void initState() {
-    GoogleAddService.createInterstitialAd();
     GoogleAddService.showInterstitialAd();
-    if (userController.user.userType ==
-        getServiceTypeCode(ServicesType.userType)) {
-      businessController.fetchUserDetail(widget.businessRef);
-    } else
-      businessController.userModel = userController.user;
+
+    businessController.fetchUserDetail(widget.businessRef);
+
     super.initState();
   }
 
@@ -113,11 +110,17 @@ class _BusinessProfileState extends State<BusinessProfile> {
                                         contactButton(
                                             image: AppImages.chatNew,
                                             onTap: () {
+                                              if (!controller
+                                                  .userModel.isFollow) {
+                                                flutterToast(
+                                                    "You have to follow first.");
+                                                return;
+                                              }
                                               Get.to(() => ChatView(
                                                     businessRef:
                                                         controller.userModel.id,
                                                     userName: controller
-                                                        .userModel.name,
+                                                        .userModel.businessName,
                                                   ));
                                             },
                                             title: 'message'.tr),
@@ -228,10 +231,10 @@ class _BusinessProfileState extends State<BusinessProfile> {
                                 GetBuilder(
                                     builder: (UserController controller) {
                                   return CustomGoogleMap(
-                                      latitude: businessController
-                                          .userModel.location.coordinates[1],
-                                      longitude: businessController
-                                          .userModel.location.coordinates[0]);
+                                      latitude: controller
+                                          .user.location.coordinates[1],
+                                      longitude: controller
+                                          .user.location.coordinates[0]);
                                 }),
                               ],
                             ),
@@ -267,7 +270,7 @@ class _BusinessProfileState extends State<BusinessProfile> {
                                               child: Text(
                                                 businessController
                                                     .userModel.rating
-                                                    .toString(),
+                                                    .toStringAsFixed(2),
                                                 style: TextStyle(
                                                     fontSize:
                                                         getProportionateScreenWidth(
@@ -454,7 +457,7 @@ class _BusinessProfileState extends State<BusinessProfile> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
+                    Wrap(
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(top: 3),
@@ -465,30 +468,30 @@ class _BusinessProfileState extends State<BusinessProfile> {
                                 fontWeight: FontWeight.bold),
                           ),
                         ),
-                        getHeightSizedBox(w: 5),
+                        // getHeightSizedBox(w: 5),
                         GestureDetector(
                             onTap: () {
-                              if (businessController.userModel.verifiedByAdmin)
-                                return;
-                              showCustomDialog(
-                                  context: Get.context as BuildContext,
-                                  color: AppColor.kDefaultColor,
-                                  okText: 'ok'.tr,
-                                  onTap: () {
-                                    Get.back();
-                                  },
-                                  title: 'warning'.tr,
-                                  content:
-                                      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting.",
-                                  height: getProportionateScreenWidth(260),
-                                  contentSize: 14);
+                              if (businessController.userModel.warningByAdmin !=
+                                  "")
+                                showCustomDialog(
+                                    context: Get.context as BuildContext,
+                                    color: AppColor.kDefaultColor,
+                                    okText: 'ok'.tr,
+                                    onTap: () {
+                                      Get.back();
+                                    },
+                                    title: 'warning'.tr,
+                                    content: businessController
+                                        .userModel.warningByAdmin,
+                                    height: getProportionateScreenWidth(260),
+                                    contentSize: 14);
                             },
-                            child: buildWidget(
-                                businessController.userModel.verifiedByAdmin
-                                    ? AppImages.verified
-                                    : AppImages.warning,
-                                23,
-                                24))
+                            child: businessController.userModel.verifiedByAdmin
+                                ? buildWidget(AppImages.verified, 23, 24)
+                                : businessController.userModel.warningByAdmin !=
+                                        ""
+                                    ? buildWidget(AppImages.warning, 23, 24)
+                                    : SizedBox())
                       ],
                     ),
                     getHeightSizedBox(h: 7),
@@ -510,21 +513,39 @@ class _BusinessProfileState extends State<BusinessProfile> {
               ),
               businessController.userModel.verifiedByAdmin
                   ? SizedBox()
-                  : Container(
-                      height: 36,
-                      width: getProportionateScreenWidth(99),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Color(0xff009345)),
-                      child: Center(
-                        child: Text(
-                          "unverified".tr,
-                          style: TextStyle(
-                              fontSize: getProportionateScreenWidth(14),
-                              color: Colors.white),
-                        ),
-                      ),
-                    )
+                  : businessController.userModel.warningByAdmin == ""
+                      ? GestureDetector(
+                          onTap: () {
+                            if (!businessController.userModel.verifiedByAdmin)
+                              showCustomDialog(
+                                  context: Get.context as BuildContext,
+                                  color: AppColor.kDefaultColor,
+                                  okText: 'ok'.tr,
+                                  onTap: () {
+                                    Get.back();
+                                  },
+                                  title: 'profileUnverified'.tr,
+                                  content: "unverifiedMsg".tr,
+                                  height: getProportionateScreenWidth(260),
+                                  contentSize: 14);
+                          },
+                          child: Container(
+                            height: 36,
+                            width: getProportionateScreenWidth(99),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Color(0xff009345)),
+                            child: Center(
+                              child: Text(
+                                "unverified".tr,
+                                style: TextStyle(
+                                    fontSize: getProportionateScreenWidth(14),
+                                    color: Colors.white),
+                              ),
+                            ),
+                          ),
+                        )
+                      : SizedBox()
             ],
           ),
         ),
@@ -655,8 +676,8 @@ class _BusinessProfileState extends State<BusinessProfile> {
   appBarPro() {
     return userController.user.userType ==
             getServiceTypeCode(ServicesType.userType)
-        ? appBar('business_profile'.tr)
-        : appBar('about_business'.tr, [
+        ? appBar(title: 'business_profile'.tr)
+        : appBar(title: 'about_business'.tr, actions: [
             widget.isShow
                 ? IconButton(
                     padding: EdgeInsets.only(right: 22),
@@ -669,10 +690,6 @@ class _BusinessProfileState extends State<BusinessProfile> {
                 : SizedBox()
           ]);
   }
-}
-
-Widget buildImageTile(String image) {
-  return Image.asset(image, fit: BoxFit.cover);
 }
 
 Widget buildTile(String title, Function()? onTap, String image,
@@ -726,10 +743,13 @@ class CustomGoogleMap extends StatefulWidget {
 }
 
 class CustomGoogleMapState extends State<CustomGoogleMap> {
-  Completer<GoogleMapController> _controller = Completer();
+  GoogleMapController? _controller;
 
   @override
   Widget build(BuildContext context) {
+    print("CustomGoogleMap BUILD");
+    animateCamera(LatLng(widget.latitude, widget.longitude));
+
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
       child: Container(
@@ -750,7 +770,6 @@ class CustomGoogleMapState extends State<CustomGoogleMap> {
             //   allMarkers.add(m);
             // });
           },
-          key: Key(DateTime.now().toString()),
           markers: Set<Marker>.of({
             Marker(
               // icon: mapPin,
@@ -760,10 +779,23 @@ class CustomGoogleMapState extends State<CustomGoogleMap> {
             )
           }),
           onMapCreated: (GoogleMapController controller) {
-            _controller.complete(controller);
+            _controller = controller;
+            animateCamera(LatLng(widget.latitude, widget.longitude));
           },
         ),
       ),
+    );
+  }
+
+  animateCamera(LatLng latLng) {
+    print(
+        "ANIMATE CAMERA ${_controller} ${latLng.latitude} ${latLng.longitude}");
+    if (_controller == null) return;
+    _controller!.animateCamera(
+      CameraUpdate.newCameraPosition(CameraPosition(
+        target: latLng, zoom: 13.0,
+        // bearing: 45.0, tilt: 45.0
+      )),
     );
   }
 }

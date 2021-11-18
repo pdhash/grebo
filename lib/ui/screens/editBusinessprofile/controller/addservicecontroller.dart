@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:grebo/core/constants/appcolor.dart';
 import 'package:grebo/core/service/repo/editProfileRepo.dart';
 import 'package:grebo/core/service/repo/imageRepo.dart';
+import 'package:grebo/core/utils/appFunctions.dart';
 import 'package:grebo/core/utils/sharedpreference.dart';
 import 'package:grebo/main.dart';
 import 'package:grebo/ui/screens/baseScreen/baseScreen.dart';
@@ -21,7 +22,6 @@ class AddServiceController extends GetxController {
   List<AddServicesModel> addServiceModels = [];
 
   addDefault() {
-    print("ADD DEFAULT");
     if (addServiceModels.length == 0) {
       addServiceViews = [AddServiceView(index: 0)];
       addServiceModels = <AddServicesModel>[AddServicesModel()];
@@ -34,11 +34,10 @@ class AddServiceController extends GetxController {
       if (element.image == null ||
           element.title == null ||
           element.title!.trim().isEmpty) {
-        print("validateForm FALSE");
+        flutterToast("kindly_add_name_and_image".tr);
         return false;
       }
     }
-    print("validateForm TRUE");
     return true;
   }
 
@@ -88,7 +87,6 @@ class AddServiceController extends GetxController {
       );
       if (p != null) {
         updateUserDetail(UserModel.fromJson(p["data"]));
-        print(userController.user.location);
 
         if (isNext) {
           showCustomDialog(

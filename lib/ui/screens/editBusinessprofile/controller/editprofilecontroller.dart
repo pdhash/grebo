@@ -52,18 +52,24 @@ class EditBProfileController extends GetxController {
     update();
   }
 
+  List<File> multiFile = <File>[];
+  List<String> uploadMultiFile = <String>[];
+
   //country update
-  late String _kDefaultCountry = '91';
+  late String _kDefaultCountry = '1';
+  late String _lastSelectedCountry = '1';
 
   String get kDefaultCountry => _kDefaultCountry;
+  String get lastSelectedCountry => _lastSelectedCountry;
 
   set kDefaultCountry(String value) {
-    _kDefaultCountry = value;
+    _kDefaultCountry = value.substring(1);
     update();
   }
 
-  List<File> multiFile = <File>[];
-  List<String> uploadMultiFile = <String>[];
+  set lastSelectedCountry(String value) {
+    _lastSelectedCountry = value;
+  }
 
   void removeImage(int index) {
     if (multiFile.length > index) {
@@ -101,8 +107,14 @@ class EditBProfileController extends GetxController {
   double long = 0;
 
   int _categorySelect = 1;
+  int _lastCategorySelect = 1;
 
   int get categorySelect => _categorySelect;
+  int get lastCategorySelect => _lastCategorySelect;
+
+  set lastCategorySelect(int value) {
+    _lastCategorySelect = value;
+  }
 
   set categorySelect(int value) {
     _categorySelect = value;
@@ -149,6 +161,8 @@ class EditBProfileController extends GetxController {
           removeImage(index);
         }
       });
+    } else {
+      flutterToast("at_least_one_image".tr);
     }
   }
 
@@ -184,7 +198,6 @@ class EditBProfileController extends GetxController {
   @override
   void onInit() {
     loadCountryJsonFile();
-    print(userController.user.location.coordinates);
 
     if (userController.user.profileCompleted) {
       businessName.text = userController.user.businessName;
@@ -196,6 +209,9 @@ class EditBProfileController extends GetxController {
       uploadMultiFile = userController.user.images;
       multiFile.addAll(userController.user.images.map((e) => File("")));
       websites = userController.user.websites;
+      _kDefaultCountry = userController.user.phoneCode;
+      print("==========${userController.user.categories.length}");
+
       for (int i = 0; i < userController.user.categories.length; i++) {
         for (int j = 0; j < userController.globalCategory.length; j++) {
           if (userController.user.categories[i].id ==

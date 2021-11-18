@@ -35,7 +35,7 @@ class SignUp extends StatelessWidget {
         builder: (SignUpController controller) {
           if (controller.emailVer) {
             return Scaffold(
-              appBar: appBar('Register'),
+              appBar: appBar(title: 'register'.tr),
               body: Form(
                 key: globalKey,
                 child: SingleChildScrollView(

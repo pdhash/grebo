@@ -12,6 +12,7 @@ class UserController extends GetxController {
     _user = value;
     updateDetails();
     update();
+    print("CALL UPDATE");
   }
 
   String _userToken = "";

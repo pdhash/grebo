@@ -6,13 +6,18 @@ import 'package:grebo/core/constants/app_assets.dart';
 import 'package:grebo/core/constants/appcolor.dart';
 import 'package:grebo/core/extension/dateTimeFormatExtension.dart';
 import 'package:grebo/core/service/apiRoutes.dart';
+import 'package:grebo/core/service/repo/userRepo.dart';
 import 'package:grebo/core/utils/config.dart';
+import 'package:grebo/core/viewmodel/controller/selectservicecontoller.dart';
+import 'package:grebo/main.dart';
 import 'package:grebo/ui/screens/messagesTab/chatscreen.dart';
 import 'package:grebo/ui/screens/messagesTab/controller/allChatController.dart';
 import 'package:grebo/ui/screens/messagesTab/model/chatListModel.dart';
 import 'package:pagination_view/pagination_view.dart';
 
 class AllMessages extends StatefulWidget {
+  static GlobalKey<PaginationViewState> paginationKey =
+      GlobalKey<PaginationViewState>();
   @override
   State<AllMessages> createState() => _AllMessagesState();
 }
@@ -23,7 +28,7 @@ class _AllMessagesState extends State<AllMessages> {
     return GetBuilder(builder: (AllChatController controller) {
       return PaginationView(
         pullToRefresh: true,
-        // key: UniqueKey(),
+        key: AllMessages.paginationKey,
         physics: AlwaysScrollableScrollPhysics(),
         itemBuilder:
             (BuildContext context, AllChatData allChatData, int index) =>
@@ -33,7 +38,17 @@ class _AllMessagesState extends State<AllMessages> {
           return Center(child: Text(error));
         },
         onEmpty: Center(
-          child: Text("no_post_found".tr),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              IconButton(
+                  onPressed: () {
+                    AllMessages.paginationKey.currentState!.refresh();
+                  },
+                  icon: Icon(Icons.restart_alt)),
+              Text("no_messages_yet".tr),
+            ],
+          ),
         ),
         initialLoader: GetPlatform.isAndroid
             ? Center(
@@ -102,15 +117,22 @@ class _AllMessagesState extends State<AllMessages> {
                   color: AppColor.kDefaultFontColor),
             ),
             title: Text(
-              allChatData.chatUserDetail.name,
+              userController.user.userType ==
+                      getServiceTypeCode(ServicesType.userType)
+                  ? allChatData.chatUserDetail.businessName
+                  : allChatData.chatUserDetail.name,
               style: TextStyle(
                   fontWeight: FontWeight.w700,
                   fontSize: getProportionateScreenWidth(15)),
             ),
             onTap: () {
               Get.to(() => ChatView(
+                  channelRef: allChatData.channelRef,
                   businessRef: allChatData.chatUserDetail.id,
-                  userName: allChatData.chatUserDetail.name));
+                  userName: userController.user.userType ==
+                      getServiceTypeCode(ServicesType.userType)
+                      ? allChatData.chatUserDetail.businessName
+                      : allChatData.chatUserDetail.name,));
               controller.realAllMessagesLocally(allChatData);
             },
             trailing: Padding(

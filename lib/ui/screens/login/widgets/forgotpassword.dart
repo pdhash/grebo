@@ -19,7 +19,7 @@ class ForgotPassword extends StatelessWidget {
         disposeKeyboard();
       },
       child: Scaffold(
-        appBar: appBar('forgot_password'.tr),
+        appBar: appBar(title: 'forgot_password'.tr),
         body: Form(
           key: formKey,
           child: SingleChildScrollView(

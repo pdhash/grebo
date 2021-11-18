@@ -47,21 +47,23 @@ class GoogleAddService {
   }
 
   static InterstitialAd? _interstitialAd;
-
-  static void createInterstitialAd() {
+  static bool isAdLoaded = false;
+  static Future createInterstitialAd() async {
     int _interstitialLoadAttempts = -1;
-
-    InterstitialAd.load(
+    isAdLoaded = false;
+    await InterstitialAd.load(
       adUnitId: GoogleAddHandler.interstitialAdUnitId,
       request: AdRequest(),
       adLoadCallback: InterstitialAdLoadCallback(
         onAdLoaded: (InterstitialAd ad) {
+          isAdLoaded = true;
           _interstitialAd = ad;
           _interstitialLoadAttempts = 0;
         },
         onAdFailedToLoad: (LoadAdError error) {
           _interstitialLoadAttempts += 1;
           _interstitialAd = null;
+          isAdLoaded = false;
           if (_interstitialLoadAttempts <= 2) {
             createInterstitialAd();
           }
@@ -71,7 +73,7 @@ class GoogleAddService {
   }
 
   static void showInterstitialAd() {
-    if (_interstitialAd != null) {
+    if (_interstitialAd != null && isAdLoaded) {
       _interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
         onAdDismissedFullScreenContent: (InterstitialAd ad) {
           ad.dispose();

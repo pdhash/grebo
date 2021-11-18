@@ -20,6 +20,7 @@ class ContactRepo {
       return null;
   }
 
+
   static Future aboutTheApp() async {
     var responseBody =
         await API.apiHandler(url: APIRoutes.appData, showLoader: false);

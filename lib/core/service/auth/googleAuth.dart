@@ -4,7 +4,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:grebo/core/utils/appFunctions.dart';
 
 class GoogleAuth {
-  static Future<User?> signInWithGoogle() async {
+  static Future<Map<String, dynamic>?> signInWithGoogle() async {
     FirebaseAuth auth = FirebaseAuth.instance;
     User? user;
 
@@ -13,20 +13,20 @@ class GoogleAuth {
     final GoogleSignInAccount? googleSignInAccount =
         await googleSignIn.signIn();
 
+    late GoogleSignInAuthentication googleSignInAuthentication;
+    late UserCredential userCredential;
     if (googleSignInAccount != null) {
-      final GoogleSignInAuthentication googleSignInAuthentication =
+      googleSignInAuthentication =
           await googleSignInAccount.authentication;
-
       final AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleSignInAuthentication.accessToken,
         idToken: googleSignInAuthentication.idToken,
       );
-
       try {
-        final UserCredential userCredential =
+        userCredential =
             await auth.signInWithCredential(credential);
-
         user = userCredential.user;
+      print("AMISHA ${userCredential.additionalUserInfo!.profile}");
       } on FirebaseAuthException catch (e) {
         if (e.code == 'account-exists-with-different-credential') {
           flutterToast(
@@ -35,12 +35,14 @@ class GoogleAuth {
           flutterToast(
               'Error occurred while accessing credentials. Try again.');
         }
+        return null;
       } catch (e) {
         flutterToast('Error occurred using Google Sign-In. Try again.');
+        return null;
       }
     }
-
-    return user;
+    final Map<String, dynamic> profile = userCredential.additionalUserInfo!.profile ?? {};
+    return {"user":user, "token" : googleSignInAuthentication.idToken , "socialId" : profile["sub"] ?? "" };
   }
 
   static Future<bool> signOut() async {

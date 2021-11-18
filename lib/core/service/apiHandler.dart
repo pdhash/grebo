@@ -1,8 +1,12 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:get/get.dart';
+import 'package:grebo/core/service/repo/userRepo.dart';
 import 'package:grebo/core/utils/appFunctions.dart';
+import 'package:grebo/core/utils/sharedpreference.dart';
+import 'package:grebo/ui/screens/login/model/currentUserModel.dart';
 import 'package:grebo/ui/shared/loader.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart' as mimeee;
@@ -18,15 +22,16 @@ class API {
     RequestType requestType = RequestType.Post,
     Map<String, String>? header,
     bool showLoader = true,
+    bool showToast = true,
     dynamic body,
   }) async {
     try {
       if (await checkConnection()) {
         if (showLoader) LoadingOverlay.of().show();
 
-        print("URl ===> $url");
-        print("HEADER ===> $header");
-        print("BODY ===> $body");
+        log("URl ===> $url");
+        log("HEADER ===> $header");
+        log("BODY ===> $body");
         if (requestType == RequestType.Get) {
           response = await http.get(
             Uri.parse(url),
@@ -38,14 +43,18 @@ class API {
         }
         if (response.body.isNotEmpty) {
           var res = jsonDecode(response.body);
-          print("RESPONSE BODY CREATE ====== $res");
+          log("RETURN RESPONSE BODY CREATE ====== $res");
 
           if (showLoader) LoadingOverlay.of().hide();
 
           if (res["code"] == 100) {
             return res;
+          } else if (res["code"] == 401) {
+            UserRepo.userLogout();
           } else {
-            flutterToast(res["message"]);
+            if (showToast) {
+              flutterToast(res["message"]);
+            }
             return null;
           }
         } else {
@@ -74,9 +83,10 @@ class API {
       bool connection = await checkConnection();
 
       if (connection) {
-        print("URl ===> $url");
-        print("HEADER ===> $header");
-        print("BODY ===> $field");
+        log("URl ===> $url");
+        log("HEADER ===> $header");
+        log("BODY ===> $field");
+
         if (showLoader) LoadingOverlay.of().show();
         var request = http.MultipartRequest(
           'POST',

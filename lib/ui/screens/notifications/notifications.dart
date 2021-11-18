@@ -6,29 +6,48 @@ import 'package:grebo/core/constants/app_assets.dart';
 import 'package:grebo/core/constants/appcolor.dart';
 import 'package:grebo/core/extension/dateTimeFormatExtension.dart';
 import 'package:grebo/core/service/apiRoutes.dart';
+import 'package:grebo/core/service/repo/userRepo.dart';
 import 'package:grebo/core/utils/config.dart';
+import 'package:grebo/core/viewmodel/controller/selectservicecontoller.dart';
 import 'package:grebo/ui/screens/homeTab/businessprofile.dart';
 import 'package:grebo/ui/screens/homeTab/controller/homeController.dart';
 import 'package:grebo/ui/screens/homeTab/postdetails.dart';
+import 'package:grebo/ui/screens/messagesTab/chatscreen.dart';
 import 'package:grebo/ui/screens/notifications/controller/allNotificationController.dart';
 import 'package:grebo/ui/screens/notifications/model/notificationModel.dart';
 import 'package:pagination_view/pagination_view.dart';
 
+import '../../../main.dart';
+
 class AllNotification extends StatelessWidget {
   final NotificationController notificationController =
       Get.find<NotificationController>();
+  GlobalKey<PaginationViewState> paginationKey =
+      GlobalKey<PaginationViewState>();
   @override
   Widget build(BuildContext context) {
     return GetBuilder(
       builder: (NotificationController controller) => PaginationView(
-          itemBuilder: (BuildContext context, Datum notifyData, int index) {
+          itemBuilder:
+              (BuildContext context, NotificationData notifyData, int index) {
             return notifyListTile(notifyData: notifyData);
           },
           physics: AlwaysScrollableScrollPhysics(),
           pullToRefresh: true,
+          key: paginationKey,
           pageFetch: notificationController.fetchNotification,
           onEmpty: Center(
-            child: Text('no_post_found'.tr),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                IconButton(
+                    onPressed: () {
+                      paginationKey.currentState!.refresh();
+                    },
+                    icon: Icon(Icons.restart_alt)),
+                Text('no_notification_yet'.tr),
+              ],
+            ),
           ),
           onError: (error) {
             return Center(child: Text(error));
@@ -42,28 +61,33 @@ class AllNotification extends StatelessWidget {
     );
   }
 
-  notifyListTile({required Datum notifyData}) {
+  notifyListTile({required NotificationData notifyData}) {
     return Column(
       children: [
         ListTile(
           horizontalTitleGap: 12,
           minVerticalPadding: 17,
           onTap: () {
-            print(notifyData.seen);
             if (notifyData.seen == false) {
               notificationController.readNotification(
                   notifyData.id, notifyData);
             }
-            if (notifyData.type == 3) {
-              Get.to(() => BusinessProfile(
-                    businessRef: notifyData.sourceRef,
-                    isShow: false,
-                  ));
+            if (notifyData.type == 2) {
+              Get.to(() => ChatView(
+                  businessRef: notifyData.userRef,
+                  channelRef: notifyData.channelRef,
+                  userName: userController.user.userType ==
+                          getServiceTypeCode(ServicesType.userType)
+                      ? notifyData.user.businessName
+                      : notifyData.user.name));
             } else if (notifyData.type == 4) {
               Get.find<HomeController>().currentPostRef = notifyData.sourceRef;
-              Get.to(() => PostDetails(
-                    postRef: notifyData.sourceRef,
-                  ));
+              if (userController.user.userType ==
+                  getServiceTypeCode(ServicesType.userType)) {
+                Get.to(() => PostDetails(
+                      postRef: notifyData.sourceRef,
+                    ));
+              }
             }
           },
           contentPadding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
@@ -74,7 +98,10 @@ class AllNotification extends StatelessWidget {
                 borderRadius: BorderRadius.circular(50),
                 child: FadeInImage(
                   placeholder: AssetImage(AppImages.placeHolder),
-                  image: NetworkImage(imageUrl + notifyData.image),
+                  image: notifyData.type == 1
+                      ? AssetImage("assets/splash/icon.png")
+                      : NetworkImage(imageUrl + notifyData.image)
+                          as ImageProvider,
                   fit: BoxFit.cover,
                   imageErrorBuilder: (context, error, stackTrace) {
                     return Image.asset(

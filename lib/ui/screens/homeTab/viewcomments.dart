@@ -61,7 +61,7 @@ class _ViewCommentsState extends State<ViewComments> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar('comments'.tr),
+      appBar: appBar(title: 'comments'.tr),
       body: Stack(
         fit: StackFit.expand,
         children: [
@@ -92,7 +92,6 @@ class _ViewCommentsState extends State<ViewComments> {
                     )
                   : GetBuilder(
                       builder: (PostDetailController controller) {
-                        print("Comment POst Detail Controller");
                         return RefreshIndicator(
                           onRefresh: () async {
                             await controller.fetchComments();
@@ -120,13 +119,13 @@ class _ViewCommentsState extends State<ViewComments> {
                     );
             },
           ),
-
           Positioned(
               bottom: 0,
               left: 0,
               right: 0,
-              child: userController.user.userType==getServiceTypeCode(ServicesType.userType)?
-                   PostDetailsBottomView(
+              child: userController.user.userType ==
+                      getServiceTypeCode(ServicesType.userType)
+                  ? PostDetailsBottomView(
                       comment: comment,
                       hintText: 'textfieldmsg1'.tr,
                       send: () {
@@ -140,47 +139,51 @@ class _ViewCommentsState extends State<ViewComments> {
                         }
                       },
                     )
-                  : userController.user.verifiedByAdmin?PostDetailsBottomView(
-                comment: comment,
-                hintText: 'textfieldmsg1'.tr,
-                send: () {
-                  if (comment.text.isNotEmpty) {
-                    disposeKeyboard();
-                    postDetailController.commentText =
-                        comment.text.trim();
-                    comment.clear();
-                    postDetailController.addComments(widget.postData);
-                    scrollController.jumpTo(0);
-                  }
-                },
-              ):Container(
-                      color: Color(0xffF9F9F9),
-                      child: Column(
-                        children: [
-                          getHeightSizedBox(h: 26),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 60),
-                            child: Text(
-                              'like_error'.tr,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: getProportionateScreenWidth(16)),
-                            ),
+                  : userController.user.verifiedByAdmin
+                      ? PostDetailsBottomView(
+                          comment: comment,
+                          hintText: 'textfieldmsg1'.tr,
+                          send: () {
+                            if (comment.text.isNotEmpty) {
+                              disposeKeyboard();
+                              postDetailController.commentText =
+                                  comment.text.trim();
+                              comment.clear();
+                              postDetailController.addComments(widget.postData);
+                              scrollController.jumpTo(0);
+                            }
+                          },
+                        )
+                      : Container(
+                          color: Color(0xffF9F9F9),
+                          child: Column(
+                            children: [
+                              getHeightSizedBox(h: 26),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 60),
+                                child: Text(
+                                  'like_error'.tr,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize:
+                                          getProportionateScreenWidth(16)),
+                                ),
+                              ),
+                              getHeightSizedBox(h: 17),
+                              SafeArea(
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 30),
+                                  child: CustomButton(
+                                      type: CustomButtonType.colourButton,
+                                      text: 'view_profile'.tr,
+                                      onTap: () {}),
+                                ),
+                              ),
+                              getHeightSizedBox(h: 17),
+                            ],
                           ),
-                          getHeightSizedBox(h: 17),
-                          SafeArea(
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 30),
-                              child: CustomButton(
-                                  type: CustomButtonType.colourButton,
-                                  text: 'view_profile'.tr,
-                                  onTap: () {}),
-                            ),
-                          ),
-                          getHeightSizedBox(h: 17),
-                        ],
-                      ),
-                    ))
+                        ))
         ],
       ),
     );

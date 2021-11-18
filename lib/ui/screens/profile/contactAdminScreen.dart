@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:grebo/core/constants/appSetting.dart';
 import 'package:grebo/core/constants/appcolor.dart';
 import 'package:grebo/core/extension/customButtonextension.dart';
+import 'package:grebo/core/utils/appFunctions.dart';
 import 'package:grebo/core/utils/config.dart';
 import 'package:grebo/ui/screens/profile/contactAdminController.dart';
 import 'package:grebo/ui/shared/appbar.dart';
@@ -16,7 +17,7 @@ class ContactAdminScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar('contact_admin'.tr),
+      appBar: appBar(title: 'contact_admin'.tr),
       body: SingleChildScrollView(
           child: Column(
         children: [
@@ -52,10 +53,12 @@ class ContactAdminScreen extends StatelessWidget {
                 text: 'save'.tr,
                 onTap: () {
                   disposeKeyboard();
-                  if (helpText.text.isNotEmpty) {
+                  if (helpText.text.trim().isNotEmpty) {
                     contactAdminController.helpText = helpText.text.trim();
                     helpText.clear();
                     contactAdminController.conatctAdmin();
+                  } else {
+                    flutterToast("please_enter_a_word".tr);
                   }
                 }),
           )

@@ -12,17 +12,8 @@ class VideoScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         body: SafeArea(
-      child: Stack(
-        children: [
-          ChewieListItem(
-            videoPlayerController: VideoPlayerController.network(path),
-          ),
-          IconButton(
-              onPressed: () {
-                Get.back();
-              },
-              icon: Icon(Icons.clear))
-        ],
+      child: ChewieListItem(
+        videoPlayerController: VideoPlayerController.network(path),
       ),
     ));
   }
@@ -53,13 +44,10 @@ class _ChewieListItemState extends State<ChewieListItem> {
       aspectRatio: widget.videoPlayerController.value.aspectRatio,
       showOptions: true,
       // Prepare the video to be played and display the first frame
-      autoInitialize: true, showControls: true, autoPlay: true,
+      autoInitialize: true, showControls: true,
       fullScreenByDefault: true,
       looping: false,
-      customControls: IconButton(
-        icon: Icon(Icons.cancel),
-        onPressed: () {},
-      ),
+
       deviceOrientationsOnEnterFullScreen: [
         DeviceOrientation.portraitDown,
         DeviceOrientation.portraitUp

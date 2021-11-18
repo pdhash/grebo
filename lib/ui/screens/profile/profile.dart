@@ -129,7 +129,7 @@ class Profile extends StatelessWidget {
                             height: 20,
                             width: 14,
                             title: 'location'.tr,
-                            subtitle: baseController.baseAddress,
+                            subtitle: userController.user.location.address,
                           ),
                         )
                       : SizedBox(),

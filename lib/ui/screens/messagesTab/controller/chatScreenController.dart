@@ -17,8 +17,10 @@ class ChatScreenController extends GetxController {
     SocketManager.socketDisconnect();
     SocketManager.connectSocket(() async {
       print("getChannel...");
-      var response = await ChatRepo.getChannel(businessRef);
-      channelRef = response["data"]["channelId"];
+      if(channelRef == "") {
+        var response = await ChatRepo.getChannel(businessRef);
+        channelRef = response["data"]["channelId"];
+      }
       connectChannelToSocket();
       setupSocketListener();
       fetchMessages();
@@ -40,7 +42,8 @@ class ChatScreenController extends GetxController {
       lastMessage = LastMessage(
           message: messageData.message,
           createdAt: messageData.createdAt,
-          user: User(name: '', id: messageData.userId, picture: ''));
+          user: User(
+              name: '', id: messageData.userId, picture: '', businessName: ''));
 
       print("ON MSG ARR ${getMessages.length}");
       update();
@@ -72,7 +75,17 @@ class ChatScreenController extends GetxController {
     var request =
         await ChatRepo.getAllMessages(page: page, channelRef: channelRef);
     getMessages.addAll(request!.data.map((e) => e));
-    print("GET MSG ARR ${getMessages.length}");
+    if (getMessages.isNotEmpty) {
+      lastMessage = LastMessage(
+          message: getMessages.first.message,
+          createdAt: getMessages.first.createdAt,
+          user: User(
+              name: '',
+              id: getMessages.first.id,
+              picture: '',
+              businessName: ''));
+    }
+
     _hasNext = request.hasMore;
     _isFetching = false;
     update();

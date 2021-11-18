@@ -54,7 +54,8 @@ class Datum {
 class UserModel {
   UserModel({
     location,
-    this.rating = 0,
+    this.rating = 0.0,
+    this.warningByAdmin = "",
     this.userType = 0,
     this.verifiedByAdmin = false,
     this.images = const [],
@@ -104,16 +105,21 @@ class UserModel {
   String endTime;
   String name;
   String phoneCode;
+  String warningByAdmin;
   String phoneNumber;
   bool isFollow;
   String startTime;
-  int rating;
+  double rating;
   List<ServiceList> services;
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
+    print("prince=${json["categories"]}");
     return UserModel(
+      categories: List<Category>.from(
+          (json["categories"] ?? []).map((x) => Category.fromJson(x))),
       location: LocData.fromJson(json["location"] ?? {}),
       userType: json["userType"] ?? 0,
+      warningByAdmin: json["warningByAdmin"] ?? "",
       verifiedByAdmin: json["verifiedByAdmin"] ?? false,
       images: List<String>.from((json["images"] ?? []).map((x) => x)),
       websites: List<String>.from((json["websites"] ?? []).map((x) => x)),
@@ -131,13 +137,11 @@ class UserModel {
       description: json["description"] ?? "",
       endTime: json["endTime"] ?? "",
       name: json["name"] ?? "",
-      rating: json["rating"] ?? 0,
+      rating: double.parse((json["rating"] ?? 0.0).toString()),
       phoneCode: json["phoneCode"] ?? "",
       phoneNumber: json["phoneNumber"] ?? "",
       isFollow: json["isFollow"] ?? false,
       startTime: json["startTime"] ?? "",
-      categories: List<Category>.from(
-          (json["categories"] ?? []).map((x) => Category.fromJson(x))),
       services: List<ServiceList>.from(
           (json["services"] ?? []).map((x) => ServiceList.fromJson(x))),
     );
@@ -147,6 +151,7 @@ class UserModel {
     return {
       "location": location.toJson(),
       "userType": userType,
+      "warningByAdmin": warningByAdmin,
       "isFollow": isFollow,
       "verifiedByAdmin": verifiedByAdmin,
       "images": List<dynamic>.from(images.map((x) => x)),

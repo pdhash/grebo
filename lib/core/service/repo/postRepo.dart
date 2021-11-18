@@ -30,13 +30,18 @@ class PostRepo {
   }
 
   static Future<PostModel?> fetchProviderPost(int page) async {
+    print(userController.user.userType);
     var response = await API.apiHandler(
         url: APIRoutes.providerPostList,
         showLoader: false,
-        header: {"Authorization": userController.userToken},
-        body: jsonEncode({"page": page}));
+        header: {
+          "Authorization": userController.userToken,
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: {
+          "page": "$page"
+        });
     if (response != null) {
-      print("fetchProviderPost $response");
       return PostModel.fromJson(response);
     } else
       return null;
@@ -185,7 +190,8 @@ class PostRepo {
       return null;
   }
 
-  static Future<UserModel?> fetchUserDetail(String businessRef) async {
+  static Future<UserModel?> fetchUserDetail(
+      {required String businessRef}) async {
     var response = await API.apiHandler(
         url: APIRoutes.userDetail,
         showLoader: false,

@@ -14,7 +14,7 @@ class PostModel {
   int code;
   String message;
   List<PostData> postData;
-  int page;
+  dynamic page;
   int limit;
   int size;
   bool hasMore;
@@ -26,7 +26,7 @@ class PostModel {
         message: json["message"] ?? "",
         postData:
             List<PostData>.from(json["data"].map((x) => PostData.fromJson(x))),
-        page: json["page"] ?? 0,
+        page: json["page"] ?? "",
         limit: json["limit"] ?? 0,
         size: json["size"] ?? 0,
         hasMore: json["hasMore"] ?? false,
@@ -88,6 +88,7 @@ class PostUserDetail {
   PostUserDetail({
     this.id = "",
     this.name = "",
+    this.businessName = "",
     this.picture = "",
     this.verifiedByAdmin = false,
   });
@@ -95,11 +96,13 @@ class PostUserDetail {
   String id;
   String name;
   String picture;
+  String businessName;
   bool verifiedByAdmin;
 
   factory PostUserDetail.fromJson(Map<String, dynamic> json) => PostUserDetail(
         id: json["_id"] ?? "",
         name: json["name"] ?? "",
+        businessName: json["businessName"] ?? "",
         picture: json["picture"] ?? "",
         verifiedByAdmin: json["verifiedByAdmin"] ?? false,
       );

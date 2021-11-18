@@ -37,6 +37,18 @@ class Settings extends StatelessWidget {
       }
     },
     {
+      'image': Image.asset(
+        AppImages.privacyPolicy,
+        height: 20,
+        width: 20,
+      ),
+      'title': 'privacy_policy'.tr,
+      'onTap': () {
+        Get.to(
+            () => AboutUsAndTAndC(screenType: DescriptionScreen.privacyPolicy));
+      }
+    },
+    {
       'image': buildWidget(AppImages.contactAdmin, 20, 20),
       'title': 'contact_admin'.tr,
       'onTap': () {
@@ -56,9 +68,6 @@ class Settings extends StatelessWidget {
       'onTap': () {
         logoutConfirmation(yesTap: () {
           UserRepo.userLogout();
-          removerUserDetail();
-          Get.find<BaseController>().resetInitialTab();
-          Get.offAll(() => ChooseServices());
         });
       }
     },
@@ -66,10 +75,10 @@ class Settings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar('settings'.tr),
+      appBar: appBar(title: 'settings'.tr),
       body: Column(
         children: List.generate(
-            5,
+            6,
             (index) => Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: kDefaultPadding),

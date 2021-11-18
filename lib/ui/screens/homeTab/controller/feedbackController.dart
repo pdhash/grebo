@@ -4,20 +4,21 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:grebo/core/constants/appcolor.dart';
 import 'package:grebo/core/service/repo/postRepo.dart';
+import 'package:grebo/ui/screens/homeTab/controller/reviewController.dart';
 import 'package:grebo/ui/shared/alertdialogue.dart';
 
 import '../../../global.dart';
 
 class FeedbackController extends GetxController {
   String businessRef = "";
-  double rating = 1;
+  double rating = 1.0;
 
   final TextEditingController description = TextEditingController();
 
   File? get image => appImagePicker.imagePickerController.image;
   resetVar() {
     appImagePicker.imagePickerController.resetImage();
-    rating = 1;
+    rating = 1.0;
     description.clear();
     update();
   }
@@ -29,8 +30,9 @@ class FeedbackController extends GetxController {
       "rating": rating,
       "text": description.text.trim()
     }, image);
-
     if (v != null) {
+      Get.find<ReviewController>().update();
+
       showCustomDialog(
           context: Get.context as BuildContext,
           height: 150,
@@ -41,6 +43,7 @@ class FeedbackController extends GetxController {
           onTap: () {
             Get.back();
             Get.back();
+
           });
     } else
       resetVar();

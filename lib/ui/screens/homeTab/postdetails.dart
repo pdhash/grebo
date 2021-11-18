@@ -17,9 +17,16 @@ import 'package:grebo/ui/shared/commentview.dart';
 import 'package:grebo/ui/shared/postdetailbottom.dart';
 import 'package:grebo/ui/shared/postview.dart';
 
+import '../../../main.dart';
+import 'widget/guestLoginScreen.dart';
+
 class PostDetails extends StatefulWidget {
   final String? postRef;
-  PostDetails({Key? key, this.postRef}) : super(key: key);
+
+  PostDetails({
+    Key? key,
+    this.postRef,
+  }) : super(key: key);
 
   @override
   State<PostDetails> createState() => _PostDetailsState();
@@ -32,18 +39,33 @@ class _PostDetailsState extends State<PostDetails> {
   final TextEditingController comment = TextEditingController();
   @override
   void initState() {
-    print("Okkkk+++>${widget.postRef}");
+    GoogleAddService.showInterstitialAd();
+
     postDetailController.getPostDetails(widget.postRef!);
 
-    GoogleAddService.createInterstitialAd();
-    GoogleAddService.showInterstitialAd();
     super.initState();
+  }
+
+  @override
+  void deactivate() {
+    if (postDetailController.postDataModel.userRef != "") {
+      HomeController controller = Get.find<HomeController>();
+      int index = controller.getPosts
+          .indexWhere((element) => element.id == widget.postRef);
+      if (index != -1) {
+        controller.getPosts[index].like =
+            postDetailController.postDataModel.like;
+        controller.getPosts[index].isLike =
+            postDetailController.postDataModel.isLike;
+      }
+    }
+    super.deactivate();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: appBar('post_details'.tr),
+        appBar: appBar(title: 'post_details'.tr),
         body: GetBuilder(
             builder: (PostDetailController postDetailController) =>
                 postDetailController.postDataModel.userRef == ""
@@ -60,9 +82,13 @@ class _PostDetailsState extends State<PostDetails> {
                             physics: BouncingScrollPhysics(),
                             child: Column(
                               children: [
-                                PostView(
-                                  postData: postDetailController.postDataModel,
-                                  isPostDetail: true,
+                                GetBuilder(
+                                  builder: (PostDetailController controller) =>
+                                      PostView(
+                                    postData:
+                                        postDetailController.postDataModel,
+                                    isPostDetail: true,
+                                  ),
                                 ),
                                 getHeightSizedBox(h: 10),
                                 Padding(
@@ -92,7 +118,10 @@ class _PostDetailsState extends State<PostDetails> {
                                                         : GestureDetector(
                                                             onTap: () {
                                                               disposeKeyboard();
-
+                                                              if(userController.isGuest){
+                                                                Get.to(()=>  GuestLoginScreen());
+                                                                return;
+                                                              }
                                                               Get.to(() =>
                                                                   ViewComments(
                                                                     postData:
@@ -195,6 +224,10 @@ class _PostDetailsState extends State<PostDetails> {
                               comment: comment,
                               hintText: 'textfieldmsg1'.tr,
                               send: () {
+                                if(userController.isGuest){
+                                  Get.to(()=>  GuestLoginScreen());
+                                  return;
+                                }
                                 if (comment.text.isNotEmpty) {
                                   disposeKeyboard();
                                   postDetailController.commentText =

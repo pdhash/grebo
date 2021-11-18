@@ -21,7 +21,7 @@ class ForgotPasswordController extends GetxController {
           color: AppColor.kDefaultColor,
           content: 'a_link_to..'.tr,
           contentSize: 16,
-          okText: 'save'.tr,
+          okText: 'ok'.tr,
           onTap: () {
             Get.back();
             Get.back();

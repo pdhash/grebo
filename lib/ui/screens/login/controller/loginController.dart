@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -23,8 +25,6 @@ class LoginController extends GetxController {
   Future userLogin() async {
     final ServiceController serviceController = Get.find<ServiceController>();
     String? fcmToken = await FirebaseMessaging.instance.getToken();
-
-    // String? fcmToken = "";
 
     var response = await UserRepo.userLogin(
         email: email.text.trim(),
@@ -56,46 +56,40 @@ class LoginController extends GetxController {
 
     final ServiceController serviceController = Get.find<ServiceController>();
     String? fcmToken = await FirebaseMessaging.instance.getToken();
-    print("FCM TOKEN ${fcmToken}");
-    // // String? fcmToken = "";
-    String socialId = "";
-    User? userFireBase;
     if (fcmToken != null) {
-      await GoogleAuth.signInWithGoogle().then((value) async {
-        print("on gogole signin $value");
-        if (value != null) {
-          socialId = await value.getIdToken();
-          userFireBase = value;
+      await GoogleAuth.signInWithGoogle().then((data) async {
+        if (data == null) return;
+        User userFireBase = data["user"];
+        if (userFireBase != null) {
+          var response = await UserRepo.userSocialLogin(
+              name: userFireBase.displayName.toString(),
+              userType: getServiceTypeCode(serviceController.servicesType),
+              email: userFireBase.email.toString(),
+              fcmToken: fcmToken.toString(),
+              image: userFireBase.photoURL.toString(),
+              socialId: data["socialId"],
+              socialToken: data["token"],
+              socialIdentifier: getSocialIdentifier(SocialIdentifier.Google));
+          if (response != null) {
+            userController.isGuest = false;
+            currentUserModel = CurrentUserModel.fromJson(response);
+            saveUserDetails(currentUserModel!.data);
+            LoadingOverlay.of().hide();
+            if (currentUserModel!.data.user.userType ==
+                getServiceTypeCode(ServicesType.providerType)) {
+              if (currentUserModel!.data.user.profileCompleted) {
+                Get.offAll(() => BaseScreen());
+              } else {
+                Get.offAll(() => DetailsPage1());
+              }
+            } else {
+              Get.offAll(() => BaseScreen());
+            }
+          }
         }
       }).then((value) {
         if (value == null) LoadingOverlay.of().hide();
       });
-      var response = await UserRepo.userSocialLogin(
-          name: userFireBase!.displayName.toString(),
-          userType: getServiceTypeCode(serviceController.servicesType),
-          email: userFireBase!.email.toString(),
-          fcmToken: fcmToken.toString(),
-          image: userFireBase!.photoURL.toString(),
-          socialId: userFireBase!.uid,
-          socialToken: socialId,
-          socialIdentifier: getSocialIdentifier(SocialIdentifier.Google));
-      if (response != null) {
-        userController.isGuest = false;
-        currentUserModel = CurrentUserModel.fromJson(response);
-        saveUserDetails(currentUserModel!.data);
-        LoadingOverlay.of().hide();
-        if (currentUserModel!.data.user.userType ==
-            getServiceTypeCode(ServicesType.providerType)) {
-          if (currentUserModel!.data.user.profileCompleted) {
-            Get.offAll(() => BaseScreen());
-          } else {
-            Get.offAll(() => DetailsPage1());
-          }
-        } else {
-          Get.offAll(() => BaseScreen());
-        }
-      } else
-        LoadingOverlay.of().hide();
     } else
       LoadingOverlay.of().hide();
   }
@@ -104,7 +98,6 @@ class LoginController extends GetxController {
     LoadingOverlay.of().show();
     final ServiceController serviceController = Get.find<ServiceController>();
     String? fcmToken = await FirebaseMessaging.instance.getToken();
-    // String? fcmToken = "ok";
 
     var response;
     if (fcmToken != null) {
@@ -116,9 +109,6 @@ class LoginController extends GetxController {
       ).catchError((e) {
         LoadingOverlay.of().hide();
       });
-      print("USER IDENTITY ${credential.userIdentifier}");
-      print("USER IDENTITY 2 ${credential.authorizationCode}");
-      print("USER SOCIAL TOKEN ${credential.identityToken}");
       response = await UserRepo.userSocialLogin(
           name: credential.givenName.toString(),
           userType: getServiceTypeCode(serviceController.servicesType),
@@ -161,7 +151,7 @@ int getSocialIdentifier(SocialIdentifier socialIdentifier) {
       code = 2;
       break;
     case SocialIdentifier.Apple:
-      code = 2;
+      code = 3;
       break;
   }
   return code;

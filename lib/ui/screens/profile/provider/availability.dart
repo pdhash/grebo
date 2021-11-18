@@ -14,7 +14,7 @@ class Availability extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar('availability'.tr, [
+      appBar: appBar(title: 'availability'.tr, actions: [
         IconButton(onPressed: () {}, icon: SizedBox()),
         IconButton(
             padding: EdgeInsets.only(right: 22),

@@ -10,8 +10,8 @@ import 'package:grebo/core/extension/customButtonextension.dart';
 import 'package:grebo/core/service/apiRoutes.dart';
 import 'package:grebo/core/utils/appFunctions.dart';
 import 'package:grebo/core/utils/config.dart';
+import 'package:grebo/core/viewmodel/controller/businesscontroller.dart';
 import 'package:grebo/core/viewmodel/controller/imagepickercontoller.dart';
-import 'package:grebo/main.dart';
 import 'package:grebo/ui/screens/homeTab/controller/feedbackController.dart';
 import 'package:grebo/ui/screens/homeTab/home.dart';
 import 'package:grebo/ui/shared/appbar.dart';
@@ -42,7 +42,7 @@ class _GiveFeedbackState extends State<GiveFeedback> {
   Widget build(BuildContext context) {
     feedbackController.businessRef = widget.businessRef;
     return Scaffold(
-      appBar: appBar('give_feedback'.tr),
+      appBar: appBar(title: 'give_feedback'.tr),
       body: Form(
         key: formKey,
         child: Center(
@@ -55,7 +55,7 @@ class _GiveFeedbackState extends State<GiveFeedback> {
                   child: FadeInImage(
                     placeholder: AssetImage(AppImages.placeHolder),
                     image: NetworkImage(
-                        "${imageUrl + userController.user.picture}"),
+                        "${imageUrl + Get.find<BusinessController>().userModel.picture}"),
                     height: 95,
                     width: 95,
                     imageErrorBuilder: (context, error, stackTrace) {
@@ -71,7 +71,7 @@ class _GiveFeedbackState extends State<GiveFeedback> {
                 ),
                 getHeightSizedBox(h: 21),
                 Text(
-                  'how_was..'.tr,
+                  "${'how_was..'.tr}\n${Get.find<BusinessController>().userModel.businessName}",
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: getProportionateScreenWidth(16)),
                 ),
@@ -230,7 +230,7 @@ class _GiveFeedbackState extends State<GiveFeedback> {
                       onTap: () {
                         if (formKey.currentState!.validate()) {
                           formKey.currentState!.save();
-                          if (feedbackController.rating != 0) {
+                          if (feedbackController.rating != 0.0) {
                             feedbackController.submitAllFields();
                           } else {
                             flutterToast("please_provide_rating".tr);

@@ -16,11 +16,13 @@ import '../../../main.dart';
 
 class ChatView extends StatefulWidget {
   final String businessRef;
+  final String channelRef;
   final String userName;
   final AllChatData? allChatData;
 
   ChatView(
       {Key? key,
+      this.channelRef = "",
       required this.businessRef,
       required this.userName,
       this.allChatData})
@@ -36,6 +38,7 @@ class _ChatViewState extends State<ChatView> {
   @override
   void initState() {
     chatScreenController.businessRef = widget.businessRef;
+    chatScreenController.channelRef = widget.channelRef;
     chatScreenController.fetchChannel();
     scrollController.addListener(scrollListener);
     super.initState();
@@ -61,6 +64,7 @@ class _ChatViewState extends State<ChatView> {
 
   @override
   void deactivate() {
+    print("deactive");
     if (chatScreenController.lastMessage != null) {
       AllChatController controller = Get.find<AllChatController>();
       int index = controller.getChatList.indexWhere(
@@ -82,7 +86,7 @@ class _ChatViewState extends State<ChatView> {
         disposeKeyboard();
       },
       child: Scaffold(
-          appBar: appBar(widget.userName),
+          appBar: appBar(title: widget.userName),
           body: GetBuilder(
             builder: (ChatScreenController controller) {
               return controller.channelRef == "" &&

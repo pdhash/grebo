@@ -1,10 +1,15 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
 import 'package:grebo/core/service/apiHandler.dart';
 import 'package:grebo/core/service/apiRoutes.dart';
+import 'package:grebo/core/utils/sharedpreference.dart';
 import 'package:grebo/core/viewmodel/controller/selectservicecontoller.dart';
+import 'package:grebo/ui/screens/baseScreen/controller/baseController.dart';
+import 'package:grebo/ui/screens/selectservice.dart';
 
 class UserRepo {
   static Future userLogin({
@@ -22,7 +27,7 @@ class UserRepo {
         {
           "email": email,
           "password": password,
-          "device": Platform.isAndroid ? "Android" : "IOS",
+          "device": Platform.isAndroid ? "android" : "ios",
           "userType": userType,
           "fcmToken": fcmToken,
         },
@@ -52,6 +57,7 @@ class UserRepo {
         showLoader: false,
         body: jsonEncode(
           {
+            "socialIdentifier": socialIdentifier,
             "email": email,
             "userType": userType,
             "name": name,
@@ -61,7 +67,6 @@ class UserRepo {
             "referralId": "",
             "socialId": socialId,
             "socialToken": socialToken,
-            "socialIdentifier": socialIdentifier
           },
         ));
     if (responseBody != null)
@@ -118,6 +123,9 @@ class UserRepo {
     if (FirebaseAuth.instance.currentUser != null) {
       await FirebaseAuth.instance.signOut();
     }
+    removerUserDetail();
+    Get.find<BaseController>().resetInitialTab();
+    Get.offAll(() => ChooseServices());
   }
 }
 

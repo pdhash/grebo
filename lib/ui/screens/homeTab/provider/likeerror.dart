@@ -9,11 +9,11 @@ import 'package:grebo/ui/shared/appbar.dart';
 import 'package:grebo/ui/shared/custombutton.dart';
 
 class LikeError extends StatelessWidget {
-  final BaseController baseController=Get.find<BaseController>();
+  final BaseController baseController = Get.find<BaseController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar(''),
+      appBar: appBar(title: ''),
       body: Column(
         children: [
           Spacer(),
@@ -37,8 +37,8 @@ class LikeError extends StatelessWidget {
                 text: 'go_to_profile'.tr,
                 onTap: () {
                   Get.back();
-                  baseController.currentTab=3
-;                }),
+                  baseController.currentTab = 3;
+                }),
           ),
           Spacer(),
         ],

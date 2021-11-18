@@ -96,11 +96,11 @@ class DetailsPage1 extends StatelessWidget {
 
                                 editProfileController.submitAllFields(isNext);
                               } else {
-                                flutterToast('select_image'.tr);
+                                flutterToast('enter_websites'.tr);
                               }
                             } else {
                               if (editProfileController.websites.isNotEmpty) {
-                                flutterToast('select_image'.tr);
+                                flutterToast('at_least_one_image'.tr);
                               } else {
                                 flutterToast(
                                     "${'select_image'.tr} & ${'enter_websites'.tr}");
@@ -196,6 +196,8 @@ class DetailsPage1 extends StatelessWidget {
                         controller.weblinks.clear();
 
                         Get.back();
+                      } else {
+                        flutterToast("kindly_add_a_link".tr);
                       }
                       controller.weblinks.clear();
                     });
@@ -244,7 +246,7 @@ class DetailsPage1 extends StatelessWidget {
           fontSize: getProportionateScreenWidth(14),
         ),
         controller: editProfileController.location,
-        validator: (val) => val!.trim().isEmpty ? "enter_location".tr : null,
+        // validator: (val) => val!.trim().isEmpty ? "enter_location".tr : null,
         enabled: false,
         textInputAction: TextInputAction.next,
         textAlignVertical: TextAlignVertical.center,
@@ -307,24 +309,53 @@ class DetailsPage1 extends StatelessWidget {
             context: Get.context as BuildContext,
             builder: (_) => SizedBox(
               height: getProportionateScreenWidth(250),
-              child: CupertinoPicker(
-                  backgroundColor: Colors.white,
-                  itemExtent: 30,
-                  looping: true,
-                  scrollController: FixedExtentScrollController(
-                      initialItem: controller.categorySelect),
-                  children: List.generate(
-                      userController.globalCategory.length,
-                      (index) => Padding(
-                            padding: const EdgeInsets.only(top: 3),
-                            child:
-                                Text(userController.globalCategory[index].name),
-                          )),
-                  onSelectedItemChanged: (val) {
-                    controller.categorySelect = val;
-                    controller.businessCategory.text =
-                        userController.globalCategory[val].name;
-                  }),
+              child: Container(
+                color: Colors.white,
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        TextButton(
+                            onPressed: () {
+                              Get.back();
+                            },
+                            child: Text(
+                              "Cancel",
+                              style: TextStyle(color: Colors.grey),
+                            )),
+                        Spacer(),
+                        TextButton(
+                            onPressed: () {
+                              Get.back();
+                              controller.categorySelect =
+                                  controller.lastCategorySelect;
+                              controller.businessCategory.text = userController
+                                  .globalCategory[controller.categorySelect]
+                                  .name;
+                            },
+                            child: Text("Done"))
+                      ],
+                    ),
+                    Expanded(
+                      child: CupertinoPicker(
+                          itemExtent: 30,
+                          // looping: true,
+                          scrollController: FixedExtentScrollController(
+                              initialItem: controller.categorySelect),
+                          children: List.generate(
+                              userController.globalCategory.length,
+                              (index) => Padding(
+                                    padding: const EdgeInsets.only(top: 3),
+                                    child: Text(userController
+                                        .globalCategory[index].name),
+                                  )),
+                          onSelectedItemChanged: (val) {
+                            controller.lastCategorySelect = val;
+                          }),
+                    ),
+                  ],
+                ),
+              ),
             ),
           );
         },
@@ -529,36 +560,69 @@ class DetailsPage1 extends StatelessWidget {
                 context: Get.context as BuildContext,
                 builder: (_) => SizedBox(
                   height: getProportionateScreenWidth(250),
-                  child: CupertinoPicker(
-                    backgroundColor: Colors.white,
-                    itemExtent: 40,
-                    useMagnifier: false,
-                    children: List.generate(
-                        controller.countries!.length,
-                        (index) => Padding(
-                              padding: const EdgeInsets.only(top: 7),
-                              child: Text(
-                                  controller.countries![index].name.toString()),
-                            )),
-                    looping: true,
-                    onSelectedItemChanged: (value) {
-                      controller.kDefaultCountry = value.toString();
-                    },
+                  child: Container(
+                    color: Colors.white,
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            TextButton(
+                                onPressed: () {
+                                  Get.back();
+                                },
+                                child: Text(
+                                  "Cancel",
+                                  style: TextStyle(color: Colors.grey),
+                                )),
+                            Spacer(),
+                            TextButton(
+                                onPressed: () {
+                                  Get.back();
+                                  controller.kDefaultCountry =
+                                      controller.lastSelectedCountry;
+                                },
+                                child: Text("Done"))
+                          ],
+                        ),
+                        Expanded(
+                          child: CupertinoPicker(
+                            itemExtent: 40,
+                            useMagnifier: false,
+                            children: List.generate(
+                                controller.countries!.length,
+                                (index) => Padding(
+                                      padding: const EdgeInsets.only(top: 7),
+                                      child: Text(controller
+                                          .countries![index].name
+                                          .toString()),
+                                    )),
+                            looping: false,
+                            onSelectedItemChanged: (value) {
+                              controller.lastSelectedCountry = controller
+                                  .countries![value].dialCode
+                                  .toString();
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               );
             },
             child: Container(
               color: Colors.transparent,
-              width: getProportionateScreenWidth(60),
+              width: getProportionateScreenWidth(65),
               child: Row(
                 children: [
                   Text(
                     "+${controller.kDefaultCountry}",
+                    softWrap: false,
+                    maxLines: 1,
                     style: TextStyle(fontSize: getProportionateScreenWidth(14)),
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 5),
+                    padding: const EdgeInsets.only(left: 5),
                     child: SvgPicture.asset(AppImages.dropdownCloseBlack),
                   )
                 ],
@@ -572,8 +636,9 @@ class DetailsPage1 extends StatelessWidget {
 
   customAppBar() {
     return appBar(
-      'business_details'.tr,
-      [
+      title: 'business_details'.tr,
+      isBackButtonShow: isNext ? false : true,
+      actions: [
         isNext
             ? Padding(
                 padding: const EdgeInsets.only(top: 22, right: 25),

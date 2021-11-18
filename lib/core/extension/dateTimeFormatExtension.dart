@@ -51,7 +51,7 @@ extension DateTimeFormatExtension on DateTimeFormat {
         }
         return "${v.inMinutes}min";
       } else {
-        return "${v.inHours}hrs";
+        return "${v.inHours}hr";
       }
     } else {
       var outputFormat = DateFormat('dd-MM-yyyy');

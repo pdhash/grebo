@@ -30,11 +30,8 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final HomeController homeController = Get.find<HomeController>();
   @override
   void initState() {
-    GoogleAddService.createInterstitialAd();
-    GoogleAddService.showInterstitialAd();
     super.initState();
   }
 
@@ -167,30 +164,43 @@ class _HomeState extends State<Home> {
               )
             : SizedBox(),
         Expanded(
-          child: PaginationView(
-            key: Home.paginationViewKey,
-            pullToRefresh: true,
-            physics: AlwaysScrollableScrollPhysics(),
-            itemBuilder: (BuildContext context, PostData postData, int index) =>
-                PostView(
-              postData: postData,
+          child: GetBuilder(
+            builder: (HomeController controller) => PaginationView(
+              key: Home.paginationViewKey,
+              pullToRefresh: true,
+              physics: AlwaysScrollableScrollPhysics(),
+              itemBuilder:
+                  (BuildContext context, PostData postData, int index) =>
+                      PostView(
+                postData: postData,
+              ),
+              pageFetch: userController.user.userType ==
+                      getServiceTypeCode(ServicesType.userType)
+                  ? controller.fetchUserPost
+                  : controller.fetchProviderPost,
+              onError: (error) {
+                return Center(child: Text(error));
+              },
+              onEmpty: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    IconButton(
+                        onPressed: () {
+                          Home.paginationViewKey.currentState!.refresh();
+                        },
+                        icon: Icon(Icons.restart_alt)),
+                    Text("no_posts_yet".tr),
+                  ],
+                ),
+              ),
+              initialLoader: GetPlatform.isAndroid
+                  ? Center(
+                      child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                    ))
+                  : Center(child: CupertinoActivityIndicator()),
             ),
-            pageFetch: userController.user.userType ==
-                    getServiceTypeCode(ServicesType.userType)
-                ? homeController.fetchUserPost
-                : homeController.fetchProviderPost,
-            onError: (error) {
-              return Center(child: Text(error));
-            },
-            onEmpty: Center(
-              child: Text("no_post_found".tr),
-            ),
-            initialLoader: GetPlatform.isAndroid
-                ? Center(
-                    child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                  ))
-                : Center(child: CupertinoActivityIndicator()),
           ),
         )
       ],

@@ -26,7 +26,7 @@ class BusinessController extends GetxController {
 
   Future fetchUserDetail(String businessRef) async {
     businessRefID = businessRef;
-    var response = await PostRepo.fetchUserDetail(businessRef);
+    var response = await PostRepo.fetchUserDetail(businessRef: businessRef);
     if (response != null) {
       userModel = response;
       getAvailabilityDay.clear();
@@ -51,7 +51,7 @@ class BusinessController extends GetxController {
 
     var response = await PostRepo.followProvider(businessRefID, isFollow);
     if (response != null) {
-      flutterToast(response["message"]);
+      flutterToast(userModel.isFollow ? 'followed'.tr : 'unfollowed'.tr);
     }
   }
 }

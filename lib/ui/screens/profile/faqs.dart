@@ -22,7 +22,7 @@ class _FaqsState extends State<Faqs> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar('faqs'.tr),
+      appBar: appBar(title: 'faqs'.tr),
       body: GetBuilder(
         builder: (FaqsController controller) => PaginationView(
           pullToRefresh: true,

@@ -24,6 +24,7 @@ class NotificationRepo {
   static Future readNotification(String id) async {
     var response = await API.apiHandler(
         url: APIRoutes.notificationSeen,
+        showToast: false,
         showLoader: false,
         header: {
           "Authorization": userController.userToken,

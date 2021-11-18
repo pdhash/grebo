@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -22,10 +23,18 @@ import 'package:grebo/ui/shared/customtextfield.dart';
 
 import 'widgets/forgotpassword.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
   final LoginController loginController = Get.put(LoginController());
+
   final ServiceController serviceController = Get.find<ServiceController>();
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -33,9 +42,10 @@ class LoginScreen extends StatelessWidget {
         disposeKeyboard();
       },
       child: Scaffold(
-        appBar: appBar(ServicesType.userType == serviceController.servicesType
-            ? 'user_login'.tr
-            : 'service_provider_login'.tr),
+        appBar: appBar(
+            title: ServicesType.userType == serviceController.servicesType
+                ? 'user_login'.tr
+                : 'service_provider_login'.tr),
         body: Form(
           key: formKey,
           child: SingleChildScrollView(
@@ -82,6 +92,7 @@ class LoginScreen extends StatelessWidget {
                                 onTap: () {
                                   disposeKeyboard();
                                   userController.isGuest = true;
+                                  userController.user.userType = 1;
                                   Get.offAll(() => BaseScreen());
                                 },
                                 child: Center(

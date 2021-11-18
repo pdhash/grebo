@@ -32,7 +32,7 @@ class _CreatePostState extends State<CreatePost> {
             disposeKeyboard();
           },
           child: Scaffold(
-            appBar: appBar('create_post'.tr, [
+            appBar: appBar(title: 'create_post'.tr, actions: [
               Padding(
                 padding: const EdgeInsets.only(right: 18, top: 5),
                 child: IconButton(
@@ -83,7 +83,7 @@ class _CreatePostState extends State<CreatePost> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              userController.user.name,
+                              userController.user.businessName,
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: getProportionateScreenWidth(18),
@@ -103,7 +103,7 @@ class _CreatePostState extends State<CreatePost> {
                             ),
                             getHeightSizedBox(h: 6),
                             Text(
-                              '${"managed_by".tr} : ${userController.user.businessName}',
+                              '${"managed_by".tr} : ${userController.user.name}',
                               style: TextStyle(
                                 color: AppColor.kDefaultFontColor
                                     .withOpacity(0.85),
@@ -121,14 +121,14 @@ class _CreatePostState extends State<CreatePost> {
                     thickness: 1,
                   ),
                   //getHeightSizedBox(h: 15),
-                  Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: kDefaultPadding),
+                  Container(
+                    height: getProportionateScreenWidth(150),
+                    padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
                     child: TextFormField(
                       controller: controller.postCaption,
                       textInputAction: TextInputAction.done,
                       minLines: 1,
-                      maxLines: 5,
+                      maxLines: null,
                       style: TextStyle(
                           height: 1.5,
                           fontSize: getProportionateScreenWidth(14)),
@@ -143,9 +143,7 @@ class _CreatePostState extends State<CreatePost> {
                   ),
                   getHeightSizedBox(h: 10),
                   controller.uploadFile == null
-                      ? SizedBox(
-                          height: getProportionateScreenWidth(130),
-                        )
+                      ? SizedBox()
                       : Stack(
                           clipBehavior: Clip.none,
                           children: [
