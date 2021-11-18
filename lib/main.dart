@@ -36,9 +36,7 @@ const AndroidNotificationChannel channel = AndroidNotificationChannel(
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-
-}
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -114,8 +112,28 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp>  with WidgetsBindingObserver{
+class _MyAppState extends State<MyApp> {
   final BaseController baseController = Get.put(BaseController());
+  @override
+  void initState() {
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
+      await NotificationUtils().handleNotificationData(message.data);
+    });
+    // listen for foreground messages
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+      // received the message while the app was foreground
+      // here the notification is not shown automatically.
+      print("notication onmessage");
+      await NotificationUtils().handleNewNotification(message, false);
+    });
+    FirebaseMessaging.instance.getInitialMessage().then((value) async {
+      if (value != null) {
+        await NotificationUtils().handleNotificationData(value.data);
+      }
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([

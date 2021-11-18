@@ -45,14 +45,6 @@ class NotificationUtils {
   /// [fromBackground] = is this [message] is from background?
   Future<void> handleNewNotification(
       RemoteMessage message, bool fromBackground) async {
-    debugPrint(
-        'Handlinggggg a ${fromBackground ? "background" : "foreground"} message ${message.data}');
-    if (fromBackground) {
-      // If you're going to use other Firebase services in the background, such as Firestore,
-      // make sure you call `initializeApp` before using other Firebase services.
-      await Firebase.initializeApp();
-    }
-
     // display the notification manually
     // 1. if the [fromBackground] is false i.e.the notification is when the app was foreground.
     // 2. if [RemoteNotification] is null in [message] i.e. [message.notification] is null.
@@ -89,14 +81,16 @@ class NotificationUtils {
   Future<void> handleNotificationData(Map<String, dynamic> data) async {
     // maybe here we need to open specific screen or link
     int typeCode = int.parse(data["type"].toString());
-    if(data["reference"] != null && data["reference"] != "")
+    if (data["reference"] != null && data["reference"] != "")
       await NotificationRepo.readNotification(data["reference"]);
     print("NOTIFICATION $typeCode ${data}");
     if (typeCode == 2) {
       Map<String, dynamic> response = jsonDecode(data["payload"]);
-      Get.to(() =>
-          ChatView(channelRef : response["channelRef"],businessRef: response["user"]["_id"], userName: userController.user.userType ==
-              getServiceTypeCode(ServicesType.userType)
+      Get.to(() => ChatView(
+          channelRef: response["channelRef"],
+          businessRef: response["user"]["_id"],
+          userName: userController.user.userType ==
+                  getServiceTypeCode(ServicesType.userType)
               ? response["user"]["businessName"] ?? ""
               : response["user"]["name"] ?? ""));
     } else if (typeCode == 4) {
@@ -140,7 +134,6 @@ class NotificationUtils {
             // priority is required for heads up in android <= 7.1
             priority: Priority.high,
           ),
-          iOS: IOSNotificationDetails(),
         ),
         payload: data.isNotEmpty ? jsonEncode(data) : null,
       );
