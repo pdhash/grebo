@@ -113,7 +113,6 @@ class UserModel {
   List<ServiceList> services;
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
-    print("prince=${json["categories"]}");
     return UserModel(
       categories: List<Category>.from(
           (json["categories"] ?? []).map((x) => Category.fromJson(x))),

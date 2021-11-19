@@ -46,23 +46,10 @@ class NotificationUtils {
   Future<void> handleNewNotification(
       RemoteMessage message, bool fromBackground) async {
     // display the notification manually
-    // 1. if the [fromBackground] is false i.e.the notification is when the app was foreground.
-    // 2. if [RemoteNotification] is null in [message] i.e. [message.notification] is null.
+
     RemoteNotification? notification = message.notification;
-    if (notification == null) {
-      // there is no notification in the message.
-      // probably this is silent push
-      if (fromBackground && kIsWeb) {
-        // the silent push is from background and in the web we can't display the local notification as the package flutter_local_notifications doesn't support that.
-        return;
-      }
-
-      // TODO handle the silent push
-
-      return; // silent push is handled
-    }
-
-    if (!fromBackground && notification != null) {
+    AndroidNotification? android = message.notification?.android;
+    if (notification != null && android != null) {
       // the push is from foreground
       // here we need to manually display the notification
 

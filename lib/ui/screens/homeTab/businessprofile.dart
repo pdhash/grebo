@@ -22,6 +22,7 @@ import 'package:grebo/ui/screens/messagesTab/chatscreen.dart';
 import 'package:grebo/ui/shared/alertdialogue.dart';
 import 'package:grebo/ui/shared/appbar.dart';
 import 'package:grebo/ui/shared/userController.dart';
+import 'package:map_launcher/map_launcher.dart' as MapLauncher;
 import 'package:url_launcher/url_launcher.dart';
 
 import 'customerreview.dart';
@@ -231,10 +232,10 @@ class _BusinessProfileState extends State<BusinessProfile> {
                                 GetBuilder(
                                     builder: (UserController controller) {
                                   return CustomGoogleMap(
-                                      latitude: controller
-                                          .user.location.coordinates[1],
-                                      longitude: controller
-                                          .user.location.coordinates[0]);
+                                      latitude: businessController
+                                          .userModel.location.coordinates[1],
+                                      longitude: businessController
+                                          .userModel.location.coordinates[0]);
                                 }),
                               ],
                             ),
@@ -747,7 +748,6 @@ class CustomGoogleMapState extends State<CustomGoogleMap> {
 
   @override
   Widget build(BuildContext context) {
-    print("CustomGoogleMap BUILD");
     animateCamera(LatLng(widget.latitude, widget.longitude));
 
     return ClipRRect(
@@ -758,17 +758,51 @@ class CustomGoogleMapState extends State<CustomGoogleMap> {
         decoration: BoxDecoration(
             color: Colors.grey, borderRadius: BorderRadius.circular(10)),
         child: GoogleMap(
-          myLocationEnabled: true,
+          myLocationEnabled: false,
           mapType: MapType.normal,
+          myLocationButtonEnabled: false,
+          mapToolbarEnabled: false,
+          zoomControlsEnabled: false,
+          zoomGesturesEnabled: false,
           initialCameraPosition: CameraPosition(
               target: LatLng(widget.latitude, widget.longitude), zoom: 13.0),
-          onTap: (pos) {
-            // print(pos);
-            // Marker m = Marker(
-            //     markerId: MarkerId('1'), icon: customIcon, position: pos);
-            // setState(() {
-            //   allMarkers.add(m);
-            // });
+          onTap: (pos) async {
+            if (Platform.isAndroid) {
+              MapLauncher.MapLauncher.isMapAvailable(MapLauncher.MapType.google)
+                  .then((value) async {
+                if (value != null) {
+                  await MapLauncher.MapLauncher.showMarker(
+                    mapType: MapLauncher.MapType.google,
+                    coords:
+                        MapLauncher.Coords(widget.latitude, widget.longitude),
+                    title: '',
+                  );
+                } else {
+                  _launchMapsUrl(widget.latitude, widget.longitude);
+                }
+              });
+            } else {
+              final availableMaps = await MapLauncher.MapLauncher.installedMaps;
+              MapLauncher.MapLauncher.isMapAvailable(MapLauncher.MapType.google)
+                  .then((value) async {
+                if (value != null) {
+                  await MapLauncher.MapLauncher.showMarker(
+                    mapType: MapLauncher.MapType.google,
+                    coords:
+                        MapLauncher.Coords(widget.latitude, widget.longitude),
+                    title: '',
+                  );
+                } else {
+                  await availableMaps.first.showMarker(
+                    coords:
+                        MapLauncher.Coords(widget.latitude, widget.longitude),
+                    title: "",
+                  );
+                }
+              }).catchError((e) {
+                _launchMapsUrl(widget.latitude, widget.longitude);
+              });
+            }
           },
           markers: Set<Marker>.of({
             Marker(
@@ -788,8 +822,6 @@ class CustomGoogleMapState extends State<CustomGoogleMap> {
   }
 
   animateCamera(LatLng latLng) {
-    print(
-        "ANIMATE CAMERA ${_controller} ${latLng.latitude} ${latLng.longitude}");
     if (_controller == null) return;
     _controller!.animateCamera(
       CameraUpdate.newCameraPosition(CameraPosition(
@@ -797,5 +829,14 @@ class CustomGoogleMapState extends State<CustomGoogleMap> {
         // bearing: 45.0, tilt: 45.0
       )),
     );
+  }
+}
+
+void _launchMapsUrl(double lat, double lon) async {
+  final url = 'https://www.google.com/maps/search/?api=1&query=$lat,$lon';
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    throw 'Could not launch $url';
   }
 }

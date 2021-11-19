@@ -3,7 +3,6 @@ import 'package:grebo/core/service/repo/editProfileRepo.dart';
 import 'package:grebo/core/service/repo/postRepo.dart';
 import 'package:grebo/main.dart';
 import 'package:grebo/ui/screens/baseScreen/controller/baseController.dart';
-import 'package:grebo/ui/screens/homeTab/model/postDetialModel.dart';
 import 'package:grebo/ui/screens/homeTab/model/postModel.dart';
 
 import '../home.dart';

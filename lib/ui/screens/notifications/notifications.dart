@@ -22,7 +22,7 @@ import '../../../main.dart';
 class AllNotification extends StatelessWidget {
   final NotificationController notificationController =
       Get.find<NotificationController>();
-  GlobalKey<PaginationViewState> paginationKey =
+  static GlobalKey<PaginationViewState> paginationKey =
       GlobalKey<PaginationViewState>();
   @override
   Widget build(BuildContext context) {

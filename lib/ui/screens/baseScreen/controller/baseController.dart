@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:grebo/core/utils/sharedpreference.dart';
 import 'package:grebo/ui/global.dart';
 import 'package:grebo/ui/screens/homeTab/home.dart';
+import 'package:grebo/ui/screens/messagesTab/allmessages.dart';
+import 'package:grebo/ui/screens/notifications/notifications.dart';
 import 'package:grebo/ui/shared/location.dart';
 
 class BaseController extends GetxController {
@@ -15,6 +17,11 @@ class BaseController extends GetxController {
 
   set currentTab(int value) {
     _current = value;
+    if (value == 1) {
+      AllMessages.paginationKey.currentState!.refresh();
+    } else if (value == 2) {
+      AllNotification.paginationKey.currentState!.refresh();
+    }
     update();
   }
 

@@ -25,7 +25,7 @@ class AvailabilityController extends GetxController {
   }
 
   ///=====================
-  String _defaultTime = "00:00 AM";
+  String _defaultTime = "09:00 AM";
 
   String get defaultTime => _defaultTime;
 
@@ -34,7 +34,7 @@ class AvailabilityController extends GetxController {
     update();
   }
 
-  String _defaultTimeEnd = "00:00 PM";
+  String _defaultTimeEnd = "06:00 PM";
 
   String get defaultTimeEnd => _defaultTimeEnd;
 
@@ -44,7 +44,7 @@ class AvailabilityController extends GetxController {
   }
 
   ///=============== DB
-  late String _startTime;
+  late String _startTime = appTimeFunDB(TimeOfDay(hour: 9, minute: 00));
 
   String get startTime => _startTime;
 
@@ -53,7 +53,7 @@ class AvailabilityController extends GetxController {
     update();
   }
 
-  late String _endTime;
+  late String _endTime = appTimeFunDB(TimeOfDay(hour: 18, minute: 00));
 
   String get endTime => _endTime;
 

@@ -29,12 +29,6 @@ import 'core/utils/sharedpreference.dart';
 import 'core/viewmodel/controller/imagepickercontoller.dart';
 
 late UserController userController;
-const AndroidNotificationChannel channel = AndroidNotificationChannel(
-    "hide_importance_channel", "name", "description",
-    importance: Importance.high, playSound: true);
-
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {}
 

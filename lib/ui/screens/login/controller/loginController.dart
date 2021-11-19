@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:grebo/core/service/auth/googleAuth.dart';
 import 'package:grebo/core/service/repo/userRepo.dart';
+import 'package:grebo/core/utils/keychain.dart';
 import 'package:grebo/core/utils/sharedpreference.dart';
 import 'package:grebo/core/viewmodel/controller/selectservicecontoller.dart';
 import 'package:grebo/main.dart';
@@ -101,22 +103,30 @@ class LoginController extends GetxController {
 
     var response;
     if (fcmToken != null) {
-      final credential = await SignInWithApple.getAppleIDCredential(
+      await SignInWithApple.getAppleIDCredential(
         scopes: [
           AppleIDAuthorizationScopes.email,
           AppleIDAuthorizationScopes.fullName,
         ],
-      ).catchError((e) {
+      ).catchError((e) async {
         LoadingOverlay.of().hide();
+      }).then((credential) async {
+        final cred = await getKeyChain();
+
+        if (cred == null) {
+          putKeyChain(jsonEncode(
+              {"name": credential.givenName, "email": credential.email}));
+        }
+
+        response = await UserRepo.userSocialLogin(
+            name: credential.givenName ?? cred!["name"],
+            userType: getServiceTypeCode(serviceController.servicesType),
+            email: credential.email ?? cred!["email"],
+            fcmToken: fcmToken.toString(),
+            socialId: credential.userIdentifier.toString(),
+            socialToken: credential.identityToken.toString(),
+            socialIdentifier: getSocialIdentifier(SocialIdentifier.Apple));
       });
-      response = await UserRepo.userSocialLogin(
-          name: credential.givenName.toString(),
-          userType: getServiceTypeCode(serviceController.servicesType),
-          email: credential.email.toString(),
-          fcmToken: fcmToken.toString(),
-          socialId: credential.userIdentifier.toString(),
-          socialToken: credential.identityToken.toString(),
-          socialIdentifier: getSocialIdentifier(SocialIdentifier.Apple));
     }
 
     if (response != null) {
