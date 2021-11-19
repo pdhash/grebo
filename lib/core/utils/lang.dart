@@ -7,7 +7,8 @@ class Lang extends Translations {
         //'fr_FR': {'hello': 'Bonjour'},
         'en_US': {
           //onBoarding
-          'onBoarding_title1': 'Choose services you want from verified profits',
+          'onBoarding_title1':
+              'Choose services you want from verified profiles',
           'onBoarding_title2':
               'Get posts daily from businesses you follow to stay updated.',
           'onBoarding_title3':
@@ -54,11 +55,12 @@ class Lang extends Translations {
           //register
           'name': 'Name',
           'confirm_password': 'Confirm Password',
+          "register": "Register",
           'already_have': 'Already have an account! ',
           'signup': 'Signup',
           //email verify
           'email_verify..':
-              'An Email with Verification Link is Sent to your email account. Please verify to Login.',
+              'An email with verification link is sent to your email account. Please verify to login.',
           'ok': 'Ok',
           //main screen
           'feeds': 'Feeds',
@@ -69,12 +71,17 @@ class Lang extends Translations {
           'change': 'Change',
           'business_categories': 'Business Categories',
           'view_all': 'View All',
-          'see_all': 'See All',
+          'see_all': 'See more',
           'see_less': 'See Less',
           'like_error':
               "Hey, You can't post & comment on news feeds until your profile is verified",
           'go_to_profile': "Go to Profile",
           'view_profile': 'View Profile',
+          'just_now': 'Just now',
+          'sign_in_sign_up': 'Sign In or Sign Up',
+          'please_signup':
+              'Please sign up to proceed further. If you are an existing user please login.',
+
           //create Post
           'create_post': 'Create Post',
           'take_a_photo': 'Take a photo',
@@ -97,7 +104,11 @@ class Lang extends Translations {
           'business_profile': 'Business Profile',
           'basic_information': 'Basic Information',
           'phone': 'Phone',
+          'unverifiedMsg':
+              "Hello, your profile is still unverified. As an unverified user you will be able to see posts but not comment or like. Please verify your account for full access.",
           'follow': 'Follow',
+          'followed': 'Followed.',
+          'unfollowed': 'Unfollowed.',
           'contact': 'Contact',
           'message': 'Message',
           'description': 'Description',
@@ -111,6 +122,7 @@ class Lang extends Translations {
           'services_offered': 'Services Offered',
           'customer_reviews': 'Customer Reviews',
           'warning': 'Warning',
+          'profileUnverified': 'Profile Unverified',
           'unverified': 'Unverified',
           //edit profile business
           'edit_business_profile': 'Edit Business Profile',
@@ -121,8 +133,10 @@ class Lang extends Translations {
           'add': 'Add',
           'enter_website_url': 'Enter Website Url',
           'cancel': 'Cancel',
+          'kindly_add_a_link': 'Kindly add a link',
           //set availability
           'set_availability': 'Set Availability',
+          'edit_availability': 'Edit Availability',
           'select_working_days': 'Select Working Days',
           'select_working_hours': 'Select Working Hours',
           'opening_hour': 'Opening Hour',
@@ -133,20 +147,23 @@ class Lang extends Translations {
           'add_services_offered': 'Add Services Offered',
           'name_of_service': 'Name of service',
           'add_more_service': 'Add More Services',
+          'kindly_add_name_and_image': "Kindly add name and image",
           'dialogue_msg':
-              'Thank you for registering with business app. once admin will verify your business profile. you will be notified.',
+              'Thank you for registering with GREBO. Once admin will verify your business profile, you will be notified.',
 
           //messsages
           'textfieldmsg2': 'Type here..',
+          'no_messages_yet': 'No messages yet',
           //customer review
           'give_feedback': 'Give Feedback',
+          'no_reviews_yet': 'No reviews yet',
           //give feedback
-          'how_was..': 'How was your experience with\nbusiness name',
+          'how_was..': 'How was your experience with',
           'your_feedback..': 'Your feedback matters to us.',
           'write_your..': 'Write your review',
           'upload_photo': 'Upload photo',
           'click_here': 'Click here to upload',
-          'submitting_review': 'Thanks you for submitting your reviews.',
+          'submitting_review': 'Thank you for submitting your review.',
           //profile
           'user_name': 'User Name',
           'about_business': 'About Business',
@@ -162,6 +179,9 @@ class Lang extends Translations {
           'faqs': 'FAQs',
           'logOut': 'Logout',
           'terms_and_conditions': 'Terms and Conditions',
+          'privacy_policy': "Privacy Policy",
+          //notification
+          "no_notification_yet": 'No notification yet',
           //About Us
           'aboutusdes':
               "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting,",
@@ -171,7 +191,7 @@ class Lang extends Translations {
           //Contact Admin
           'how_can_we_help': 'How can we help?',
           'dialog_msg':
-              'Thanks you for submitting your request. we will surely help you.',
+              'Thank you for submitting your request. We will surely help you.',
           //validations
           'enter_mobile_number': 'Please enter mobile number',
           'enter_business_name': 'Please enter business name',
@@ -179,7 +199,7 @@ class Lang extends Translations {
           'enter_description': 'Please enter description',
           'enter_location': 'Please enter location',
           'enter_websites': 'Please enter websites',
-          'select_image': 'Please select image',
+          'at_least_one_image': 'At least one image is mandatory',
           'password_not_matched': 'Password not matched',
           'please_enter_name': 'Please enter name',
           'please_enter_email': 'Please enter email',
@@ -195,10 +215,17 @@ class Lang extends Translations {
           'please_enter_service': 'Please Enter Service',
           'weblink_toast': "You can add max 3 website link",
           'no_data_found': 'No data found',
+          'no_posts_yet': 'No posts yet',
           'press_again_to_close_app': 'Press again to close app',
+          'please_enter_a_word': "Please enter a word",
           //
           'today': 'Today',
           'managed_by': 'Managed By',
+          'logOutMsg': 'Are you sure want to log out?',
+          'logout': 'Log out?',
+          'logoutPop': 'Log out',
+          'yes': "Yes",
+          'no': 'No',
         },
       };
 }

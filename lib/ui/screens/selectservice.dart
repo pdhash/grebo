@@ -11,8 +11,6 @@ import 'package:grebo/ui/shared/custombutton.dart';
 import 'login/login.dart';
 
 class ChooseServices extends StatelessWidget {
-  final ServiceController serviceController = Get.put(ServiceController());
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -9,35 +9,43 @@ import 'package:grebo/core/constants/app_assets.dart';
 import 'package:grebo/core/constants/appcolor.dart';
 import 'package:grebo/core/extension/customButtonextension.dart';
 import 'package:grebo/core/service/auth/fbAuth.dart';
-import 'package:grebo/core/service/auth/googleAuth.dart';
 import 'package:grebo/core/utils/config.dart';
 import 'package:grebo/core/viewmodel/controller/selectservicecontoller.dart';
+import 'package:grebo/main.dart';
 import 'package:grebo/ui/global.dart';
+import 'package:grebo/ui/screens/baseScreen/baseScreen.dart';
+import 'package:grebo/ui/screens/baseScreen/controller/baseController.dart';
 import 'package:grebo/ui/screens/login/controller/loginController.dart';
 import 'package:grebo/ui/screens/login/signup.dart';
 import 'package:grebo/ui/shared/appbar.dart';
 import 'package:grebo/ui/shared/custombutton.dart';
 import 'package:grebo/ui/shared/customtextfield.dart';
-import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 import 'widgets/forgotpassword.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
   final LoginController loginController = Get.put(LoginController());
+
   final ServiceController serviceController = Get.find<ServiceController>();
-  FirebaseMessaging messaging = FirebaseMessaging.instance;
+
   @override
   Widget build(BuildContext context) {
-    print(serviceController.servicesType);
     return GestureDetector(
       onTap: () {
         disposeKeyboard();
       },
       child: Scaffold(
-        appBar: appBar(ServicesType.userType == serviceController.servicesType
-            ? 'user_login'.tr
-            : 'service_provider_login'.tr),
+        appBar: appBar(
+            title: ServicesType.userType == serviceController.servicesType
+                ? 'user_login'.tr
+                : 'service_provider_login'.tr),
         body: Form(
           key: formKey,
           child: SingleChildScrollView(
@@ -83,6 +91,9 @@ class LoginScreen extends StatelessWidget {
                             ? GestureDetector(
                                 onTap: () {
                                   disposeKeyboard();
+                                  userController.isGuest = true;
+                                  userController.user.userType = 1;
+                                  Get.offAll(() => BaseScreen());
                                 },
                                 child: Center(
                                   child: Text(
@@ -139,7 +150,9 @@ class LoginScreen extends StatelessWidget {
         onTap: () {
           disposeKeyboard();
           appImagePicker.imagePickerController.resetImage();
-          Get.to(() => SignUp());
+          Get.to(() => SignUp(
+                isBack: true,
+              ));
         });
   }
 
@@ -150,6 +163,7 @@ class LoginScreen extends StatelessWidget {
       text: 'login'.tr,
       onTap: () {
         disposeKeyboard();
+        Get.find<BaseController>().resetInitialTab();
         if (formKey.currentState!.validate()) {
           formKey.currentState!.save();
           loginController.userLogin();
@@ -163,24 +177,31 @@ class LoginScreen extends StatelessWidget {
       children: [
         Spacer(),
         socialButton(AppImages.facebook, () {
+          Get.find<BaseController>().resetInitialTab();
+
           disposeKeyboard();
           FBAuth.fbLogin();
         }),
         Spacer(),
         socialButton(AppImages.google, () async {
-          loginController.socialLogin();
+          Get.find<BaseController>().resetInitialTab();
+
+          loginController.googleLogin();
           disposeKeyboard();
         }),
         Platform.isIOS ? Spacer() : SizedBox(),
         Platform.isIOS
             ? socialButton(AppImages.apple, () async {
+                Get.find<BaseController>().resetInitialTab();
+
                 disposeKeyboard();
-                final credential = await SignInWithApple.getAppleIDCredential(
-                  scopes: [
-                    AppleIDAuthorizationScopes.email,
-                    AppleIDAuthorizationScopes.fullName,
-                  ],
-                );
+                loginController.appleLogin();
+                // final credential = await SignInWithApple.getAppleIDCredential(
+                //   scopes: [
+                //     AppleIDAuthorizationScopes.email,
+                //     AppleIDAuthorizationScopes.fullName,
+                //   ],
+                // );
               })
             : SizedBox(),
         Spacer(),
@@ -213,7 +234,7 @@ class LoginScreen extends StatelessWidget {
       controller: loginController.email,
       hintText: 'email_example'.tr,
       keyboardType: TextInputType.emailAddress,
-      validator: (val) => val!.isEmpty
+      validator: (val) => val!.trim().isEmpty
           ? 'enter_email'.tr
           : val.isValidEmail()
               ? null
@@ -239,9 +260,9 @@ class LoginScreen extends StatelessWidget {
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
-        validator: (val) => val!.isEmpty
+        validator: (val) => val!.trim().isEmpty
             ? 'enter_password'.tr
-            : val.length >= 5
+            : val.isNotEmpty
                 ? null
                 : 'invalid_password'.tr,
       ),

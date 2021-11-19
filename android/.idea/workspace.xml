@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="NONE" />
+  </component>
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="0b041a17-03e0-4d5d-9b8c-783d04cb55dc" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../.dart_tool/package_config.json" beforeDir="false" afterPath="$PROJECT_DIR$/../.dart_tool/package_config.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.dart_tool/package_config_subset" beforeDir="false" afterPath="$PROJECT_DIR$/../.dart_tool/package_config_subset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.dart_tool/version" beforeDir="false" afterPath="$PROJECT_DIR$/../.dart_tool/version" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.flutter-plugins" beforeDir="false" afterPath="$PROJECT_DIR$/../.flutter-plugins" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/../.flutter-plugins-dependencies" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/libraries/Dart_Packages.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/libraries/Dart_SDK.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/libraries/Dart_SDK.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/libraries/Flutter_Plugins.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/libraries/Flutter_Plugins.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.packages" beforeDir="false" afterPath="$PROJECT_DIR$/../.packages" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/AppAuth.build/dgph" beforeDir="false" afterPath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/AppAuth.build/dgph" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/FBAEMKit.build/dgph" beforeDir="false" afterPath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/FBAEMKit.build/dgph" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/FBSDKCoreKit-FacebookSDKStrings.build/dgph" beforeDir="false" afterPath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/FBSDKCoreKit-FacebookSDKStrings.build/dgph" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/FBSDKCoreKit.build/dgph" beforeDir="false" afterPath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/FBSDKCoreKit.build/dgph" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/FBSDKCoreKit_Basics.build/dgph" beforeDir="false" afterPath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/FBSDKCoreKit_Basics.build/dgph" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/FBSDKLoginKit.build/dgph" beforeDir="false" afterPath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/FBSDKLoginKit.build/dgph" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/Firebase.build/dgph" beforeDir="false" afterPath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/Firebase.build/dgph" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/FirebaseAuth.build/dgph" beforeDir="false" afterPath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/FirebaseAuth.build/dgph" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/FirebaseCore.build/dgph" beforeDir="false" afterPath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/FirebaseCore.build/dgph" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/FirebaseCoreDiagnostics.build/dgph" beforeDir="false" afterPath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/FirebaseCoreDiagnostics.build/dgph" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/FirebaseInstallations.build/dgph" beforeDir="false" afterPath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/FirebaseInstallations.build/dgph" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/FirebaseMessaging.build/dgph" beforeDir="false" afterPath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/FirebaseMessaging.build/dgph" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/Flutter.build/dgph" beforeDir="false" afterPath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/Flutter.build/dgph" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/GTMAppAuth.build/dgph" beforeDir="false" afterPath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/GTMAppAuth.build/dgph" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/GTMSessionFetcher.build/dgph" beforeDir="false" afterPath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/GTMSessionFetcher.build/dgph" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/Google-Mobile-Ads-SDK.build/dgph" beforeDir="false" afterPath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/Google-Mobile-Ads-SDK.build/dgph" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/GoogleAppMeasurement.build/dgph" beforeDir="false" afterPath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/GoogleAppMeasurement.build/dgph" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/GoogleDataTransport.build/dgph" beforeDir="false" afterPath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/GoogleDataTransport.build/dgph" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/GoogleMaps.build/dgph" beforeDir="false" afterPath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/GoogleMaps.build/dgph" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/GoogleSignIn.build/dgph" beforeDir="false" afterPath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/GoogleSignIn.build/dgph" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/GoogleUserMessagingPlatform.build/dgph" beforeDir="false" afterPath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/GoogleUserMessagingPlatform.build/dgph" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/GoogleUtilities.build/dgph" beforeDir="false" afterPath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/GoogleUtilities.build/dgph" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/Pods-Runner.build/dgph" beforeDir="false" afterPath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/Pods-Runner.build/dgph" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/PromisesObjC.build/dgph" beforeDir="false" afterPath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/PromisesObjC.build/dgph" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/Reachability.build/dgph" beforeDir="false" afterPath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/Reachability.build/dgph" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/TOCropViewController-TOCropViewControllerBundle.build/dgph" beforeDir="false" afterPath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/TOCropViewController-TOCropViewControllerBundle.build/dgph" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/TOCropViewController.build/dgph" beforeDir="false" afterPath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/TOCropViewController.build/dgph" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/Toast.build/dgph" beforeDir="false" afterPath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/Toast.build/dgph" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/connectivity.build/dgph" beforeDir="false" afterPath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/connectivity.build/dgph" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/firebase_auth.build/dgph" beforeDir="false" afterPath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/firebase_auth.build/dgph" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/firebase_core.build/dgph" beforeDir="false" afterPath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/firebase_core.build/dgph" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/firebase_messaging.build/dgph" beforeDir="false" afterPath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/firebase_messaging.build/dgph" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/flutter_facebook_auth.build/dgph" beforeDir="false" afterPath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/flutter_facebook_auth.build/dgph" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/fluttertoast.build/dgph" beforeDir="false" afterPath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/fluttertoast.build/dgph" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/geocoding.build/dgph" beforeDir="false" afterPath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/geocoding.build/dgph" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/geolocator_apple.build/dgph" beforeDir="false" afterPath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/geolocator_apple.build/dgph" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/google_maps_flutter.build/dgph" beforeDir="false" afterPath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/google_maps_flutter.build/dgph" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/google_mobile_ads.build/dgph" beforeDir="false" afterPath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/google_mobile_ads.build/dgph" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/google_sign_in.build/dgph" beforeDir="false" afterPath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/google_sign_in.build/dgph" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/image_cropper.build/dgph" beforeDir="false" afterPath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/image_cropper.build/dgph" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/image_picker.build/dgph" beforeDir="false" afterPath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/image_picker.build/dgph" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/location.build/dgph" beforeDir="false" afterPath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/location.build/dgph" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/nanopb.build/dgph" beforeDir="false" afterPath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/nanopb.build/dgph" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/notification_permissions.build/dgph" beforeDir="false" afterPath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/notification_permissions.build/dgph" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/package_info_plus.build/dgph" beforeDir="false" afterPath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/package_info_plus.build/dgph" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/path_provider.build/dgph" beforeDir="false" afterPath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/path_provider.build/dgph" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/permission_handler.build/dgph" beforeDir="false" afterPath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/permission_handler.build/dgph" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/sign_in_with_apple.build/dgph" beforeDir="false" afterPath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/sign_in_with_apple.build/dgph" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/url_launcher.build/dgph" beforeDir="false" afterPath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/url_launcher.build/dgph" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/video_compress.build/dgph" beforeDir="false" afterPath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/video_compress.build/dgph" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/video_player.build/dgph" beforeDir="false" afterPath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/video_player.build/dgph" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/volume_watcher.build/dgph" beforeDir="false" afterPath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/volume_watcher.build/dgph" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/wakelock.build/dgph" beforeDir="false" afterPath="$PROJECT_DIR$/../build/ios/Pods.build/Release-iphonesimulator/wakelock.build/dgph" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/Runner/Info.plist" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/Runner/Info.plist" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lib/core/service/repo/postRepo.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/core/service/repo/postRepo.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lib/core/utils/lang.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/core/utils/lang.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lib/ui/screens/homeTab/widget/guestLoginScreen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/ui/screens/homeTab/widget/guestLoginScreen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lib/ui/screens/login/login.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/ui/screens/login/login.dart" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectId" id="20LfZNQTSbWHW0RwkRfbpYo7gC9" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="dart.analysis.tool.window.visible" value="false" />
+    <property name="settings.editor.selected.configurable" value="AndroidSdkUpdater" />
+    <property name="show.migrate.to.gradle.popup" value="false" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="0b041a17-03e0-4d5d-9b8c-783d04cb55dc" name="Default Changelist" comment="" />
+      <created>1635828843175</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1635828843175</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>

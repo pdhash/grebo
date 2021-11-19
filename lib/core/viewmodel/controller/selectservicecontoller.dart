@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 
 class ServiceController extends GetxController {
-  late ServicesType _servicesType;
+  ServicesType _servicesType = ServicesType.userType;
 
   ServicesType get servicesType => _servicesType;
 

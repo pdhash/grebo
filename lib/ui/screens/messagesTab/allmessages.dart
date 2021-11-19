@@ -1,81 +1,157 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:grebo/core/constants/appSetting.dart';
 import 'package:grebo/core/constants/app_assets.dart';
 import 'package:grebo/core/constants/appcolor.dart';
+import 'package:grebo/core/extension/dateTimeFormatExtension.dart';
+import 'package:grebo/core/service/apiRoutes.dart';
+import 'package:grebo/core/service/repo/userRepo.dart';
 import 'package:grebo/core/utils/config.dart';
+import 'package:grebo/core/viewmodel/controller/selectservicecontoller.dart';
+import 'package:grebo/main.dart';
 import 'package:grebo/ui/screens/messagesTab/chatscreen.dart';
-import 'package:grebo/ui/shared/postview.dart';
+import 'package:grebo/ui/screens/messagesTab/controller/allChatController.dart';
+import 'package:grebo/ui/screens/messagesTab/model/chatListModel.dart';
+import 'package:pagination_view/pagination_view.dart';
 
-class AllMessages extends StatelessWidget {
+class AllMessages extends StatefulWidget {
+  static GlobalKey<PaginationViewState> paginationKey =
+      GlobalKey<PaginationViewState>();
+  @override
+  State<AllMessages> createState() => _AllMessagesState();
+}
+
+class _AllMessagesState extends State<AllMessages> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: ListView.builder(
-        itemCount: 4,
-        physics: BouncingScrollPhysics(),
-        itemBuilder: (context, index) => Column(
-          children: [
-            ListTile(
-              horizontalTitleGap: 12,
-              contentPadding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
-              leading: Stack(
-                clipBehavior: Clip.none,
-                children: [
-                  buildCircleProfile(
-                      image: AppImages.defaultProfile, width: 40, height: 40),
-                  Positioned(
-                    bottom: 0,
-                    right: -3,
-                    child: CircleAvatar(
-                      radius: getProportionateScreenWidth(8),
-                      backgroundColor: Colors.white,
-                      child: Center(
-                        child: CircleAvatar(
-                          radius: getProportionateScreenWidth(6.5),
-                          backgroundColor: Color(0xff8BC53F),
+    return GetBuilder(builder: (AllChatController controller) {
+      return PaginationView(
+        pullToRefresh: true,
+        key: AllMessages.paginationKey,
+        physics: AlwaysScrollableScrollPhysics(),
+        itemBuilder:
+            (BuildContext context, AllChatData allChatData, int index) =>
+                chatListTile(allChatData),
+        pageFetch: controller.fetchAllChatList,
+        onError: (error) {
+          return Center(child: Text(error));
+        },
+        onEmpty: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              IconButton(
+                  onPressed: () {
+                    AllMessages.paginationKey.currentState!.refresh();
+                  },
+                  icon: Icon(Icons.restart_alt)),
+              Text("no_messages_yet".tr),
+            ],
+          ),
+        ),
+        initialLoader: GetPlatform.isAndroid
+            ? Center(
+                child: CircularProgressIndicator(
+                strokeWidth: 2,
+              ))
+            : Center(child: CupertinoActivityIndicator()),
+      );
+    });
+  }
+
+  chatListTile(AllChatData allChatData) {
+    return GetBuilder(
+      builder: (AllChatController controller) => Column(
+        children: [
+          ListTile(
+            horizontalTitleGap: 12,
+            contentPadding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
+            leading: Stack(
+              clipBehavior: Clip.none,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(50),
+                  child: FadeInImage(
+                    placeholder: AssetImage(AppImages.placeHolder),
+                    image: NetworkImage(
+                        "${imageUrl + allChatData.chatUserDetail.picture}"),
+                    fit: BoxFit.cover,
+                    imageErrorBuilder: (context, error, stackTrace) {
+                      return Image.asset(
+                        AppImages.placeHolder,
+                        height: 40,
+                        width: 40,
+                        fit: BoxFit.cover,
+                      );
+                    },
+                    height: 40,
+                    width: 40,
+                  ),
+                ),
+                Positioned(
+                  bottom: 0,
+                  right: -3,
+                  child: allChatData.unreadCount == 0
+                      ? SizedBox()
+                      : CircleAvatar(
+                          radius: getProportionateScreenWidth(8),
+                          backgroundColor: Colors.white,
+                          child: Center(
+                            child: CircleAvatar(
+                              radius: getProportionateScreenWidth(6.5),
+                              backgroundColor: Color(0xff8BC53F),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-              subtitle: Text(
-                'Hi, Is that Arjun! How are you.',
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
+                )
+              ],
+            ),
+            subtitle: Text(
+              allChatData.lastMessage.message,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                  fontSize: getProportionateScreenWidth(13),
+                  fontWeight: FontWeight.w400,
+                  color: AppColor.kDefaultFontColor),
+            ),
+            title: Text(
+              userController.user.userType ==
+                      getServiceTypeCode(ServicesType.userType)
+                  ? allChatData.chatUserDetail.businessName
+                  : allChatData.chatUserDetail.name,
+              style: TextStyle(
+                  fontWeight: FontWeight.w700,
+                  fontSize: getProportionateScreenWidth(15)),
+            ),
+            onTap: () {
+              Get.to(() => ChatView(
+                  channelRef: allChatData.channelRef,
+                  businessRef: allChatData.chatUserDetail.id,
+                  userName: userController.user.userType ==
+                      getServiceTypeCode(ServicesType.userType)
+                      ? allChatData.chatUserDetail.businessName
+                      : allChatData.chatUserDetail.name,));
+              controller.realAllMessagesLocally(allChatData);
+            },
+            trailing: Padding(
+              padding: EdgeInsets.only(bottom: 11),
+              child: Text(
+                DateTimeFormatExtension.displayMSGTimeFromTimestamp(
+                    allChatData.lastMessage.createdAt.toLocal()),
                 style: TextStyle(
                     fontSize: getProportionateScreenWidth(13),
-                    fontWeight: FontWeight.w400,
-                    color: AppColor.kDefaultFontColor),
-              ),
-              title: Text(
-                'Samira Sehgal',
-                style: TextStyle(
-                    fontWeight: FontWeight.w700,
-                    fontSize: getProportionateScreenWidth(15)),
-              ),
-              onTap: () {
-                Get.to(() => ChatView(index: index));
-              },
-              trailing: Padding(
-                padding: EdgeInsets.only(bottom: 11),
-                child: Text(
-                  '2:30 PM',
-                  style: TextStyle(
-                      fontSize: getProportionateScreenWidth(13),
-                      color: AppColor.kDefaultFontColor.withOpacity(0.50)),
-                ),
+                    color: AppColor.kDefaultFontColor.withOpacity(0.50)),
               ),
             ),
-            //  getHeightSizedBox(h: 10),
-            Divider(
-              height: 0,
-              thickness: 1,
-              color: AppColor.kDefaultFontColor.withOpacity(0.08),
-            ),
-          ],
-        ),
+          ),
+          Divider(
+            height: 0,
+            thickness: 1,
+            color: AppColor.kDefaultFontColor.withOpacity(0.08),
+          ),
+        ],
       ),
     );
   }

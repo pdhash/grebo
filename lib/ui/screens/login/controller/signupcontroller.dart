@@ -35,8 +35,13 @@ class SignUpController extends GetxController {
         image: appImagePicker.imagePickerController.image as File,
         userType: getServiceTypeCode(serviceController.servicesType));
     if (response != null) emailVer = false;
-    appImagePicker.imagePickerController.resetImage();
 
     LoadingOverlay.of().hide();
+  }
+
+  @override
+  void dispose() {
+    appImagePicker.imagePickerController.resetImage();
+    super.dispose();
   }
 }
