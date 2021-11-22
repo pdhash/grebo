@@ -43,7 +43,7 @@ class _CustomerReviewedState extends State<CustomerReviewed> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: appBar('customer_reviews'.tr),
+        appBar: appBar(title: 'customer_reviews'.tr),
         body: GetBuilder(
           builder: (ReviewController controller) => controller.isFetching
               ? Center(
@@ -59,8 +59,8 @@ class _CustomerReviewedState extends State<CustomerReviewed> {
                       children: [
                         Expanded(
                           child: PaginationView(
-                            key: Key(DateTime.now().toString()),
                             pullToRefresh: true,
+                            key: Key(DateTime.now().toString()),
                             physics: AlwaysScrollableScrollPhysics(),
                             itemBuilder: (BuildContext context,
                                     ReviewData reviewData, int index) =>
@@ -71,7 +71,7 @@ class _CustomerReviewedState extends State<CustomerReviewed> {
                               return Center(child: Text(error));
                             },
                             onEmpty: Center(
-                              child: Text("no_post_found".tr),
+                              child: Text("no_reviews_yet".tr),
                             ),
                             initialLoader: GetPlatform.isAndroid
                                 ? Center(
@@ -178,10 +178,9 @@ class _CustomerReviewedState extends State<CustomerReviewed> {
                     ),
                     getHeightSizedBox(h: 4),
                     RatingBar.builder(
-                      initialRating: 1,
+                      initialRating: reviewData.rating.toDouble(),
                       minRating: 1,
                       direction: Axis.horizontal,
-                      allowHalfRating: true,
                       ignoreGestures: true,
                       itemCount: 5,
                       unratedColor: Color(0xffE8E8E8),
@@ -203,7 +202,27 @@ class _CustomerReviewedState extends State<CustomerReviewed> {
               style: TextStyle(
                 fontSize: getProportionateScreenWidth(13),
               ),
-            )
+            ),
+            getHeightSizedBox(h: 10),
+            if(reviewData.image != "")
+            ClipRRect(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              child: FadeInImage(
+                placeholder: AssetImage(AppImages.placeHolder),
+                image: NetworkImage("${imageUrl + reviewData.image}"),
+                height: 120,
+                width: Get.width - 30,
+                imageErrorBuilder: (context, error, stackTrace) {
+                  return Image.asset(
+                    AppImages.placeHolder,
+                    height: 120,
+                    width: Get.width - 30,
+                    fit: BoxFit.cover,
+                  );
+                },
+                fit: BoxFit.cover,
+              ),
+            ),
           ],
         ),
       ),

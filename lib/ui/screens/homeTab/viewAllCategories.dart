@@ -14,7 +14,7 @@ class ViewAll extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar('business_categories'.tr),
+      appBar: appBar(title: 'business_categories'.tr),
       body: Column(
         children: [
           Expanded(

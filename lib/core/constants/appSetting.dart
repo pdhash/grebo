@@ -8,5 +8,5 @@ const kBorderRadius = 15.0;
 const kAppFont = "Nexa";
 final dateFormat = DateFormat("h:mm a");
 void disposeKeyboard() {
-  FocusManager.instance.primaryFocus?.unfocus();
+  return FocusManager.instance.primaryFocus?.unfocus();
 }

@@ -3,7 +3,6 @@ import 'package:grebo/core/service/repo/postRepo.dart';
 import 'package:grebo/ui/screens/homeTab/model/reviewModel.dart';
 
 class ReviewController extends GetxController {
-  late bool _hasNext;
   bool _isFetching = false;
 
   bool get isFetching => _isFetching;

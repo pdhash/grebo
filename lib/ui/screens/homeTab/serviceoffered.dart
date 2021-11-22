@@ -27,7 +27,7 @@ class ServiceOffered extends StatelessWidget {
   Widget build(BuildContext context) {
     serviceOfferedController.userRef = businessRef;
     return Scaffold(
-      appBar: appBar('services_offered'.tr, [
+      appBar: appBar(title: 'services_offered'.tr, actions: [
         isEdit
             ? IconButton(
                 padding: EdgeInsets.only(right: 22),
@@ -85,11 +85,13 @@ class ServiceOffered extends StatelessWidget {
                 ),
               ),
               getHeightSizedBox(w: 10),
-              Text(
-                text,
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: getProportionateScreenWidth(14)),
+              Expanded(
+                child: Text(
+                  text,
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: getProportionateScreenWidth(14)),
+                ),
               )
             ],
           ),

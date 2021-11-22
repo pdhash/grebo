@@ -1,9 +1,24 @@
-//development
+///---debug
+// const String url = "http://fd40-122-173-24-14.ngrok.io/api/";
+// const String url = "http://cb52-122-173-30-17.ngrok.io/api/";
+
+// const String socketBaseUrl = "http://fd40-122-173-24-14.ngrok.io/";
+
+///---development
 const String url = "http://3.110.6.163:3000/api/";
+const String socketBaseUrl = "http://3.110.6.163:3000";
 const String imageUrl =
     "https://greboapp.s3.ap-south-1.amazonaws.com/development/images/average/";
 const String videoUrl =
     "https://greboapp.s3.ap-south-1.amazonaws.com/development/videos/";
+
+// ///---staging
+// const String url = "http://3.109.136.124:3000/api/";
+// const String socketBaseUrl = "http://3.109.136.124:3000";
+// const String imageUrl =
+//     "https://greboapp.s3.amazonaws.com/staging/images/average/";
+// const String videoUrl =
+//     "https://greboapp.s3.ap-south-1.amazonaws.com/staging/videos/";
 
 class APIRoutes {
   static const String userLogin = url + "user/login";
@@ -16,6 +31,7 @@ class APIRoutes {
   static const String providerPostList = url + "post/myList"; // provider
   static const String userPostList = url + "post/list"; // provider
   static const String addPost = url + "post/add";
+  static const String postDetails = url + "post/details";
   static const String addServices = url + "services/add";
   static const String updateServices = url + "services/update";
   static const String updateLike = url + "like/update";
@@ -32,6 +48,14 @@ class APIRoutes {
   static const String userDetail = url + "user/details";
   static const String follow = url + "follow/update";
   static const String appData = url + "appDetail/list";
+  static const String faqs = url + "faq/list";
+  static const String getChannel = url + "chat/getchannel";
+  static const String guestPostList = url + "post/guestList";
+  static const String guestPostDetail = url + "post/guestDetails";
+  static const String guestCommentList = url + "comment/guestList";
+  static const String messageList = url + "chat/listChat";
+  static const String getMessages = url + "messages/get";
+  static const String countsChats = url + "chat/countChats";
 }
 
 enum ContentType { jsonType }

@@ -28,6 +28,7 @@ class AppImages {
   static final profileActive = 'assets/image/home/ic_profile_active.svg';
   static final location = 'assets/image/home/ic_location.svg';
   static final like = 'assets/image/home/ic_like-active.svg';
+  static final privacyPolicy = 'assets/image/profile/ic_privacy-policy.png';
   static final unlike = 'assets/image/home/ic_unlike.svg';
   static final comment = 'assets/image/home/ic_comment (2).svg';
   static final videoPlay = 'assets/image/home/ic_post_video_play-icon.svg';
@@ -68,6 +69,8 @@ class AppImages {
   static final availability = 'assets/image/profile/ic_availability.svg';
   static final aboutBusiness = 'assets/image/profile/ic_about-business.svg';
   static final dropdownClose = 'assets/image/profile/ic_dropdown_close.svg';
+  static final guestLogin =
+      'assets/image/home/ic_guest_mode_illustration (1).svg';
   static final workingDays =
       'assets/image/editBusinessProfile/ic_working-days_icon.svg';
   static final workingHours =

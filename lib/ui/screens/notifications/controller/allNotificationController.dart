@@ -5,10 +5,10 @@ import 'package:grebo/ui/screens/notifications/model/notificationModel.dart';
 class NotificationController extends GetxController {
   int page = 1;
 
-  Future<List<Datum>> fetchNotification(int offset) async {
+  Future<List<NotificationData>> fetchNotification(int offset) async {
     if (offset == 0) page = 1;
     if (page == -1) return [];
-    List<Datum> getNotify = [];
+    List<NotificationData> getNotify = [];
 
     var request = await NotificationRepo.fetchNotification(page);
     getNotify = request!.data;
@@ -18,10 +18,12 @@ class NotificationController extends GetxController {
     return getNotify;
   }
 
-  Future readNotification(String notificationId, Datum notifyData) async {
+  Future readNotification(
+      String notificationId, NotificationData notifyData) async {
     notifyData.seen = true;
     update();
 
     var request = await NotificationRepo.readNotification(notificationId);
+    print(request);
   }
 }

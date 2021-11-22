@@ -9,6 +9,7 @@ import 'package:grebo/core/service/repo/editProfileRepo.dart';
 import 'package:grebo/core/service/repo/imageRepo.dart';
 import 'package:grebo/core/utils/appFunctions.dart';
 import 'package:grebo/core/utils/sharedpreference.dart';
+import 'package:grebo/core/viewmodel/controller/businesscontroller.dart';
 import 'package:grebo/main.dart';
 import 'package:grebo/ui/screens/login/model/currentUserModel.dart';
 
@@ -51,27 +52,37 @@ class EditBProfileController extends GetxController {
     update();
   }
 
-  //country update
-  late String _kDefaultCountry = '91';
-
-  String get kDefaultCountry => _kDefaultCountry;
-
-  set kDefaultCountry(String value) {
-    _kDefaultCountry = value;
-    update();
-  }
-
   List<File> multiFile = <File>[];
   List<String> uploadMultiFile = <String>[];
 
-  void removeImage(int index) {
-    multiFile.removeAt(index);
-    uploadMultiFile.removeAt(index);
+  //country update
+  late String _kDefaultCountry = '1';
+  late String _lastSelectedCountry = '1';
+
+  String get kDefaultCountry => _kDefaultCountry;
+  String get lastSelectedCountry => _lastSelectedCountry;
+
+  set kDefaultCountry(String value) {
+    _kDefaultCountry = value.substring(1);
     update();
   }
 
-  void removeImageLocally(index) {
+  set lastSelectedCountry(String value) {
+    _lastSelectedCountry = value;
+  }
+
+  void removeImage(int index) {
+    if (multiFile.length > index) {
+      print("validate");
+      multiFile.removeAt(index);
+    }
     uploadMultiFile.removeAt(index);
+    print("BEFOREE ${userController.user.images}");
+
+    userController.user.images = uploadMultiFile;
+    updateUserDetail(userController.user);
+    print("AFTER  ${userController.user.images}");
+
     update();
   }
 
@@ -92,12 +103,18 @@ class EditBProfileController extends GetxController {
     update();
   }
 
-  double lat = -1;
-  double long = -1;
+  double lat = 0;
+  double long = 0;
 
   int _categorySelect = 1;
+  int _lastCategorySelect = 1;
 
   int get categorySelect => _categorySelect;
+  int get lastCategorySelect => _lastCategorySelect;
+
+  set lastCategorySelect(int value) {
+    _lastCategorySelect = value;
+  }
 
   set categorySelect(int value) {
     _categorySelect = value;
@@ -137,12 +154,16 @@ class EditBProfileController extends GetxController {
   }
 
   deleteImage(int index) {
-    ImageRepo.deleteImage(imageId: uploadMultiFile[index]).then((value) {
-      if (value != null) {
-        flutterToast(value["message"]);
-        removeImage(index);
-      }
-    });
+    if (uploadMultiFile.length > 1) {
+      ImageRepo.deleteImage(imageId: uploadMultiFile[index]).then((value) {
+        if (value != null) {
+          flutterToast(value["message"]);
+          removeImage(index);
+        }
+      });
+    } else {
+      flutterToast("at_least_one_image".tr);
+    }
   }
 
   Future submitAllFields(bool isNext) async {
@@ -168,6 +189,7 @@ class EditBProfileController extends GetxController {
       if (isNext)
         Get.to(() => DetailsPage2());
       else {
+        Get.find<BusinessController>().updateUserModelList();
         Get.back();
       }
     }
@@ -181,9 +203,15 @@ class EditBProfileController extends GetxController {
       businessName.text = userController.user.businessName;
       mobileNumber.text = userController.user.phoneNumber;
       location.text = userController.user.location.address;
+      lat = userController.user.location.coordinates[0];
+      long = userController.user.location.coordinates[1];
       description.text = userController.user.description;
       uploadMultiFile = userController.user.images;
+      multiFile.addAll(userController.user.images.map((e) => File("")));
       websites = userController.user.websites;
+      _kDefaultCountry = userController.user.phoneCode;
+      print("==========${userController.user.categories.length}");
+
       for (int i = 0; i < userController.user.categories.length; i++) {
         for (int j = 0; j < userController.globalCategory.length; j++) {
           if (userController.user.categories[i].id ==

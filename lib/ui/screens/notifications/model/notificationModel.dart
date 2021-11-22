@@ -2,6 +2,8 @@
 //
 //     final notificationModel = notificationModelFromJson(jsonString);
 
+import 'package:grebo/ui/screens/messagesTab/model/chatListModel.dart';
+
 class NotificationModel {
   NotificationModel({
     required this.code,
@@ -16,7 +18,7 @@ class NotificationModel {
 
   int code;
   String message;
-  List<Datum> data;
+  List<NotificationData> data;
   int limit;
   int size;
   bool hasMore;
@@ -27,7 +29,8 @@ class NotificationModel {
       NotificationModel(
         code: json["code"],
         message: json["message"],
-        data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
+        data: List<NotificationData>.from(
+            json["data"].map((x) => NotificationData.fromJson(x))),
         limit: json["limit"],
         size: json["size"],
         hasMore: json["hasMore"],
@@ -47,41 +50,46 @@ class NotificationModel {
       };
 }
 
-class Datum {
-  Datum({
+class NotificationData {
+  NotificationData({
     required this.id,
-    required this.seen,
     required this.userRef,
+    required this.channelRef,
+    required this.seen,
+    required this.image,
     required this.type,
     required this.sourceRef,
     required this.text,
     required this.createdAt,
-    required this.updatedAt,
-    required this.v,
     required this.deleted,
+    required this.user,
   });
 
   String id;
   bool seen;
   String userRef;
+  String image;
+  User user;
+
   int type;
   String sourceRef;
+  String channelRef;
   String text;
   DateTime createdAt;
-  DateTime updatedAt;
-  int v;
-  bool deleted;
 
-  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-        id: json["_id"],
-        seen: json["seen"],
-        userRef: json["userRef"],
-        type: json["type"],
-        sourceRef: json["sourceRef"],
-        text: json["text"],
+  bool deleted;
+  factory NotificationData.fromJson(Map<String, dynamic> json) =>
+      NotificationData(
+        id: json["_id"] ?? "",
+        user: User.fromJson(json["user"] ?? {}),
+        seen: json["seen"] ?? "",
+        userRef: json["userRef"] ?? "",
+        channelRef: json["channelRef"] ?? "",
+        image: json["image"] ?? "",
+        type: json["type"] ?? 0,
+        sourceRef: json["sourceRef"] ?? "",
+        text: json["text"] ?? "",
         createdAt: DateTime.parse(json["createdAt"]),
-        updatedAt: DateTime.parse(json["updatedAt"]),
-        v: json["__v"],
         deleted: json["deleted"],
       );
 
@@ -89,12 +97,12 @@ class Datum {
         "_id": id,
         "seen": seen,
         "userRef": userRef,
+        "image": image,
+        "user": user.toJson(),
         "type": type,
         "sourceRef": sourceRef,
         "text": text,
         "createdAt": createdAt.toIso8601String(),
-        "updatedAt": updatedAt.toIso8601String(),
-        "__v": v,
         "deleted": deleted,
       };
 }

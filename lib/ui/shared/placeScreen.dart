@@ -10,7 +10,7 @@ import 'package:grebo/core/utils/appFunctions.dart';
 import 'package:grebo/core/utils/config.dart';
 
 const String iOSGoogleApiKey = "AIzaSyASRrlkBg6CYEnVbzZDtObouh2q6Pgm3es";
-const String androidGoogleApiKey = "AIzaSyDzVraVkj0hNE1yfau4FlCocRCva8Z6QPs";
+const String androidGoogleApiKey = "AIzaSyAn0Hpf17oBrRQ3NYI4lHr6A1GwdZl9M5Q";
 UnderlineInputBorder border =
     UnderlineInputBorder(borderSide: BorderSide(color: Colors.transparent));
 
