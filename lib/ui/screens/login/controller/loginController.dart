@@ -88,8 +88,8 @@ class LoginController extends GetxController {
             }
           }
         }
-      }).then((value) {
-        if (value == null) LoadingOverlay.of().hide();
+      }).catchError((e) {
+        LoadingOverlay.of().hide();
       });
     } else
       LoadingOverlay.of().hide();
