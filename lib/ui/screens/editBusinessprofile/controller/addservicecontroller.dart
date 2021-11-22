@@ -5,12 +5,14 @@ import 'package:get/get.dart';
 import 'package:grebo/core/constants/appcolor.dart';
 import 'package:grebo/core/service/repo/editProfileRepo.dart';
 import 'package:grebo/core/service/repo/imageRepo.dart';
+import 'package:grebo/core/utils/appFunctions.dart';
+import 'package:grebo/core/utils/sharedpreference.dart';
 import 'package:grebo/ui/screens/baseScreen/baseScreen.dart';
-import 'package:grebo/ui/screens/baseScreen/controller/baseController.dart';
 import 'package:grebo/ui/screens/editBusinessprofile/model/addSeviceModel.dart';
 import 'package:grebo/ui/screens/editBusinessprofile/model/serviceListModel.dart';
 import 'package:grebo/ui/screens/editBusinessprofile/widgets/addServiceView.dart';
 import 'package:grebo/ui/screens/homeTab/serviceoffered.dart';
+import 'package:grebo/ui/screens/login/model/currentUserModel.dart';
 import 'package:grebo/ui/shared/alertdialogue.dart';
 
 class AddServiceController extends GetxController {
@@ -19,7 +21,6 @@ class AddServiceController extends GetxController {
   List<AddServicesModel> addServiceModels = [];
 
   addDefault() {
-    print("ADD DEFAULT");
     if (addServiceModels.length == 0) {
       addServiceViews = [AddServiceView(index: 0)];
       addServiceModels = <AddServicesModel>[AddServicesModel()];
@@ -32,27 +33,23 @@ class AddServiceController extends GetxController {
       if (element.image == null ||
           element.title == null ||
           element.title!.trim().isEmpty) {
-        print("validateForm FALSE");
+        flutterToast("kindly_add_name_and_image".tr);
         return false;
       }
     }
-    print("validateForm TRUE");
     return true;
   }
 
   add() {
-    print("ADD at ${addServiceViews.length}");
     bool flag = validateForm();
     if (flag) {
       addServiceViews.add(AddServiceView(index: addServiceViews.length));
       addServiceModels.add(AddServicesModel());
-    } else
-      print('not valid');
+    }
     update();
   }
 
   remove(int index) {
-    print("REMOVE at ${index}");
     addServiceModels.removeAt(index);
     addServiceViews.removeAt(index);
     addServiceViews.asMap().forEach((int index, AddServiceView view) {
@@ -87,15 +84,16 @@ class AddServiceController extends GetxController {
           "profile": true,
         },
       );
-      print("okkkkkkkkkkkkk ====== >>>>>>>>>>> $p");
       if (p != null) {
+        updateUserDetail(UserModel.fromJson(p["data"]));
+
         if (isNext) {
           showCustomDialog(
               context: Get.context as BuildContext,
               content: 'dialogue_msg'.tr,
               contentSize: 15,
               onTap: () {
-                Get.offAll(()=>BaseScreen());
+                Get.offAll(() => BaseScreen());
               },
               color: AppColor.kDefaultColor,
               okText: 'ok'.tr);

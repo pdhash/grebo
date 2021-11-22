@@ -7,6 +7,7 @@ import 'package:grebo/core/service/repo/postRepo.dart';
 import 'package:grebo/ui/shared/loader.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:video_compress/video_compress.dart';
 
 class AddPostController extends GetxController {
@@ -29,71 +30,74 @@ class AddPostController extends GetxController {
   }
 
   Future addPost() async {
-    print("ahgdhjgvshvds");
-    var response;
-
-    response = await PostRepo.postUpload(uploadFile as File,
-        {"text": postCaption.text.trim()}, isImage, thumbnail);
+    var response = await PostRepo.postUpload(
+        caption: {"text": postCaption.text.trim()},
+        isImage: isImage,
+        image: uploadFile,
+        thumbnail: thumbnail);
 
     if (response != null) {
-      print(response);
       return response;
     }
   }
 
-  late bool _isImage;
+  int _isImage = 0;
 
-  bool get isImage => _isImage;
+  int get isImage => _isImage;
 
-  set isImage(bool value) {
+  set isImage(int value) {
     _isImage = value;
     update();
   }
 
-  browseImage(ImageSource imageSource, bool isVideo) async {
-    ImagePicker imagePicker = ImagePicker();
-    if (isVideo) {
-      isImage = false;
-      var pickedVideo = await imagePicker.pickVideo(
-        source: imageSource,
-      );
-      if (pickedVideo != null) {
-        LoadingOverlay.of().show();
-        MediaInfo? mediaInfo = await VideoCompress.compressVideo(
-          pickedVideo.path,
-          quality: VideoQuality.MediumQuality,
-          deleteOrigin: true, // It's false by default
+  Future browseImage(ImageSource imageSource, bool isVideo) async {
+    try {
+      ImagePicker imagePicker = ImagePicker();
+      if (isVideo) {
+        isImage = 1;
+        var pickedVideo = await imagePicker.pickVideo(
+          source: imageSource,
         );
-        LoadingOverlay.of().hide();
+        if (pickedVideo != null) {
+          LoadingOverlay.of().show();
+          MediaInfo? mediaInfo = await VideoCompress.compressVideo(
+            pickedVideo.path,
+            quality: VideoQuality.MediumQuality,
+            deleteOrigin: true, // It's false by default
+          );
+          LoadingOverlay.of().hide();
 
-        final uint8list = await VideoCompress.getFileThumbnail(
-          mediaInfo!.path.toString(),
+          final uint8list = await VideoCompress.getFileThumbnail(
+            mediaInfo!.path.toString(),
+          );
+          thumbnail = uint8list;
+
+          uploadFile = File(mediaInfo.path.toString());
+        }
+
+        update();
+      } else {
+        isImage = 2;
+
+        var pickedFile =
+            await imagePicker.pickImage(source: imageSource, imageQuality: 50);
+        File? file = await ImageCropper.cropImage(
+          sourcePath: pickedFile!.path,
+          aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
+          compressQuality: 100,
+          maxHeight: 700,
+          maxWidth: 700,
+          compressFormat: ImageCompressFormat.jpg,
+          androidUiSettings: AndroidUiSettings(
+            toolbarColor: Colors.white,
+            toolbarTitle: "Image Cropper",
+          ),
         );
-        thumbnail = uint8list;
-
-        uploadFile = File(mediaInfo.path.toString());
+        uploadFile = file;
+        update();
       }
-
-      update();
-    } else {
-      isImage = true;
-
-      var pickedFile =
-          await imagePicker.pickImage(source: imageSource, imageQuality: 50);
-      File? file = await ImageCropper.cropImage(
-        sourcePath: pickedFile!.path,
-        aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
-        compressQuality: 100,
-        maxHeight: 700,
-        maxWidth: 700,
-        compressFormat: ImageCompressFormat.jpg,
-        androidUiSettings: AndroidUiSettings(
-          toolbarColor: Colors.white,
-          toolbarTitle: "Image Cropper",
-        ),
-      );
-      uploadFile = file;
-      update();
+    } on Exception catch (e) {
+      return Future.error(e);
     }
   }
 
@@ -109,7 +113,9 @@ class AddPostController extends GetxController {
                 style: TextStyle(color: Colors.black),
               ),
               onPressed: () {
-                browseImage(ImageSource.camera, isVideo);
+                browseImage(ImageSource.camera, isVideo).catchError((e) async {
+                  await openAppSettings();
+                });
 
                 Get.back();
                 uploadFile = null;
@@ -121,7 +127,9 @@ class AddPostController extends GetxController {
                 style: TextStyle(color: Colors.black),
               ),
               onPressed: () {
-                browseImage(ImageSource.gallery, isVideo);
+                browseImage(ImageSource.gallery, isVideo).catchError((e) async {
+                  await openAppSettings();
+                });
 
                 Get.back();
                 uploadFile = null;
@@ -149,7 +157,11 @@ class AddPostController extends GetxController {
                 title: Text('Photo Library'),
                 tileColor: Colors.white,
                 onTap: () async {
-                  browseImage(ImageSource.gallery, isVideo);
+                  browseImage(ImageSource.gallery, isVideo)
+                      .catchError((e) async {
+                    await openAppSettings();
+                  });
+                  ;
 
                   Get.back();
                 },
@@ -162,7 +174,30 @@ class AddPostController extends GetxController {
                 title: Text('Camera'),
                 tileColor: Colors.white,
                 onTap: () async {
-                  browseImage(ImageSource.camera, isVideo);
+                  final cameraPermissionStatus = await Permission.camera.status;
+                  if (cameraPermissionStatus.isDenied) {
+                    print("is denied");
+
+                    Permission.camera.request().then((value) async {
+                      if (value.isPermanentlyDenied) {
+                        await openAppSettings();
+                      } else if (value.isDenied) {
+                        Permission.camera.request();
+                      } else if (value.isGranted) {
+                        browseImage(ImageSource.camera, isVideo);
+                      }
+                    });
+                  } else if (cameraPermissionStatus.isRestricted) {
+                    print("is Restricted");
+                    await openAppSettings();
+                  } else if (cameraPermissionStatus.isGranted) {
+                    browseImage(ImageSource.camera, isVideo)
+                        .catchError((e) async {
+                      await openAppSettings();
+                    });
+                    ;
+                  }
+                  print("ok");
                   Get.back();
                 },
               ),

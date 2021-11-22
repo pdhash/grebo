@@ -30,8 +30,8 @@ class DetailsPage2 extends StatelessWidget {
       builder: (AvailabilityController controller) {
         return Scaffold(
           appBar: appBar(
-            'set_availability'.tr,
-            [
+            title: isNext ? 'set_availability'.tr : "edit_availability".tr,
+            actions: [
               isNext
                   ? Padding(
                       padding: const EdgeInsets.only(top: 22, right: 25),
@@ -206,7 +206,7 @@ class DetailsPage2 extends StatelessWidget {
                 Spacer(),
                 SafeArea(
                     child: CustomButton(
-                  text: 'next'.tr,
+                  text: isNext ? 'next'.tr : 'save'.tr,
                   onTap: () {
                     // print("START ${DateTime.parse(controller.startTime)}");
                     // print("END ${DateTime.parse(controller.endTime)}");

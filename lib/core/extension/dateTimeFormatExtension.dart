@@ -21,8 +21,8 @@ extension DateTimeFormatExtension on DateTimeFormat {
   }
 
   static String displayChatTimeFromTimestamp(DateTime timestamp) {
-    int v = timestamp.difference(DateTime.now()).inDays;
-    if (v > 1) {
+    var v = DateTime.now().difference(timestamp);
+    if (v.inHours < 24) {
       return "${"today".tr} ${timeFormat(timestamp)}";
     } else {
       var outputFormat = DateFormat('dd-MM-yyyy');
@@ -31,15 +31,27 @@ extension DateTimeFormatExtension on DateTimeFormat {
     }
   }
 
+  static String displayMSGTimeFromTimestamp(DateTime timestamp) {
+    var v = DateTime.now().difference(timestamp);
+    if (v.inHours < 24) {
+      return "${timeFormat(timestamp)}";
+    } else {
+      var outputFormat = DateFormat('dd-MM-yyyy');
+      var outputDate = outputFormat.format(timestamp);
+      return outputDate;
+    }
+  }
+
   static String displayTimeFromTimestampForPost(DateTime timestamp) {
-    var v = DateTime.now();
-    if (v.day == timestamp.day) {
-      if (timestamp.minute < 60) {
-        var outputFormat = DateFormat('mm');
-        return "${outputFormat.format(v)}min";
+    var v = DateTime.now().difference(timestamp);
+    if (v.inHours < 24) {
+      if (v.inMinutes < 60) {
+        if (v.inMinutes == 0) {
+          return "just_now".tr;
+        }
+        return "${v.inMinutes}min";
       } else {
-        var outputFormat = DateFormat('h');
-        return "${outputFormat.format(v)}hrs";
+        return "${v.inHours}hr";
       }
     } else {
       var outputFormat = DateFormat('dd-MM-yyyy');
@@ -63,14 +75,21 @@ extension DateTimeFormatExtension on DateTimeFormat {
         return 'yyyy-MM-ddTHH:mm:ss';
       case DateTimeFormat.time:
         Duration duration = DateTime.now().timeZoneOffset;
-        return "yyyy-MM-dd'T'HH:mm:ss${duration.isNegative ? "-" : "+"}${durationToString(duration.inMinutes)}";
+        return "yyyy-MM-dd'T'HH:mm:ss${duration.isNegative ? "" : "+"}${durationToString(duration.inMinutes)}";
     }
   }
 
   String durationToString(int minutes) {
     var d = Duration(minutes: minutes);
     List<String> parts = d.toString().split(':');
-    return '${parts[0].padLeft(2, '0')}:${parts[1].padLeft(2, '0')}';
+    var firstWord;
+    if (parts[0].contains("-")) {
+      firstWord = parts[0].split("-")[1].padLeft(2, "0");
+    } else {
+      firstWord = parts[0].padLeft(2, "0");
+    }
+
+    return '$firstWord${parts[1].padLeft(2, '0')}';
   }
 }
 

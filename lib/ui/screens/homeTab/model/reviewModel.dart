@@ -49,6 +49,7 @@ class ReviewModel {
 
 class ReviewData {
   ReviewData({
+    this.rating = 0.0,
     this.id = "",
     required this.user,
     this.isMine = false,
@@ -62,6 +63,7 @@ class ReviewData {
   String id;
   ReviewUser user;
   bool isMine;
+  double rating;
   String businessRef;
   String text;
   String image;
@@ -69,20 +71,24 @@ class ReviewData {
   DateTime createdAt;
 
   factory ReviewData.fromJson(Map<String, dynamic> json) => ReviewData(
-        id: json["_id"],
+        id: json["_id"] ?? "",
         user: ReviewUser.fromJson(json["user"]),
-        isMine: json["isMine"],
-        businessRef: json["businessRef"],
-        text: json["text"],
-        image: json["image"],
-        deleted: json["deleted"],
-        createdAt: DateTime.parse(json["createdAt"]).toLocal(),
+        isMine: json["isMine"] ?? "",
+        businessRef: json["businessRef"] ?? "",
+        rating: double.parse((json["rating"] ?? 0.0).toString()),
+        text: json["text"] ?? "",
+        image: json["image"] ?? "",
+        deleted: json["deleted"] ?? false,
+        createdAt: DateTime.parse(
+                json["createdAt"] ?? DateTime.now().toIso8601String())
+            .toLocal(),
       );
 
   Map<String, dynamic> toJson() => {
         "_id": id,
         "user": user.toJson(),
         "isMine": isMine,
+        "rating": rating,
         "businessRef": businessRef,
         "text": text,
         "image": image,
@@ -103,9 +109,9 @@ class ReviewUser {
   String picture;
 
   factory ReviewUser.fromJson(Map<String, dynamic> json) => ReviewUser(
-        id: json["_id"],
-        name: json["name"],
-        picture: json["picture"],
+        id: json["_id"] ?? "",
+        name: json["name"] ?? "",
+        picture: json["picture"] ?? "",
       );
 
   Map<String, dynamic> toJson() => {

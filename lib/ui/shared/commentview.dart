@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:grebo/core/constants/appSetting.dart';
 import 'package:grebo/core/constants/app_assets.dart';
 import 'package:grebo/core/constants/appcolor.dart';
+import 'package:grebo/core/extension/dateTimeFormatExtension.dart';
 import 'package:grebo/core/service/apiRoutes.dart';
 import 'package:grebo/core/utils/config.dart';
 import 'package:grebo/ui/screens/homeTab/model/commentModel.dart';
@@ -67,7 +68,9 @@ class CommentView extends StatelessWidget {
                           ),
                           getHeightSizedBox(h: 5),
                           Text(
-                            commentsData.createdAt.toString(),
+                            DateTimeFormatExtension
+                                .displayTimeFromTimestampForPost(
+                                    commentsData.createdAt.toLocal()),
                             style: TextStyle(
                                 color: AppColor.kDefaultFontColor
                                     .withOpacity(0.57),

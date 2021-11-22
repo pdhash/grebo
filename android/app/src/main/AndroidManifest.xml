@@ -3,10 +3,14 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.CAMERA" />
    <application
-        android:label="grebo"
+        android:label="GREBO"
         android:icon="@mipmap/ic_launcher">
         <activity
+            android:usesCleartextTraffic="true"
             android:name=".MainActivity"
             android:launchMode="singleTop"
             android:theme="@style/LaunchTheme"
@@ -34,10 +38,15 @@
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+            <intent-filter>
+                <action android:name="FLUTTER_NOTIFICATION_CLICK" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
         </activity>
 
        <meta-data android:name="com.google.android.geo.API_KEY"
-           android:value="AIzaSyC1zSra5Ol2oTN-thknGpsdd-FeO0fYYeM"/>
+           android:value="AIzaSyAn0Hpf17oBrRQ3NYI4lHr6A1GwdZl9M5Q"/>
 
        <meta-data android:name="com.facebook.sdk.ApplicationId"
            android:value="@string/facebook_app_id"/>
@@ -65,5 +74,8 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+       <meta-data
+           android:name="com.google.android.gms.ads.APPLICATION_ID"
+           android:value="ca-app-pub-5808398297574305~4986492044"/>
     </application>
 </manifest>

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:grebo/core/constants/appSetting.dart';
 import 'package:grebo/core/constants/app_assets.dart';
 import 'package:grebo/core/service/apiRoutes.dart';
+import 'package:grebo/core/service/repo/userRepo.dart';
 import 'package:grebo/core/utils/config.dart';
+import 'package:grebo/core/viewmodel/controller/selectservicecontoller.dart';
 import 'package:grebo/ui/screens/baseScreen/controller/baseController.dart';
 import 'package:grebo/ui/screens/homeTab/businessprofile.dart';
 import 'package:grebo/ui/screens/homeTab/controller/homeController.dart';
@@ -117,7 +120,8 @@ class Profile extends StatelessWidget {
                     title: 'user_name'.tr,
                     subtitle: userController.user.name,
                   ),
-                  userController.user.userType == 1
+                  userController.user.userType ==
+                          getServiceTypeCode(ServicesType.userType)
                       ? GetBuilder(
                           builder: (BaseController controller) =>
                               buildSettingTile(
@@ -125,7 +129,7 @@ class Profile extends StatelessWidget {
                             height: 20,
                             width: 14,
                             title: 'location'.tr,
-                            subtitle: baseController.address,
+                            subtitle: userController.user.location.address,
                           ),
                         )
                       : SizedBox(),
@@ -175,7 +179,12 @@ Widget buildSettingTile(
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        buildWidget(image, height, width),
+        Container(
+            width: 20,
+            height: 20,
+            child: Center(
+              child: SvgPicture.asset(image),
+            )),
         Expanded(
           child: Container(
             margin: EdgeInsets.only(left: 15),

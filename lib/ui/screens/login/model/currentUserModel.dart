@@ -54,6 +54,8 @@ class Datum {
 class UserModel {
   UserModel({
     location,
+    this.rating = 0.0,
+    this.warningByAdmin = "",
     this.userType = 0,
     this.verifiedByAdmin = false,
     this.images = const [],
@@ -64,6 +66,7 @@ class UserModel {
     this.deleted = false,
     this.profileCompleted = false,
     this.id = "",
+    this.isFollow = false,
     this.email = "",
     this.picture = "",
     this.categories = const [],
@@ -77,7 +80,7 @@ class UserModel {
     this.phoneNumber = "",
     this.startTime = "",
     this.services = const [],
-  })  : this.location = LocData(),
+  })  : this.location = location ?? LocData(),
         this.createdOn = DateTime.now(),
         this.updatedOn = DateTime.now();
 
@@ -102,15 +105,20 @@ class UserModel {
   String endTime;
   String name;
   String phoneCode;
+  String warningByAdmin;
   String phoneNumber;
+  bool isFollow;
   String startTime;
+  double rating;
   List<ServiceList> services;
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
-    print("okkk");
     return UserModel(
+      categories: List<Category>.from(
+          (json["categories"] ?? []).map((x) => Category.fromJson(x))),
       location: LocData.fromJson(json["location"] ?? {}),
       userType: json["userType"] ?? 0,
+      warningByAdmin: json["warningByAdmin"] ?? "",
       verifiedByAdmin: json["verifiedByAdmin"] ?? false,
       images: List<String>.from((json["images"] ?? []).map((x) => x)),
       websites: List<String>.from((json["websites"] ?? []).map((x) => x)),
@@ -128,11 +136,11 @@ class UserModel {
       description: json["description"] ?? "",
       endTime: json["endTime"] ?? "",
       name: json["name"] ?? "",
+      rating: double.parse((json["rating"] ?? 0.0).toString()),
       phoneCode: json["phoneCode"] ?? "",
       phoneNumber: json["phoneNumber"] ?? "",
+      isFollow: json["isFollow"] ?? false,
       startTime: json["startTime"] ?? "",
-      categories: List<Category>.from(
-          (json["categories"] ?? []).map((x) => Category.fromJson(x))),
       services: List<ServiceList>.from(
           (json["services"] ?? []).map((x) => ServiceList.fromJson(x))),
     );
@@ -142,6 +150,8 @@ class UserModel {
     return {
       "location": location.toJson(),
       "userType": userType,
+      "warningByAdmin": warningByAdmin,
+      "isFollow": isFollow,
       "verifiedByAdmin": verifiedByAdmin,
       "images": List<dynamic>.from(images.map((x) => x)),
       "websites": List<dynamic>.from(websites.map((x) => x)),
@@ -149,6 +159,7 @@ class UserModel {
       "categories": List<dynamic>.from(categories.map((e) => e.toJson())),
       "services": List<dynamic>.from(services.map((x) => x.toJson())),
       "verified": verified,
+      "rating": rating,
       "blocked": blocked,
       "deleted": deleted,
       "_id": id,
@@ -216,7 +227,7 @@ class LocData {
   LocData({
     this.address = "",
     this.type = "",
-    this.coordinates = const [0, 0],
+    this.coordinates = const [0.0, 0.0],
   });
 
   String address;
@@ -233,6 +244,6 @@ class LocData {
   Map<String, dynamic> toJson() => {
         "address": address,
         "type": type,
-        "coordinates": List<dynamic>.from(coordinates.map((x) => x)),
+        "coordinates": List<double>.from(coordinates.map((x) => x)),
       };
 }

@@ -1,75 +1,92 @@
 import 'dart:async';
 
-import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
-import 'package:grebo/core/utils/appFunctions.dart';
-import 'package:grebo/ui/screens/baseScreen/controller/baseController.dart';
-import 'package:location/location.dart';
 
-class GetLocationController extends GetxController {
-  GetLocationController() {
-    getCurrentLocation();
+import 'package:location/location.dart' as loc;
+
+class GetCurrentLocation extends GetxController {
+  double _currentLatitude = 0;
+
+  double get currentLatitude => _currentLatitude;
+
+  set currentLatitude(double value) {
+    _currentLatitude = value;
+    update();
   }
 
-  void getCurrentLocation() async {
-    Location currentLocation = new Location();
-    LocationData _locationData;
-    PermissionStatus permissionStatus = await currentLocation.hasPermission();
+  double _currentLongitude = 0;
 
-    print("getCurrentLocation $permissionStatus");
-    try {
-      getLocation() async {
-        bool isServiceEnable = await Geolocator.isLocationServiceEnabled();
-        print("GETTING LOCATION isServiceEnable $isServiceEnable");
-        bool isShow = false;
-        Timer.periodic(Duration(milliseconds: 500), (timer) async {
-          if(!isShow) {
-            isShow = true;
-            _locationData = await currentLocation.getLocation();
-          }
+  double get currentLongitude => _currentLongitude;
 
-          // Stop the timer when it matches a condition
-          isServiceEnable = await Geolocator.isLocationServiceEnabled();
-          print("TIMER isServiceEnable ${isServiceEnable} ");
-          if (isServiceEnable) {
-            timer.cancel();
-            _locationData = await currentLocation.getLocation();
-            print("LOCATION $_locationData");
-            Get.find<BaseController>().getAddressFromLatLong(_locationData);
-          }
-        });
+  set currentLongitude(double value) {
+    _currentLongitude = value;
+    update();
+  }
 
-      }
+  Future<Position> determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
 
-      if (permissionStatus != PermissionStatus.granted) {
-        _locationData = await currentLocation.getLocation();
-        Timer.periodic(Duration(milliseconds: 500), (timer) async {
-          // Stop the timer when it matches a condition
-          permissionStatus = await currentLocation.hasPermission();
-          print("TIMER permissionStatus ${permissionStatus} ");
-          if (permissionStatus == PermissionStatus.granted) {
-            timer.cancel();
-            getLocation();
-          }
-        });
-      }
+    // Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    print(serviceEnabled);
+    if (!serviceEnabled) {
+      serviceEnabled = await loc.Location.instance.requestService();
 
-      if (permissionStatus == PermissionStatus.granted) {
-        getLocation();
-      }
-    } on PlatformException {
-      print("PlatformException");
-      flutterToast("allowAccessToLocationMsg".tr);
-      if (permissionStatus != PermissionStatus.granted) {
-        _locationData = await currentLocation.getLocation();
-      }
-    } catch (error) {
-      print("error ${error}");
-      flutterToast("allowAccessToLocationMsg".tr);
-      if (permissionStatus != PermissionStatus.granted) {
-        _locationData = await currentLocation.getLocation();
+      // Location services are not enabled don't continue
+      // accessing the position and request users of the
+      // App to enable the location services.
+      if (!serviceEnabled) {
+        return Future.error('Location services are disabled.');
       }
     }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        // Permissions are denied, next time you could try
+        // requesting permissions again (this is also where
+        // Android's shouldShowRequestPermissionRationale
+        // returned true. According to Android guidelines
+        // your App should show an explanatory UI now.
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      // Permissions are denied forever, handle appropriately.
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    // When we reach here, permissions are granted and we can
+    // continue accessing the position of the device.
+    return await Geolocator.getCurrentPosition().then((value) {
+      currentLatitude = value.latitude;
+      currentLongitude = value.longitude;
+      return value;
+    });
   }
+
+// @override
+// void onInit() async {
+//   try {
+//     determinePosition().then((value) => null).catchError((e) {
+//       print("location denied}");
+//     });
+//   } catch (e) {
+//     print("erroe frm $e");
+//   }
+//
+//   super.onInit();
+// }
+}
+
+class LatLongCoordinate {
+  double? latitude;
+  double? longitude;
+
+  LatLongCoordinate({this.latitude, this.longitude});
 }

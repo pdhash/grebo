@@ -1,6 +1,8 @@
 import 'package:geocoding/geocoding.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:grebo/core/service/repo/postRepo.dart';
 import 'package:grebo/main.dart';
+import 'package:grebo/ui/global.dart';
 import 'package:grebo/ui/screens/login/model/currentUserModel.dart';
 
 final sharedPreference = GetStorage();
@@ -47,14 +49,23 @@ removerUserDetail() async {
   sharedPreference.remove("userLong");
 }
 
-bool getUserDetail() {
+Future getUserDetail() async {
   var userData = sharedPreference.read("GreboUser");
   var userToken = sharedPreference.read("UserToken");
   if (userData == null) {
-    return false;
+    navigationScreen = false;
   } else {
     userController.user = UserModel.fromJson(userData);
     userController.userToken = userToken;
-    return true;
+    if (!userController.user.verifiedByAdmin) {
+      final p =
+          await PostRepo.fetchUserDetail(businessRef: userController.user.id);
+      if (p != null) {
+        if (p.verifiedByAdmin) {
+          updateUserDetail(p);
+        }
+      }
+    }
+    navigationScreen = true;
   }
 }

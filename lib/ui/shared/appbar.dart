@@ -3,23 +3,28 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:grebo/core/constants/app_assets.dart';
 
-AppBar appBar(String title, [List<Widget>? actions]) {
+AppBar appBar(
+    {required String title,
+    bool isBackButtonShow = true,
+    List<Widget>? actions}) {
   return AppBar(
     elevation: 0,
     centerTitle: true,
     leadingWidth: 50,
     automaticallyImplyLeading: false,
-    leading: IconButton(
-      splashRadius: 10,
-      focusNode: FocusNode(canRequestFocus: false),
-      enableFeedback: false,
-      icon: SvgPicture.asset(
-        AppImages.back,
-      ),
-      onPressed: () {
-        Get.back();
-      },
-    ),
+    leading: isBackButtonShow
+        ? IconButton(
+            splashRadius: 10,
+            focusNode: FocusNode(canRequestFocus: false),
+            enableFeedback: false,
+            icon: SvgPicture.asset(
+              AppImages.back,
+            ),
+            onPressed: () {
+              Get.back();
+            },
+          )
+        : SizedBox(),
     //titleSpacing: 200,
     actions: actions == null ? [] : actions,
     title: Padding(

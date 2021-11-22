@@ -23,8 +23,8 @@ class DetailsPage3 extends StatelessWidget {
     // addServiceController.addDefault();
     return Scaffold(
         appBar: appBar(
-          'add_services_offered'.tr,
-          [
+          title: 'add_services_offered'.tr,
+          actions: [
             isNext
                 ? Padding(
                     padding: const EdgeInsets.only(top: 22, right: 25),

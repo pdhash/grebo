@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -9,7 +8,9 @@ import 'package:grebo/core/constants/appSetting.dart';
 import 'package:grebo/core/constants/app_assets.dart';
 import 'package:grebo/core/constants/appcolor.dart';
 import 'package:grebo/core/service/apiRoutes.dart';
+import 'package:grebo/core/service/googleAdd/addServices.dart';
 import 'package:grebo/core/service/repo/userRepo.dart';
+import 'package:grebo/core/utils/appFunctions.dart';
 import 'package:grebo/core/utils/config.dart';
 import 'package:grebo/core/viewmodel/controller/businesscontroller.dart';
 import 'package:grebo/core/viewmodel/controller/selectservicecontoller.dart';
@@ -17,8 +18,11 @@ import 'package:grebo/main.dart';
 import 'package:grebo/ui/screens/editBusinessprofile/details1.dart';
 import 'package:grebo/ui/screens/homeTab/home.dart';
 import 'package:grebo/ui/screens/homeTab/serviceoffered.dart';
+import 'package:grebo/ui/screens/messagesTab/chatscreen.dart';
 import 'package:grebo/ui/shared/alertdialogue.dart';
 import 'package:grebo/ui/shared/appbar.dart';
+import 'package:grebo/ui/shared/userController.dart';
+import 'package:map_launcher/map_launcher.dart' as MapLauncher;
 import 'package:url_launcher/url_launcher.dart';
 
 import 'customerreview.dart';
@@ -43,11 +47,10 @@ class _BusinessProfileState extends State<BusinessProfile> {
 
   @override
   void initState() {
-    if (userController.user.userType ==
-        getServiceTypeCode(ServicesType.userType)) {
-      businessController.businessRef = widget.businessRef.toString();
-      businessController.fetchUserDetail();
-    }
+    GoogleAddService.showInterstitialAd();
+
+    businessController.fetchUserDetail(widget.businessRef);
+
     super.initState();
   }
 
@@ -56,337 +59,385 @@ class _BusinessProfileState extends State<BusinessProfile> {
     return Scaffold(
       appBar: appBarPro(),
       body: GetBuilder(
-        builder: (BusinessController controller) => controller.userModel.id ==
-                ""
-            ? Center(
-                child: Platform.isIOS
-                    ? CupertinoActivityIndicator()
-                    : CircularProgressIndicator(
-                        strokeWidth: 2,
-                      ))
-            : SingleChildScrollView(
-                physics: BouncingScrollPhysics(),
-                child: Column(
-                  children: [
-                    imageView(),
-                    getHeightSizedBox(h: 15),
-                    businessNameIntro(),
-                    getHeightSizedBox(h: 15),
-                    controller.userModel.userType ==
-                            getServiceTypeCode(ServicesType.userType)
-                        ? Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  contactButton(
-                                      image: AppImages.follow,
-                                      title: 'follow'.tr,
-                                      onTap: () {
-                                        controller.follow();
-                                      }),
-                                  contactButton(
-                                      image: AppImages.call,
-                                      title: 'contact'.tr,
-                                      onTap: () async {
-                                        if (await canLaunch(
-                                            'tel:${controller.userModel.phoneNumber}')) {
-                                          await launch(
-                                              'tel:${controller.userModel.phoneNumber}');
-                                        } else {
-                                          throw 'Could not launch ${controller.userModel.phoneNumber}';
-                                        }
-                                      }),
-                                  contactButton(
-                                      image: AppImages.chatNew,
-                                      onTap: () {},
-                                      title: 'message'.tr),
-                                ],
-                              ),
-                              getHeightSizedBox(h: 15),
-                              Divider(
-                                height: 0,
-                              ),
-                            ],
-                          )
-                        : Padding(
+        builder: (BusinessController controller) {
+          return controller.userModel.id == ""
+              ? Center(
+                  child: Platform.isIOS
+                      ? CupertinoActivityIndicator()
+                      : CircularProgressIndicator(
+                          strokeWidth: 2,
+                        ))
+              : GetBuilder(
+                  builder: (UserController con) {
+                    return SingleChildScrollView(
+                      physics: BouncingScrollPhysics(),
+                      child: Column(
+                        children: [
+                          imageView(),
+                          getHeightSizedBox(h: 15),
+                          businessNameIntro(),
+                          getHeightSizedBox(h: 15),
+                          userController.user.userType ==
+                                  getServiceTypeCode(ServicesType.userType)
+                              ? Column(
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      children: [
+                                        contactButton(
+                                            image: AppImages.follow,
+                                            title: controller.userModel.isFollow
+                                                ? "Unfollow".tr
+                                                : 'follow'.tr,
+                                            onTap: () {
+                                              if (controller.userModel.isFollow)
+                                                controller.follow(false);
+                                              else
+                                                controller.follow(true);
+                                            }),
+                                        contactButton(
+                                            image: AppImages.call,
+                                            title: 'contact'.tr,
+                                            onTap: () async {
+                                              if (await canLaunch(
+                                                  'tel:${controller.userModel.phoneNumber}')) {
+                                                await launch(
+                                                    'tel:${controller.userModel.phoneNumber}');
+                                              } else {
+                                                throw 'Could not launch ${controller.userModel.phoneNumber}';
+                                              }
+                                            }),
+                                        contactButton(
+                                            image: AppImages.chatNew,
+                                            onTap: () {
+                                              if (!controller
+                                                  .userModel.isFollow) {
+                                                flutterToast(
+                                                    "You have to follow first.");
+                                                return;
+                                              }
+                                              Get.to(() => ChatView(
+                                                    businessRef:
+                                                        controller.userModel.id,
+                                                    userName: controller
+                                                        .userModel.businessName,
+                                                  ));
+                                            },
+                                            title: 'message'.tr),
+                                      ],
+                                    ),
+                                    getHeightSizedBox(h: 15),
+                                    Divider(
+                                      height: 0,
+                                    ),
+                                  ],
+                                )
+                              : Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: kDefaultPadding),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'basic_information'.tr,
+                                        style: TextStyle(
+                                            fontSize:
+                                                getProportionateScreenWidth(
+                                                    15)),
+                                      ),
+                                      getHeightSizedBox(h: 18),
+                                      Row(
+                                        children: [
+                                          buildWidget(
+                                              AppImages.callProfile, 41, 41),
+                                          getHeightSizedBox(w: 8),
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              getHeightSizedBox(h: 3),
+                                              Text(
+                                                'phone'.tr,
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize:
+                                                        getProportionateScreenWidth(
+                                                            16)),
+                                              ),
+                                              getHeightSizedBox(h: 3),
+                                              Text(
+                                                "+${businessController.userModel.phoneCode}${businessController.userModel.phoneNumber}",
+                                                style: TextStyle(
+                                                    color: Color(0xff6E6E6E)
+                                                        .withOpacity(0.85),
+                                                    fontSize:
+                                                        getProportionateScreenWidth(
+                                                            15)),
+                                              )
+                                            ],
+                                          )
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                ),
+                          getHeightSizedBox(h: 18),
+                          Padding(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: kDefaultPadding),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
+                                header('description'.tr),
+                                getHeightSizedBox(h: 11),
                                 Text(
-                                  'basic_information'.tr,
+                                  businessController.userModel.description,
                                   style: TextStyle(
+                                      height: 1.5,
+                                      color: AppColor.kDefaultFontColor
+                                          .withOpacity(0.89),
                                       fontSize:
-                                          getProportionateScreenWidth(15)),
+                                          getProportionateScreenWidth(14)),
                                 ),
                                 getHeightSizedBox(h: 18),
-                                Row(
-                                  children: [
-                                    buildWidget(AppImages.callProfile, 41, 41),
-                                    getHeightSizedBox(w: 8),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        getHeightSizedBox(h: 3),
-                                        Text(
-                                          'phone'.tr,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize:
-                                                  getProportionateScreenWidth(
-                                                      16)),
-                                        ),
-                                        getHeightSizedBox(h: 3),
-                                        Text(
-                                          "+${businessController.userModel.phoneCode}${businessController.userModel.phoneNumber}",
-                                          style: TextStyle(
-                                              color: Color(0xff6E6E6E)
-                                                  .withOpacity(0.85),
-                                              fontSize:
-                                                  getProportionateScreenWidth(
-                                                      15)),
-                                        )
-                                      ],
-                                    )
-                                  ],
-                                )
+                                header('website_links'.tr),
+                                getHeightSizedBox(h: 16),
+                                ...List.generate(
+                                    businessController
+                                        .userModel.websites.length,
+                                    (index) => Column(
+                                          children: [
+                                            buildLink(businessController
+                                                .userModel.websites[index]),
+                                            getHeightSizedBox(h: 18),
+                                          ],
+                                        )),
                               ],
                             ),
                           ),
-                    getHeightSizedBox(h: 18),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: kDefaultPadding),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          header('description'.tr),
-                          getHeightSizedBox(h: 11),
-                          Text(
-                            businessController.userModel.description,
-                            style: TextStyle(
-                                height: 1.5,
-                                color: AppColor.kDefaultFontColor
-                                    .withOpacity(0.89),
-                                fontSize: getProportionateScreenWidth(14)),
+                          Divider(
+                            height: 0,
                           ),
                           getHeightSizedBox(h: 18),
-                          header('website_links'.tr),
-                          getHeightSizedBox(h: 16),
-                          ...List.generate(
-                              businessController.userModel.websites.length,
-                              (index) => Column(
-                                    children: [
-                                      buildLink(businessController
-                                          .userModel.websites[index]),
-                                      getHeightSizedBox(h: 18),
-                                    ],
-                                  )),
-                        ],
-                      ),
-                    ),
-                    Divider(
-                      height: 0,
-                    ),
-                    getHeightSizedBox(h: 18),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: kDefaultPadding),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          header('location'.tr),
-                          getHeightSizedBox(h: 11),
-                          CustomGoogleMap(
-                              latitude: businessController
-                                  .userModel.location.coordinates[1],
-                              longitude: businessController
-                                  .userModel.location.coordinates[0]),
-                        ],
-                      ),
-                    ),
-                    getHeightSizedBox(h: 15),
-                    businessController.userModel.userType ==
-                            getServiceTypeCode(ServicesType.userType)
-                        ? Column(
-                            children: [
-                              Divider(
-                                height: 0,
-                              ),
-                              getHeightSizedBox(h: 18),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: kDefaultPadding),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: kDefaultPadding),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                header('location'.tr),
+                                getHeightSizedBox(h: 11),
+                                GetBuilder(
+                                    builder: (UserController controller) {
+                                  return CustomGoogleMap(
+                                      latitude: businessController
+                                          .userModel.location.coordinates[1],
+                                      longitude: businessController
+                                          .userModel.location.coordinates[0]);
+                                }),
+                              ],
+                            ),
+                          ),
+                          getHeightSizedBox(h: 15),
+                          userController.user.userType ==
+                                  getServiceTypeCode(ServicesType.providerType)
+                              ? Column(
                                   children: [
-                                    header('availability'.tr),
-                                    getHeightSizedBox(h: 11),
-                                    Text(
-                                      'working_days'.tr,
-                                      style: TextStyle(
-                                          fontFamily: 'Opensans',
-                                          fontSize:
-                                              getProportionateScreenWidth(15)),
+                                    buildTile('customer_reviews'.tr, () {
+                                      print(
+                                          businessController.userModel.rating);
+
+                                      Get.to(() => CustomerReviewed(
+                                            businessRef:
+                                                widget.businessRef.toString(),
+                                          ));
+                                    },
+                                        AppImages.customerReview,
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            getHeightSizedBox(w: 5),
+                                            Icon(
+                                              Icons.star,
+                                              color: Color(0xffFFAB00),
+                                            ),
+                                            getHeightSizedBox(w: 5),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.only(top: 4),
+                                              child: Text(
+                                                businessController
+                                                    .userModel.rating
+                                                    .toStringAsFixed(2),
+                                                style: TextStyle(
+                                                    fontSize:
+                                                        getProportionateScreenWidth(
+                                                            15)),
+                                              ),
+                                            )
+                                          ],
+                                        )),
+                                    getHeightSizedBox(h: 20),
+                                  ],
+                                )
+                              : Column(
+                                  children: [
+                                    Divider(
+                                      height: 0,
                                     ),
-                                    getHeightSizedBox(h: 10),
-                                    Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        buildWidget(AppImages.calender, 23, 26),
-                                        getHeightSizedBox(w: 10),
-                                        Expanded(
-                                          child: Column(
+                                    getHeightSizedBox(h: 18),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: kDefaultPadding),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          header('availability'.tr),
+                                          getHeightSizedBox(h: 11),
+                                          Text(
+                                            'working_days'.tr,
+                                            style: TextStyle(
+                                                fontFamily: 'Opensans',
+                                                fontSize:
+                                                    getProportionateScreenWidth(
+                                                        15)),
+                                          ),
+                                          getHeightSizedBox(h: 10),
+                                          Row(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             children: [
-                                              RichText(
-                                                  text: TextSpan(
-                                                      text: "${'open'.tr} : ",
-                                                      children: [
-                                                        TextSpan(
-                                                            text: businessController
-                                                                .getAvailabilityDay
-                                                                .join(", "),
-                                                            style: TextStyle(
-                                                                color: AppColor
-                                                                    .kDefaultFontColor,
-                                                                fontFamily:
-                                                                    'Nexa',
-                                                                fontSize:
-                                                                    getProportionateScreenWidth(
-                                                                        14))),
-                                                      ],
-                                                      style: TextStyle(
-                                                          color:
-                                                              Color(0xff075935),
-                                                          fontFamily: 'Nexa',
-                                                          fontSize:
-                                                              getProportionateScreenWidth(
-                                                                  14)))),
-                                              getHeightSizedBox(h: 8),
-                                              RichText(
-                                                  text: TextSpan(
-                                                      text: "${'closed'.tr} : ",
-                                                      children: [
-                                                        TextSpan(
+                                              buildWidget(
+                                                  AppImages.calender, 23, 26),
+                                              getHeightSizedBox(w: 10),
+                                              Expanded(
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    RichText(
+                                                        text: TextSpan(
                                                             text:
-                                                                businessController
-                                                                    .getCloseDay
-                                                                    .join(", "),
+                                                                "${'open'.tr} : ",
+                                                            children: [
+                                                              TextSpan(
+                                                                  text: businessController
+                                                                      .getAvailabilityDay
+                                                                      .join(
+                                                                          ", "),
+                                                                  style: TextStyle(
+                                                                      color: AppColor
+                                                                          .kDefaultFontColor,
+                                                                      fontFamily:
+                                                                          'Nexa',
+                                                                      fontSize:
+                                                                          getProportionateScreenWidth(
+                                                                              14))),
+                                                            ],
                                                             style: TextStyle(
-                                                                color: AppColor
-                                                                    .kDefaultFontColor,
+                                                                color: Color(
+                                                                    0xff075935),
                                                                 fontFamily:
                                                                     'Nexa',
                                                                 fontSize:
                                                                     getProportionateScreenWidth(
-                                                                        14))),
-                                                      ],
-                                                      style: TextStyle(
-                                                          color:
-                                                              Color(0xffDB0505),
-                                                          fontFamily: 'Nexa',
-                                                          fontSize:
-                                                              getProportionateScreenWidth(
-                                                                  14))))
+                                                                        14)))),
+                                                    getHeightSizedBox(h: 8),
+                                                    RichText(
+                                                        text: TextSpan(
+                                                            text:
+                                                                "${'closed'.tr} : ",
+                                                            children: [
+                                                              TextSpan(
+                                                                  text: businessController
+                                                                      .getCloseDay
+                                                                      .join(
+                                                                          ", "),
+                                                                  style: TextStyle(
+                                                                      color: AppColor
+                                                                          .kDefaultFontColor,
+                                                                      fontFamily:
+                                                                          'Nexa',
+                                                                      fontSize:
+                                                                          getProportionateScreenWidth(
+                                                                              14))),
+                                                            ],
+                                                            style: TextStyle(
+                                                                color: Color(
+                                                                    0xffDB0505),
+                                                                fontFamily:
+                                                                    'Nexa',
+                                                                fontSize:
+                                                                    getProportionateScreenWidth(
+                                                                        14))))
+                                                  ],
+                                                ),
+                                              )
                                             ],
                                           ),
-                                        )
-                                      ],
-                                    ),
-                                    getHeightSizedBox(h: 13),
-                                    Text(
-                                      'working_hours'.tr,
-                                      style: TextStyle(
-                                          fontFamily: 'Opensans',
-                                          fontSize:
-                                              getProportionateScreenWidth(15)),
-                                    ),
-                                    getHeightSizedBox(h: 10),
-                                    Row(
-                                      children: [
-                                        buildWidget(AppImages.clock, 23, 23),
-                                        getHeightSizedBox(w: 10),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(top: 4),
-                                          child: Text(
-                                            '${businessController.userModel.startTime == "" ? "00:00" : dateFormat.format(DateTime.parse(businessController.userModel.startTime).toLocal())}-${businessController.userModel.endTime == "" ? "00:00" : dateFormat.format(DateTime.parse(businessController.userModel.endTime).toLocal())}',
+                                          getHeightSizedBox(h: 13),
+                                          Text(
+                                            'working_hours'.tr,
                                             style: TextStyle(
+                                                fontFamily: 'Opensans',
                                                 fontSize:
                                                     getProportionateScreenWidth(
-                                                        13)),
+                                                        15)),
                                           ),
-                                        )
-                                      ],
+                                          getHeightSizedBox(h: 10),
+                                          Row(
+                                            children: [
+                                              buildWidget(
+                                                  AppImages.clock, 23, 23),
+                                              getHeightSizedBox(w: 10),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 4),
+                                                child: Text(
+                                                  '${businessController.userModel.startTime == "" ? "00:00" : dateFormat.format(DateTime.parse(businessController.userModel.startTime).toLocal())}-${businessController.userModel.endTime == "" ? "00:00" : dateFormat.format(DateTime.parse(businessController.userModel.endTime).toLocal())}',
+                                                  style: TextStyle(
+                                                      fontSize:
+                                                          getProportionateScreenWidth(
+                                                              13)),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ],
+                                      ),
                                     ),
+                                    getHeightSizedBox(h: 15),
+                                    Divider(
+                                      height: 0,
+                                    ),
+                                    buildTile('services_offered'.tr, () {
+                                      print(widget.businessRef);
+                                      Get.to(() => ServiceOffered(
+                                            businessRef: widget.businessRef,
+                                          ));
+                                    }, AppImages.serviceOffer),
+                                    Divider(
+                                      height: 0,
+                                    ),
+                                    buildTile('customer_reviews'.tr, () {
+                                      Get.to(() => CustomerReviewed(
+                                            businessRef:
+                                                widget.businessRef.toString(),
+                                          ));
+                                    }, AppImages.customerReview),
+                                    getHeightSizedBox(h: 20)
                                   ],
                                 ),
-                              ),
-                              getHeightSizedBox(h: 15),
-                              Divider(
-                                height: 0,
-                              ),
-                              buildTile('services_offered'.tr, () {
-                                print(widget.businessRef);
-                                Get.to(() => ServiceOffered(
-                                      businessRef: widget.businessRef,
-                                    ));
-                              }, AppImages.serviceOffer),
-                              Divider(
-                                height: 0,
-                              ),
-                              buildTile('customer_reviews'.tr, () {
-                                Get.to(() => CustomerReviewed(
-                                      businessRef:
-                                          widget.businessRef.toString(),
-                                    ));
-                              }, AppImages.customerReview),
-                              getHeightSizedBox(h: 20)
-                            ],
-                          )
-                        : Column(
-                            children: [
-                              buildTile('customer_reviews'.tr, () {
-                                Get.to(() => CustomerReviewed(
-                                      businessRef:
-                                          widget.businessRef.toString(),
-                                    ));
-                              },
-                                  AppImages.customerReview,
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      getHeightSizedBox(w: 5),
-                                      Icon(
-                                        Icons.star,
-                                        color: Color(0xffFFAB00),
-                                      ),
-                                      getHeightSizedBox(w: 5),
-                                      Padding(
-                                        padding: const EdgeInsets.only(top: 4),
-                                        child: Text(
-                                          "3",
-                                          style: TextStyle(
-                                              fontSize:
-                                                  getProportionateScreenWidth(
-                                                      15)),
-                                        ),
-                                      )
-                                    ],
-                                  )),
-                              getHeightSizedBox(h: 20),
-                            ],
-                          ),
-                  ],
-                ),
-              ),
+                        ],
+                      ),
+                    );
+                  },
+                );
+        },
       ),
     );
   }
@@ -407,7 +458,7 @@ class _BusinessProfileState extends State<BusinessProfile> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
+                    Wrap(
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(top: 3),
@@ -418,37 +469,39 @@ class _BusinessProfileState extends State<BusinessProfile> {
                                 fontWeight: FontWeight.bold),
                           ),
                         ),
-                        getHeightSizedBox(w: 5),
+                        // getHeightSizedBox(w: 5),
                         GestureDetector(
                             onTap: () {
-                              if (businessController.userModel.verifiedByAdmin)
-                                return;
-                              showCustomDialog(
-                                  context: Get.context as BuildContext,
-                                  color: AppColor.kDefaultColor,
-                                  okText: 'ok'.tr,
-                                  onTap: () {
-                                    Get.back();
-                                  },
-                                  title: 'warning'.tr,
-                                  content:
-                                      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting.",
-                                  height: getProportionateScreenWidth(260),
-                                  contentSize: 14);
+                              if (businessController.userModel.warningByAdmin !=
+                                  "")
+                                showCustomDialog(
+                                    context: Get.context as BuildContext,
+                                    color: AppColor.kDefaultColor,
+                                    okText: 'ok'.tr,
+                                    onTap: () {
+                                      Get.back();
+                                    },
+                                    title: 'warning'.tr,
+                                    content: businessController
+                                        .userModel.warningByAdmin,
+                                    height: getProportionateScreenWidth(260),
+                                    contentSize: 14);
                             },
-                            child: buildWidget(
-                                businessController.userModel.verifiedByAdmin
-                                    ? AppImages.verified
-                                    : AppImages.warning,
-                                23,
-                                24))
+                            child: businessController.userModel.verifiedByAdmin
+                                ? buildWidget(AppImages.verified, 23, 24)
+                                : businessController.userModel.warningByAdmin !=
+                                        ""
+                                    ? buildWidget(AppImages.warning, 23, 24)
+                                    : SizedBox())
                       ],
                     ),
                     getHeightSizedBox(h: 7),
                     Text(
                       businessController.userModel.categories
                           .map((e) => e.name)
-                          .toString(),
+                          .toString()
+                          .replaceAll("(", "")
+                          .replaceAll(")", ""),
                       style: TextStyle(fontSize: 15),
                     ),
                     getHeightSizedBox(h: 7),
@@ -459,23 +512,41 @@ class _BusinessProfileState extends State<BusinessProfile> {
                   ],
                 ),
               ),
-              businessController.userModel.verified
+              businessController.userModel.verifiedByAdmin
                   ? SizedBox()
-                  : Container(
-                      height: 36,
-                      width: getProportionateScreenWidth(99),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Color(0xff009345)),
-                      child: Center(
-                        child: Text(
-                          "unverified".tr,
-                          style: TextStyle(
-                              fontSize: getProportionateScreenWidth(14),
-                              color: Colors.white),
-                        ),
-                      ),
-                    )
+                  : businessController.userModel.warningByAdmin == ""
+                      ? GestureDetector(
+                          onTap: () {
+                            if (!businessController.userModel.verifiedByAdmin)
+                              showCustomDialog(
+                                  context: Get.context as BuildContext,
+                                  color: AppColor.kDefaultColor,
+                                  okText: 'ok'.tr,
+                                  onTap: () {
+                                    Get.back();
+                                  },
+                                  title: 'profileUnverified'.tr,
+                                  content: "unverifiedMsg".tr,
+                                  height: getProportionateScreenWidth(260),
+                                  contentSize: 14);
+                          },
+                          child: Container(
+                            height: 36,
+                            width: getProportionateScreenWidth(99),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Color(0xff009345)),
+                            child: Center(
+                              child: Text(
+                                "unverified".tr,
+                                style: TextStyle(
+                                    fontSize: getProportionateScreenWidth(14),
+                                    color: Colors.white),
+                              ),
+                            ),
+                          ),
+                        )
+                      : SizedBox()
             ],
           ),
         ),
@@ -520,24 +591,29 @@ class _BusinessProfileState extends State<BusinessProfile> {
   }
 
   buildPagination() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: List.generate(
-          businessController.userModel.images.length,
-          (index) => index > 1
-              ? AnimatedContainer(
-                  duration: kOnBoardingPageAnimationDuration,
-                  margin: EdgeInsets.symmetric(horizontal: 2),
-                  width: 9,
-                  height: 9,
-                  decoration: BoxDecoration(
-                    color: index == businessController.currentIndex
-                        ? Colors.white
-                        : Colors.white.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                )
-              : SizedBox()),
+    return GetBuilder(
+      builder: (BusinessController controller) {
+        print(controller.userModel.images.length);
+        return businessController.userModel.images.length < 2
+            ? SizedBox()
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(
+                    businessController.userModel.images.length,
+                    (index) => AnimatedContainer(
+                          duration: kOnBoardingPageAnimationDuration,
+                          margin: EdgeInsets.symmetric(horizontal: 2),
+                          width: 9,
+                          height: 9,
+                          decoration: BoxDecoration(
+                            color: index == businessController.currentIndex
+                                ? Colors.white
+                                : Colors.white.withOpacity(0.2),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        )),
+              );
+      },
     );
   }
 
@@ -580,17 +656,20 @@ class _BusinessProfileState extends State<BusinessProfile> {
       {required String image, required String title, Function()? onTap}) {
     return GestureDetector(
       onTap: onTap,
-      child: Column(
-        children: [
-          buildWidget(image, 17, 18),
-          getHeightSizedBox(h: 10),
-          Text(
-            title,
-            style: TextStyle(
-                fontSize: getProportionateScreenWidth(15),
-                color: AppColor.kDefaultFontColor.withOpacity(0.75)),
-          )
-        ],
+      child: Container(
+        color: Colors.transparent,
+        child: Column(
+          children: [
+            buildWidget(image, 17, 18),
+            getHeightSizedBox(h: 10),
+            Text(
+              title,
+              style: TextStyle(
+                  fontSize: getProportionateScreenWidth(15),
+                  color: AppColor.kDefaultFontColor.withOpacity(0.75)),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -598,8 +677,8 @@ class _BusinessProfileState extends State<BusinessProfile> {
   appBarPro() {
     return userController.user.userType ==
             getServiceTypeCode(ServicesType.userType)
-        ? appBar('business_profile'.tr)
-        : appBar('about_business'.tr, [
+        ? appBar(title: 'business_profile'.tr)
+        : appBar(title: 'about_business'.tr, actions: [
             widget.isShow
                 ? IconButton(
                     padding: EdgeInsets.only(right: 22),
@@ -612,10 +691,6 @@ class _BusinessProfileState extends State<BusinessProfile> {
                 : SizedBox()
           ]);
   }
-}
-
-Widget buildImageTile(String image) {
-  return Image.asset(image, fit: BoxFit.cover);
 }
 
 Widget buildTile(String title, Function()? onTap, String image,
@@ -669,40 +744,99 @@ class CustomGoogleMap extends StatefulWidget {
 }
 
 class CustomGoogleMapState extends State<CustomGoogleMap> {
-  Completer<GoogleMapController> _controller = Completer();
+  GoogleMapController? _controller;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 200,
-      width: Get.width,
-      decoration: BoxDecoration(
-          color: Colors.red, borderRadius: BorderRadius.circular(10)),
-      child: GoogleMap(
-        myLocationEnabled: true,
-        mapType: MapType.normal,
-        initialCameraPosition: CameraPosition(
-            target: LatLng(widget.latitude, widget.longitude), zoom: 13.0),
-        onTap: (pos) {
-          // print(pos);
-          // Marker m = Marker(
-          //     markerId: MarkerId('1'), icon: customIcon, position: pos);
-          // setState(() {
-          //   allMarkers.add(m);
-          // });
-        },
-        markers: Set<Marker>.of({
-          Marker(
-            // icon: mapPin,
-            markerId: MarkerId("center"),
-            draggable: false,
-            position: LatLng(widget.latitude, widget.longitude),
-          )
-        }),
-        onMapCreated: (GoogleMapController controller) {
-          _controller.complete(controller);
-        },
+    animateCamera(LatLng(widget.latitude, widget.longitude));
+
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(10),
+      child: Container(
+        height: 143,
+        width: Get.width,
+        decoration: BoxDecoration(
+            color: Colors.grey, borderRadius: BorderRadius.circular(10)),
+        child: GoogleMap(
+          myLocationEnabled: false,
+          mapType: MapType.normal,
+          myLocationButtonEnabled: false,
+          mapToolbarEnabled: false,
+          zoomControlsEnabled: false,
+          zoomGesturesEnabled: false,
+          initialCameraPosition: CameraPosition(
+              target: LatLng(widget.latitude, widget.longitude), zoom: 13.0),
+          onTap: (pos) async {
+            if (Platform.isAndroid) {
+              MapLauncher.MapLauncher.isMapAvailable(MapLauncher.MapType.google)
+                  .then((value) async {
+                if (value != null) {
+                  await MapLauncher.MapLauncher.showMarker(
+                    mapType: MapLauncher.MapType.google,
+                    coords:
+                        MapLauncher.Coords(widget.latitude, widget.longitude),
+                    title: '',
+                  );
+                } else {
+                  _launchMapsUrl(widget.latitude, widget.longitude);
+                }
+              });
+            } else {
+              final availableMaps = await MapLauncher.MapLauncher.installedMaps;
+              MapLauncher.MapLauncher.isMapAvailable(MapLauncher.MapType.google)
+                  .then((value) async {
+                if (value != null) {
+                  await MapLauncher.MapLauncher.showMarker(
+                    mapType: MapLauncher.MapType.google,
+                    coords:
+                        MapLauncher.Coords(widget.latitude, widget.longitude),
+                    title: '',
+                  );
+                } else {
+                  await availableMaps.first.showMarker(
+                    coords:
+                        MapLauncher.Coords(widget.latitude, widget.longitude),
+                    title: "",
+                  );
+                }
+              }).catchError((e) {
+                _launchMapsUrl(widget.latitude, widget.longitude);
+              });
+            }
+          },
+          markers: Set<Marker>.of({
+            Marker(
+              // icon: mapPin,
+              markerId: MarkerId("center"),
+              draggable: false,
+              position: LatLng(widget.latitude, widget.longitude),
+            )
+          }),
+          onMapCreated: (GoogleMapController controller) {
+            _controller = controller;
+            animateCamera(LatLng(widget.latitude, widget.longitude));
+          },
+        ),
       ),
     );
+  }
+
+  animateCamera(LatLng latLng) {
+    if (_controller == null) return;
+    _controller!.animateCamera(
+      CameraUpdate.newCameraPosition(CameraPosition(
+        target: latLng, zoom: 13.0,
+        // bearing: 45.0, tilt: 45.0
+      )),
+    );
+  }
+}
+
+void _launchMapsUrl(double lat, double lon) async {
+  final url = 'https://www.google.com/maps/search/?api=1&query=$lat,$lon';
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    throw 'Could not launch $url';
   }
 }
