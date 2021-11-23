@@ -106,24 +106,6 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final BaseController baseController = Get.put(BaseController());
-  @override
-  void initState() {
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
-      await NotificationUtils().handleNotificationData(message.data);
-    });
-    // listen for foreground messages
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-      // received the message while the app was foreground
-      // here the notification is not shown automatically.
-      await NotificationUtils().handleNewNotification(message, false);
-    });
-    FirebaseMessaging.instance.getInitialMessage().then((value) async {
-      if (value != null) {
-        await NotificationUtils().handleNotificationData(value.data);
-      }
-    });
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {

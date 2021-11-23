@@ -81,22 +81,16 @@ class HomeController extends GetxController {
     update();
   }
 
-  late String _currentPostRef;
-
-  String get currentPostRef => _currentPostRef;
-
-  set currentPostRef(String value) {
-    _currentPostRef = value;
-    update();
-  }
+  late String currentPostRef;
 
   addComment(PostData postData, String commentText) async {
-    getPosts[getPosts.indexWhere((element) => element.id == currentPostRef)]
-        .comment += 1;
+    PostRepo.addComments(postRef: currentPostRef, commentsText: commentText);
+    try {
+      getPosts[getPosts.indexWhere((element) => element.id == currentPostRef)]
+          .comment += 1;
+    } on Exception catch (e) {
+      print("prince $e");
+    }
     update();
-
-    await PostRepo.addComments(
-            postRef: currentPostRef, commentsText: commentText)
-        .then((value) => print("============$value"));
   }
 }

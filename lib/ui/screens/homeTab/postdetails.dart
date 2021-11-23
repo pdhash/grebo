@@ -118,8 +118,10 @@ class _PostDetailsState extends State<PostDetails> {
                                                         : GestureDetector(
                                                             onTap: () {
                                                               disposeKeyboard();
-                                                              if(userController.isGuest){
-                                                                Get.to(()=>  GuestLoginScreen());
+                                                              if (userController
+                                                                  .isGuest) {
+                                                                Get.to(() =>
+                                                                    GuestLoginScreen());
                                                                 return;
                                                               }
                                                               Get.to(() =>
@@ -224,8 +226,8 @@ class _PostDetailsState extends State<PostDetails> {
                               comment: comment,
                               hintText: 'textfieldmsg1'.tr,
                               send: () {
-                                if(userController.isGuest){
-                                  Get.to(()=>  GuestLoginScreen());
+                                if (userController.isGuest) {
+                                  Get.to(() => GuestLoginScreen());
                                   return;
                                 }
                                 if (comment.text.isNotEmpty) {

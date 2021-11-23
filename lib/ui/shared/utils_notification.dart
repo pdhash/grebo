@@ -7,8 +7,10 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:grebo/core/service/repo/notificationRepo.dart';
 import 'package:grebo/core/service/repo/userRepo.dart';
+import 'package:grebo/core/utils/appFunctions.dart';
 import 'package:grebo/core/viewmodel/controller/selectservicecontoller.dart';
 import 'package:grebo/main.dart';
+import 'package:grebo/ui/screens/homeTab/controller/homeController.dart';
 import 'package:grebo/ui/screens/homeTab/postdetails.dart';
 import 'package:grebo/ui/screens/messagesTab/chatscreen.dart';
 
@@ -57,13 +59,30 @@ class NotificationUtils {
     }
   }
 
+  bool notificationUnread = true;
+  Future<void> handleAppLunchLocalNotification() async {
+    final NotificationAppLaunchDetails? notificationAppLaunchDetails =
+        await FlutterLocalNotificationsPlugin()
+            .getNotificationAppLaunchDetails();
+    final didNotificationLaunchApp =
+        notificationAppLaunchDetails?.didNotificationLaunchApp ?? false;
+    if (didNotificationLaunchApp && notificationUnread) {
+      if (notificationAppLaunchDetails!.payload != null) {
+        notificationUnread = false;
+        handleNotificationData(
+            jsonDecode(notificationAppLaunchDetails.payload!));
+      }
+    }
+  }
+
   /// handle the notification [data] when the user taps on the notification.
   Future<void> handleNotificationData(Map<String, dynamic> data) async {
     // maybe here we need to open specific screen or link
+    print(data);
     int typeCode = int.parse(data["type"].toString());
-    if (data["reference"] != null && data["reference"] != "")
-      await NotificationRepo.readNotification(data["reference"]);
-    print("NOTIFICATION $typeCode ${data}");
+    // if (data["reference"] != null && data["reference"] != "") {
+    //   await NotificationRepo.readNotification(data["reference"]);
+    // }
     if (typeCode == 2) {
       Map<String, dynamic> response = jsonDecode(data["payload"]);
       Get.to(() => ChatView(
@@ -75,8 +94,11 @@ class NotificationUtils {
               : response["user"]["name"] ?? ""));
     } else if (typeCode == 4) {
       // var response = jsonDecode(data["user"]);
+
       if (userController.user.userType ==
           getServiceTypeCode(ServicesType.userType)) {
+        Get.find<HomeController>().currentPostRef = data["sourceRef"];
+
         Get.to(() => PostDetails(
               postRef: data["sourceRef"],
             ));

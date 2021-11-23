@@ -22,14 +22,14 @@ class MessageModel {
   String timestamp;
 
   factory MessageModel.fromJson(Map<String, dynamic> json) => MessageModel(
-        code: json["code"],
-        message: json["message"],
+        code: json["code"] ?? 0,
+        message: json["message"] ?? "",
         data: List<MessageData>.from(
             json["data"].map((x) => MessageData.fromJson(x))),
-        page: json["page"],
-        limit: json["limit"],
-        size: json["size"],
-        hasMore: json["hasMore"],
+        page: json["page"] ?? 0,
+        limit: json["limit"] ?? 0,
+        size: json["size"] ?? 0,
+        hasMore: json["hasMore"] ?? false,
         format: json["format"],
         timestamp: json["timestamp"],
       );
@@ -65,11 +65,12 @@ class MessageData {
   String name;
 
   factory MessageData.fromJson(Map<String, dynamic> json) => MessageData(
-        id: json["_id"],
-        userId: json["userId"],
-        picture: json["picture"],
-        message: json["message"],
-        createdAt: DateTime.parse(json["createdAt"]),
+        id: json["_id"] ?? "",
+        userId: json["userId"] ?? "",
+        picture: json["picture"] ?? "",
+        message: json["message"] ?? "",
+        createdAt: DateTime.parse(
+            json["createdAt"] ?? DateTime.now().toIso8601String()),
         name: json["name"] ?? "",
       );
 

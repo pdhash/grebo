@@ -130,7 +130,6 @@ class LoginController extends GetxController {
       userController.isGuest = false;
       currentUserModel = CurrentUserModel.fromJson(response);
       saveUserDetails(currentUserModel!.data);
-      LoadingOverlay.of().hide();
       if (currentUserModel!.data.user.userType ==
           getServiceTypeCode(ServicesType.providerType)) {
         if (currentUserModel!.data.user.profileCompleted) {
