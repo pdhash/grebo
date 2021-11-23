@@ -88,8 +88,8 @@ class LoginController extends GetxController {
             }
           }
         }
-      }).then((value) {
-        if (value == null) LoadingOverlay.of().hide();
+      }).catchError((e) {
+        LoadingOverlay.of().hide();
       });
     } else
       LoadingOverlay.of().hide();
@@ -113,10 +113,8 @@ class LoginController extends GetxController {
         final cred = await getKeyChain();
 
         if (cred == null) {
-          putKeyChain(jsonEncode(
-              {"name": credential.givenName, "email": credential.email}));
+          putKeyChain(name: credential.givenName, email: credential.email);
         }
-
         response = await UserRepo.userSocialLogin(
             name: credential.givenName ?? cred!["name"],
             userType: getServiceTypeCode(serviceController.servicesType),
@@ -132,7 +130,6 @@ class LoginController extends GetxController {
       userController.isGuest = false;
       currentUserModel = CurrentUserModel.fromJson(response);
       saveUserDetails(currentUserModel!.data);
-      LoadingOverlay.of().hide();
       if (currentUserModel!.data.user.userType ==
           getServiceTypeCode(ServicesType.providerType)) {
         if (currentUserModel!.data.user.profileCompleted) {

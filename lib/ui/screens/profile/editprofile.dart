@@ -111,8 +111,10 @@ class _EditProfileState extends State<EditProfile> {
                 ),
                 CustomTextField(
                   controller: profileChangeController.email,
+                  validator: (val) =>
+                      val!.trim().isEmpty ? "please_enter_email".tr : null,
                   hintText: 'johnsmith@gmail.com',
-                  enabled: false,
+                  enabled: userController.user.email == "" ? true : false,
                 ),
                 getHeightSizedBox(h: 18),
                 userController.user.userType ==

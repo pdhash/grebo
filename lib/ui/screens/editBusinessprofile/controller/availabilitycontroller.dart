@@ -64,10 +64,6 @@ class AvailabilityController extends GetxController {
 
   Future submitAllFields(bool isNext) async {
     daysCount.sort();
-    print(DateTime.now());
-    print(DateTime.now());
-    print(startTime);
-    print(endTime);
 
     var v = await EditProfileRepo.updateUser(
       map: {

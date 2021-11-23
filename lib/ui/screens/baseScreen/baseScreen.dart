@@ -1,9 +1,12 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:grebo/core/constants/app_assets.dart';
 import 'package:grebo/core/service/googleAdd/addServices.dart';
 import 'package:grebo/core/service/repo/userRepo.dart';
+import 'package:grebo/core/utils/appFunctions.dart';
 import 'package:grebo/core/viewmodel/controller/selectservicecontoller.dart';
 import 'package:grebo/main.dart';
 import 'package:grebo/ui/screens/baseScreen/controller/baseController.dart';
@@ -14,6 +17,7 @@ import 'package:grebo/ui/screens/notifications/controller/allNotificationControl
 import 'package:grebo/ui/shared/bottomabar.dart';
 import 'package:grebo/ui/shared/doubleTaptoback.dart';
 import 'package:grebo/ui/shared/location.dart';
+import 'package:grebo/ui/shared/utils_notification.dart';
 
 import '../../global.dart';
 import '../homeTab/home.dart';
@@ -33,6 +37,23 @@ class _BaseScreenState extends State<BaseScreen> {
 
   @override
   void initState() {
+    NotificationUtils().handleAppLunchLocalNotification();
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
+      await NotificationUtils().handleNotificationData(message.data);
+    });
+    // listen for foreground messages
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+      // received the message while the app was foreground
+      // here the notification is not shown automatically.
+      await NotificationUtils().handleNewNotification(message, false);
+    });
+    FirebaseMessaging.instance.getInitialMessage().then((value) async {
+      if (value != null) {
+        await NotificationUtils().handleNotificationData(value.data);
+      }
+    });
+
     GoogleAddService.showInterstitialAd();
     if (userController.user.userType ==
         getServiceTypeCode(ServicesType.userType)) {

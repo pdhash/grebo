@@ -29,13 +29,13 @@ class ProfileChangeController extends GetxController {
                     "latitude": lat,
                     "longitude": long,
                     "address": location.text.trim(),
+                    "email": email.text.trim()
                   }
-                : {
-                    "name": name.text.trim(),
-                  },
+                : {"name": name.text.trim(), "email": email.text.trim()},
             image: appImagePicker.imagePickerController.image)
         .then((v) {
       if (v != null) {
+        print(v);
         Get.find<BaseController>().baseAddress = location.text.trim();
 
         appImagePicker.imagePickerController.resetImage();

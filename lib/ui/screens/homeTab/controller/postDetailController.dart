@@ -64,6 +64,7 @@ class PostDetailController extends GetxController {
         picture: userController.user.picture,
         updatedAt: DateTime.now());
     getComments.insert(0, currentComment);
+
     postDataModel.comment += 1;
     if (last2Comments.length > 1) last2Comments.removeLast();
     last2Comments.insert(0, currentComment);

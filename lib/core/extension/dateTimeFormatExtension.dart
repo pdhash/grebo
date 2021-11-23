@@ -75,7 +75,7 @@ extension DateTimeFormatExtension on DateTimeFormat {
         return 'yyyy-MM-ddTHH:mm:ss';
       case DateTimeFormat.time:
         Duration duration = DateTime.now().timeZoneOffset;
-        return "yyyy-MM-dd'T'HH:mm:ss${duration.isNegative ? "" : "+"}${durationToString(duration.inMinutes)}";
+        return "yyyy-MM-dd'T'HH:mm:ss${durationToString(duration.inMinutes)}";
     }
   }
 
@@ -84,11 +84,12 @@ extension DateTimeFormatExtension on DateTimeFormat {
     List<String> parts = d.toString().split(':');
     var firstWord;
     if (parts[0].contains("-")) {
-      firstWord = parts[0].split("-")[1].padLeft(2, "0");
-    } else {
-      firstWord = parts[0].padLeft(2, "0");
-    }
+      var p = parts[0].split("-");
 
+      firstWord = "-${p[1].padLeft(2, "0")}";
+    } else {
+      firstWord = "+${parts[0].padLeft(2, "0")}";
+    }
     return '$firstWord${parts[1].padLeft(2, '0')}';
   }
 }
