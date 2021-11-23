@@ -113,10 +113,8 @@ class LoginController extends GetxController {
         final cred = await getKeyChain();
 
         if (cred == null) {
-          putKeyChain(jsonEncode(
-              {"name": credential.givenName, "email": credential.email}));
+          putKeyChain(name: credential.givenName, email: credential.email);
         }
-
         response = await UserRepo.userSocialLogin(
             name: credential.givenName ?? cred!["name"],
             userType: getServiceTypeCode(serviceController.servicesType),
