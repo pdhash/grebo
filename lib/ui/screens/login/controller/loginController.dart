@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:grebo/core/service/auth/googleAuth.dart';
 import 'package:grebo/core/service/repo/userRepo.dart';
 import 'package:grebo/core/utils/keychain.dart';
@@ -53,16 +54,19 @@ class LoginController extends GetxController {
   }
 
   Future googleLogin() async {
+    if (FirebaseAuth.instance.currentUser != null) {
+      await FirebaseAuth.instance.signOut();
+    }
     LoadingOverlay.of().show();
 
     final ServiceController serviceController = Get.find<ServiceController>();
     String? fcmToken = await FirebaseMessaging.instance.getToken();
+    var response;
     if (fcmToken != null) {
       await GoogleAuth.signInWithGoogle().then((data) async {
-        if (data == null) return;
-        User userFireBase = data["user"];
-        if (userFireBase != null) {
-          var response = await UserRepo.userSocialLogin(
+        if (data != null) {
+          User userFireBase = data["user"];
+          response = await UserRepo.userSocialLogin(
               name: userFireBase.displayName.toString(),
               userType: getServiceTypeCode(serviceController.servicesType),
               email: userFireBase.email.toString(),
@@ -71,23 +75,23 @@ class LoginController extends GetxController {
               socialId: data["socialId"],
               socialToken: data["token"],
               socialIdentifier: getSocialIdentifier(SocialIdentifier.Google));
-          if (response != null) {
-            userController.isGuest = false;
-            currentUserModel = CurrentUserModel.fromJson(response);
-            saveUserDetails(currentUserModel!.data);
-            LoadingOverlay.of().hide();
-            if (currentUserModel!.data.user.userType ==
-                getServiceTypeCode(ServicesType.providerType)) {
-              if (currentUserModel!.data.user.profileCompleted) {
-                Get.offAll(() => BaseScreen());
-              } else {
-                Get.offAll(() => DetailsPage1());
-              }
-            } else {
+        }
+        if (response != null) {
+          userController.isGuest = false;
+          currentUserModel = CurrentUserModel.fromJson(response);
+          saveUserDetails(currentUserModel!.data);
+          if (currentUserModel!.data.user.userType ==
+              getServiceTypeCode(ServicesType.providerType)) {
+            if (currentUserModel!.data.user.profileCompleted) {
               Get.offAll(() => BaseScreen());
+            } else {
+              Get.offAll(() => DetailsPage1());
             }
+          } else {
+            Get.offAll(() => BaseScreen());
           }
         }
+        LoadingOverlay.of().hide();
       }).catchError((e) {
         LoadingOverlay.of().hide();
       });
