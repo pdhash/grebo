@@ -539,14 +539,8 @@ class DetailsPage1 extends StatelessWidget {
         style: TextStyle(
           fontSize: getProportionateScreenWidth(14),
         ),
-        maxLength: 10,
         keyboardType: TextInputType.phone,
         textAlignVertical: TextAlignVertical.center,
-        buildCounter: (BuildContext context,
-                {required int currentLength,
-                required bool isFocused,
-                required int? maxLength}) =>
-            null,
         decoration: InputDecoration(
           hintStyle: TextStyle(
               fontSize: getProportionateScreenWidth(14),

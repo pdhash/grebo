@@ -35,7 +35,6 @@ class ProfileChangeController extends GetxController {
             image: appImagePicker.imagePickerController.image)
         .then((v) {
       if (v != null) {
-        print(v);
         Get.find<BaseController>().baseAddress = location.text.trim();
 
         appImagePicker.imagePickerController.resetImage();
@@ -48,7 +47,6 @@ class ProfileChangeController extends GetxController {
 
   @override
   void onInit() {
-    print(userController.user.name);
     name.text = userController.user.name;
     email.text = userController.user.email;
     lat = userController.user.location.coordinates[0];
