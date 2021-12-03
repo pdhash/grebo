@@ -69,7 +69,7 @@ class PostDetailController extends GetxController {
     if (last2Comments.length > 1) last2Comments.removeLast();
     last2Comments.insert(0, currentComment);
     update();
-    homeController.addComment(postData, commentText);
+    Get.find<HomeController>().addComment(postData, commentText);
     commentText = "";
   }
 
@@ -96,14 +96,5 @@ class PostDetailController extends GetxController {
     _hasNext = request.hasMore;
     _isFetching = false;
     update();
-  }
-
-  late HomeController homeController;
-  @override
-  void onInit() {
-    homeController = Get.find<HomeController>();
-    selectedPostRef = homeController.currentPostRef;
-    fetchCommentsLast2();
-    super.onInit();
   }
 }

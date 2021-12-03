@@ -31,12 +31,15 @@ class _ViewCommentsState extends State<ViewComments> {
   final TextEditingController comment = TextEditingController();
 
   final PostDetailController postDetailController =
-      Get.put(PostDetailController());
+      Get.find<PostDetailController>();
   final scrollController = ScrollController();
 
   @override
   void initState() {
     print(">>>>>> ViewComments initState");
+    postDetailController.selectedPostRef =
+        Get.find<HomeController>().currentPostRef;
+
     super.initState();
     scrollController.addListener(scrollListener);
     postDetailController.fetchComments();

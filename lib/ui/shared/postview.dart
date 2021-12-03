@@ -46,7 +46,9 @@ class PostView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               profileImageView(),
-              getHeightSizedBox(w: 10),
+              SizedBox(
+                width: 10,
+              ),
               Expanded(
                 child: GestureDetector(
                   onTap: () {
@@ -133,14 +135,12 @@ class PostView extends StatelessWidget {
                                                 "${imageUrl + postData.thumbnail}")
                                             : NetworkImage(
                                                 "${imageUrl + postData.image}"),
-                                        height: 138,
-                                        width: 281,
+                                        height: Get.width - 94,
                                         imageErrorBuilder:
                                             (context, error, stackTrace) {
                                           return Image.asset(
                                             AppImages.placeHolder,
-                                            height: 138,
-                                            width: 281,
+                                            height: Get.width - 94,
                                             fit: BoxFit.cover,
                                           );
                                         },
@@ -249,7 +249,6 @@ class PostView extends StatelessWidget {
                                 }
                                 homeScreenController.currentPostRef =
                                     postData.id;
-
                                 Get.to(() => ViewComments(
                                       postData: postData,
                                     ));

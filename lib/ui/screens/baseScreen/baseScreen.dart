@@ -11,6 +11,7 @@ import 'package:grebo/core/viewmodel/controller/selectservicecontoller.dart';
 import 'package:grebo/main.dart';
 import 'package:grebo/ui/screens/baseScreen/controller/baseController.dart';
 import 'package:grebo/ui/screens/homeTab/controller/homeController.dart';
+import 'package:grebo/ui/screens/homeTab/controller/postDetailController.dart';
 import 'package:grebo/ui/screens/homeTab/provider/likeerror.dart';
 import 'package:grebo/ui/screens/messagesTab/controller/allChatController.dart';
 import 'package:grebo/ui/screens/notifications/controller/allNotificationController.dart';
@@ -37,6 +38,7 @@ class _BaseScreenState extends State<BaseScreen> {
 
   @override
   void initState() {
+    Get.lazyPut(() => PostDetailController(), fenix: true);
     NotificationUtils().handleAppLunchLocalNotification();
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
