@@ -136,11 +136,13 @@ class PostView extends StatelessWidget {
                                             : NetworkImage(
                                                 "${imageUrl + postData.image}"),
                                         height: Get.width - 94,
+                                        width: Get.width,
                                         imageErrorBuilder:
                                             (context, error, stackTrace) {
                                           return Image.asset(
                                             AppImages.placeHolder,
                                             height: Get.width - 94,
+                                            width: Get.width,
                                             fit: BoxFit.cover,
                                           );
                                         },

@@ -36,7 +36,7 @@ class _FaqsState extends State<Faqs> {
             return Center(child: Text(error));
           },
           onEmpty: Center(
-            child: Text("no_post_found".tr),
+            child: Text("no_data_found".tr),
           ),
           initialLoader: GetPlatform.isAndroid
               ? Center(
