@@ -246,9 +246,6 @@ class _BusinessProfileState extends State<BusinessProfile> {
                               ? Column(
                                   children: [
                                     buildTile('customer_reviews'.tr, () {
-                                      print(
-                                          businessController.userModel.rating);
-
                                       Get.to(() => CustomerReviewed(
                                             businessRef:
                                                 widget.businessRef.toString(),
@@ -415,7 +412,7 @@ class _BusinessProfileState extends State<BusinessProfile> {
                                       height: 0,
                                     ),
                                     buildTile('services_offered'.tr, () {
-                                      print(widget.businessRef);
+                                      debugPrint(widget.businessRef);
                                       Get.to(() => ServiceOffered(
                                             businessRef: widget.businessRef,
                                           ));
@@ -593,7 +590,6 @@ class _BusinessProfileState extends State<BusinessProfile> {
   buildPagination() {
     return GetBuilder(
       builder: (BusinessController controller) {
-        print(controller.userModel.images.length);
         return businessController.userModel.images.length < 2
             ? SizedBox()
             : Row(

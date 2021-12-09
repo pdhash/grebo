@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:grebo/main.dart';
 import 'package:grebo/ui/screens/profile/model/faqsModel.dart';
 
@@ -20,7 +21,6 @@ class ContactRepo {
       return null;
   }
 
-
   static Future aboutTheApp() async {
     var responseBody =
         await API.apiHandler(url: APIRoutes.appData, showLoader: false);
@@ -35,7 +35,7 @@ class ContactRepo {
         url: APIRoutes.faqs,
         showLoader: false,
         body: jsonEncode({"page": page}));
-    print(responseBody);
+    debugPrint(responseBody);
     if (responseBody != null)
       return FaqsModel.fromJson(responseBody);
     else

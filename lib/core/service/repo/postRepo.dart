@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:grebo/core/service/apiHandler.dart';
 import 'package:grebo/core/service/apiRoutes.dart';
 import 'package:grebo/main.dart';
@@ -23,14 +24,13 @@ class PostRepo {
         },
         body: jsonEncode({"postRef": postRef}));
     if (response != null) {
-      print("getPostDetails $response");
+      debugPrint("getPostDetails $response");
       return PostDetailModel.fromJson(response).postData;
     } else
       return null;
   }
 
   static Future<PostModel?> fetchProviderPost(int page) async {
-    print(userController.user.userType);
     var response = await API.apiHandler(
         url: APIRoutes.providerPostList,
         showLoader: false,
@@ -72,7 +72,7 @@ class PostRepo {
     );
     if (response != null) {
       {
-        print("fetchUserPost $response");
+        debugPrint("fetchUserPost $response");
         return PostModel.fromJson(response);
       }
     } else

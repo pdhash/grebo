@@ -36,7 +36,6 @@ class _ViewCommentsState extends State<ViewComments> {
 
   @override
   void initState() {
-    print(">>>>>> ViewComments initState");
     postDetailController.selectedPostRef =
         Get.find<HomeController>().currentPostRef;
 

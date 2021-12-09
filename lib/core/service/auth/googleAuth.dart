@@ -25,7 +25,6 @@ class GoogleAuth {
       try {
         userCredential = await auth.signInWithCredential(credential);
         user = userCredential.user;
-        print("AMISHA ${userCredential.additionalUserInfo!.profile}");
       } on FirebaseAuthException catch (e) {
         if (e.code == 'account-exists-with-different-credential') {
           flutterToast(

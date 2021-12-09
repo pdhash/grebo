@@ -78,7 +78,7 @@ class NotificationUtils {
   /// handle the notification [data] when the user taps on the notification.
   Future<void> handleNotificationData(Map<String, dynamic> data) async {
     // maybe here we need to open specific screen or link
-    print(data);
+
     int typeCode = int.parse(data["type"].toString());
     // if (data["reference"] != null && data["reference"] != "") {
     //   await NotificationRepo.readNotification(data["reference"]);
@@ -117,7 +117,6 @@ class NotificationUtils {
     if (kIsWeb) {
       // TODO display the notification as toast in web
     } else {
-      print(data);
       // display the local notification with flutter_local_notifications
       // currently this package doesn't work with web.
 

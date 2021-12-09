@@ -64,7 +64,7 @@ class _ChatViewState extends State<ChatView> {
 
   @override
   void deactivate() {
-    print("deactive");
+    debugPrint("deactive");
     if (chatScreenController.lastMessage != null) {
       AllChatController controller = Get.find<AllChatController>();
       int index = controller.getChatList.indexWhere(

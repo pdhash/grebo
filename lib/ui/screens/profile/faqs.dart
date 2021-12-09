@@ -32,7 +32,7 @@ class _FaqsState extends State<Faqs> {
                   faqsBody(listElement, index),
           pageFetch: faqsController.fetchFaqs,
           onError: (error) {
-            print("Error $error");
+            debugPrint("Error $error");
             return Center(child: Text(error));
           },
           onEmpty: Center(

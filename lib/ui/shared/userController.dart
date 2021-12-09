@@ -12,7 +12,6 @@ class UserController extends GetxController {
     _user = value;
     updateDetails();
     update();
-    print("CALL UPDATE");
   }
 
   String _userToken = "";
@@ -46,7 +45,6 @@ class UserController extends GetxController {
   List<String> getCloseDay = [];
 
   void updateDetails() {
-    print("update userController");
     getAvailabilityDay.clear();
     for (int i = 0; i < user.workingDays.length; i++) {
       var v = user.workingDays[i] - 1;

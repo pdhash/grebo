@@ -24,6 +24,5 @@ class NotificationController extends GetxController {
     update();
 
     var request = await NotificationRepo.readNotification(notificationId);
-    print(request);
   }
 }

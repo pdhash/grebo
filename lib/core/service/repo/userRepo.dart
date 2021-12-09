@@ -102,8 +102,6 @@ class UserRepo {
     required String email,
     required int userType,
   }) async {
-    print(email);
-    print(userType);
     var responseBody = await API.apiHandler(
       url: APIRoutes.emailVerification,
       requestType: RequestType.Post,

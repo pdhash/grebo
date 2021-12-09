@@ -73,15 +73,12 @@ class EditBProfileController extends GetxController {
 
   void removeImage(int index) {
     if (multiFile.length > index) {
-      print("validate");
       multiFile.removeAt(index);
     }
     uploadMultiFile.removeAt(index);
-    print("BEFOREE ${userController.user.images}");
 
     userController.user.images = uploadMultiFile;
     updateUserDetail(userController.user);
-    print("AFTER  ${userController.user.images}");
 
     update();
   }
@@ -131,7 +128,6 @@ class EditBProfileController extends GetxController {
   }
 
   void loadCountryJsonFile() async {
-    print("loadCountryJsonFile....");
     var jsonText = await rootBundle.loadString(AppJson.country);
     countries = countryModelFromJson(jsonText);
   }
@@ -210,7 +206,6 @@ class EditBProfileController extends GetxController {
       multiFile.addAll(userController.user.images.map((e) => File("")));
       websites = userController.user.websites;
       _kDefaultCountry = userController.user.phoneCode;
-      print("==========${userController.user.categories.length}");
 
       for (int i = 0; i < userController.user.categories.length; i++) {
         for (int j = 0; j < userController.globalCategory.length; j++) {

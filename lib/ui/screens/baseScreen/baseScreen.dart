@@ -63,7 +63,6 @@ class _BaseScreenState extends State<BaseScreen> {
         baseController.getAddressFromLatLong(LatLongCoordinate(
             latitude: value.latitude, longitude: value.longitude));
       }).catchError((e) {
-        print("permisison Denied");
         if (userController.user.location.coordinates[0] != 0.0 &&
             userController.user.location.coordinates[1] != 0.0) {
           baseController.getAddressFromLatLong(LatLongCoordinate(
@@ -78,7 +77,6 @@ class _BaseScreenState extends State<BaseScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print("USER TOKEN ${userController.userToken}");
     return DoubleBackToCloseApp(
       child: Scaffold(
         appBar: buildAppBar(),

@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:grebo/core/service/repo/postRepo.dart';
 import 'package:grebo/ui/screens/homeTab/controller/homeController.dart';
@@ -13,7 +14,7 @@ class PostDetailController extends GetxController {
 
   set postDataModel(PostData value) {
     _postDataModel = value;
-    print("Update");
+    debugPrint("Update");
     update();
   }
 
@@ -74,7 +75,7 @@ class PostDetailController extends GetxController {
   }
 
   Future getPostDetails(String postRef) async {
-    print("GTE POST DETAIL");
+    debugPrint("GTE POST DETAIL");
     PostData? postData = await PostRepo.getPostDetails(postRef);
     postDataModel = postData!;
   }

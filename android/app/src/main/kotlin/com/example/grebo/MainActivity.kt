@@ -1,4 +1,4 @@
-package com.example.grebo
+package com.app.grebo
 
 import io.flutter.embedding.android.FlutterActivity
 

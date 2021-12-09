@@ -58,7 +58,6 @@ class ViewAll extends StatelessWidget {
               type: CustomButtonType.colourButton,
               text: 'apply'.tr,
               onTap: () {
-                print(homeController.selectedCategory);
                 Get.back();
               },
               padding: 30,

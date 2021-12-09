@@ -30,7 +30,7 @@ class GetCurrentLocation extends GetxController {
 
     // Test if location services are enabled.
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    print(serviceEnabled);
+
     if (!serviceEnabled) {
       serviceEnabled = await loc.Location.instance.requestService();
 
@@ -74,10 +74,10 @@ class GetCurrentLocation extends GetxController {
 // void onInit() async {
 //   try {
 //     determinePosition().then((value) => null).catchError((e) {
-//       print("location denied}");
+//       debugPrint("location denied}");
 //     });
 //   } catch (e) {
-//     print("erroe frm $e");
+//     debugPrint("erroe frm $e");
 //   }
 //
 //   super.onInit();

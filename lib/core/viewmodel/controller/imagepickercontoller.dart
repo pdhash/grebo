@@ -13,7 +13,7 @@ class ImagePickerController extends GetxController {
   setImage(String url) async {
     if (url != "") {
       _image = await urlToFile(imageUrl + url);
-      print("ImagePickerController SET IMAGE $tag");
+      debugPrint("ImagePickerController SET IMAGE $tag");
       update();
     }
   }
@@ -137,8 +137,6 @@ class AppImagePicker {
                 onTap: () async {
                   final cameraPermissionStatus = await Permission.camera.status;
                   if (cameraPermissionStatus.isDenied) {
-                    print("is denied");
-
                     Permission.camera.request().then((value) async {
                       if (value.isPermanentlyDenied) {
                         await openAppSettings();
@@ -149,7 +147,6 @@ class AppImagePicker {
                       }
                     });
                   } else if (cameraPermissionStatus.isRestricted) {
-                    print("is Restricted");
                     await openAppSettings();
                   } else if (cameraPermissionStatus.isGranted) {
                     await browseImage(ImageSource.camera);

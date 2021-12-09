@@ -39,7 +39,7 @@ String getFileNameFromUrl(String url) {
 
 Future<File> urlToFile(String imageUrl) async {
   String fileName = getFileNameFromUrl(imageUrl);
-  print("URLTOFILE $imageUrl $fileName");
+  debugPrint("URLTOFILE $imageUrl $fileName");
 // get temporary directory of device.
   Directory tempDir = await getTemporaryDirectory();
 // get temporary path from temporary directory.
@@ -52,7 +52,7 @@ Future<File> urlToFile(String imageUrl) async {
   await file.writeAsBytes(response.bodyBytes);
 // now return the file which is created with random name in
 // temporary directory and image bytes from response is written to // that file.
-  print("PATH ${file.path}");
+  debugPrint("PATH ${file.path}");
   return file;
 }
 

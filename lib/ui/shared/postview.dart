@@ -72,7 +72,7 @@ class PostView extends StatelessWidget {
                                 Get.to(() => GuestLoginScreen());
                                 return;
                               }
-                              print(postData.userRef);
+                              debugPrint(postData.userRef);
                               Get.to(() => BusinessProfile(
                                     businessRef: postData.userRef,
                                   ));
@@ -108,7 +108,7 @@ class PostView extends StatelessWidget {
                               onTap: () {
                                 if (isPostDetail) {
                                   if (postData.image == "") {
-                                    print("ok");
+                                    debugPrint("ok");
                                     Get.to(() => VideoScreen(
                                         path: "${videoUrl + postData.video}"));
                                   }

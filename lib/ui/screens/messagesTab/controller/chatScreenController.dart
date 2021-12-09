@@ -16,8 +16,8 @@ class ChatScreenController extends GetxController {
   Future fetchChannel() async {
     SocketManager.socketDisconnect();
     SocketManager.connectSocket(() async {
-      print("getChannel...");
-      if(channelRef == "") {
+      debugPrint("getChannel...");
+      if (channelRef == "") {
         var response = await ChatRepo.getChannel(businessRef);
         channelRef = response["data"]["channelId"];
       }
@@ -28,10 +28,10 @@ class ChatScreenController extends GetxController {
   }
 
   void setupSocketListener() {
-    print("setupSocketListener...");
+    debugPrint("setupSocketListener...");
     readAllMsg();
     SocketManager.socket!.on('message', (data) {
-      print("GET message ${data}");
+      debugPrint("GET message ${data}");
       readAllMsg();
       var messageData = MessageData(
           createdAt: DateTime.parse(data["createdOn"]),
@@ -45,7 +45,7 @@ class ChatScreenController extends GetxController {
           user: User(
               name: '', id: messageData.userId, picture: '', businessName: ''));
 
-      print("ON MSG ARR ${getMessages.length}");
+      debugPrint("ON MSG ARR ${getMessages.length}");
       update();
     });
   }
@@ -94,7 +94,7 @@ class ChatScreenController extends GetxController {
   Future sendMessages() async {
     String msg = messageText.text.trim();
     messageText.clear();
-    print("sendMessages");
+    debugPrint("sendMessages");
     SocketManager.socket!.emit('message', {
       "channelRef": channelRef,
       "message": msg,
@@ -103,7 +103,7 @@ class ChatScreenController extends GetxController {
   }
 
   connectChannelToSocket() {
-    print("connectChannelToSocket");
+    debugPrint("connectChannelToSocket");
     SocketManager.socket!.emit("subscribe_channel", {"channelRef": channelRef});
     SocketManager.socket!
         .emit("subscribe_user", {"userRef": userController.user.id});
@@ -132,19 +132,19 @@ class SocketManager {
     socket!.connect();
 
     socket!.onConnect((_) {
-      print('connectted');
+      debugPrint('connectted');
       onConnect();
     });
-    socket!.onConnecting((data) => print("onConnecting ${data}"));
-    socket!.onConnectError((data) => print("onConnectError ${data}"));
-    socket!.onError((data) => print("onError ${data}"));
-    socket!.onDisconnect((data) => print("onDisconnect $data"));
+    socket!.onConnecting((data) => debugPrint("onConnecting ${data}"));
+    socket!.onConnectError((data) => debugPrint("onConnectError ${data}"));
+    socket!.onError((data) => debugPrint("onError ${data}"));
+    socket!.onDisconnect((data) => debugPrint("onDisconnect $data"));
   }
 
   static void socketDisconnect() {
     if (SocketManager.socket != null) {
       SocketManager.socket!.disconnect();
-      socket!.onDisconnect((data) => print("onDisconnect $data"));
+      socket!.onDisconnect((data) => debugPrint("onDisconnect $data"));
     }
   }
 }

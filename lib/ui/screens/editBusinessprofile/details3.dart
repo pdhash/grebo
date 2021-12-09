@@ -19,7 +19,6 @@ class DetailsPage3 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("DetailsPage3 BUILD");
     // addServiceController.addDefault();
     return Scaffold(
         appBar: appBar(

@@ -29,8 +29,11 @@ import 'core/viewmodel/controller/imagepickercontoller.dart';
 late UserController userController;
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {}
-
+const bool isProduction = bool.fromEnvironment('dart.vm.product');
 void main() async {
+  if (isProduction) {
+    debugPrint = (String? message, {int? wrapWidth}) {};
+  }
   WidgetsFlutterBinding.ensureInitialized();
   //--Firebase initialize
   await Firebase.initializeApp();

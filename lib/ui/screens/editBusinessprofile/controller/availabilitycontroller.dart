@@ -13,7 +13,6 @@ class AvailabilityController extends GetxController {
   List<int> daysCount = [];
 
   void addDays(int index) {
-    print("add $daysCount");
     daysCount.add(index);
     update();
   }

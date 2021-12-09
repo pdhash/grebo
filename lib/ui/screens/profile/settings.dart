@@ -77,7 +77,7 @@ class _SettingsState extends State<Settings> {
                           if (index == 0) {
                             Get.to(() => AboutUsAndTAndC());
                           } else if (index == 1) {
-                            print(aboutUsController.tc!);
+                            debugPrint(aboutUsController.tc!);
                             if (await canLaunch(
                                 "http://gogrebo.com/terms-and-conditions")) {
                               await launch(
