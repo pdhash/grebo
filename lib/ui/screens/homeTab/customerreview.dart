@@ -67,7 +67,7 @@ class _CustomerReviewedState extends State<CustomerReviewed> {
                                 reviewBox(reviewData),
                             pageFetch: reviewController.fetchReviews,
                             onError: (error) {
-                              print("Error $error");
+                              debugPrint("Error $error");
                               return Center(child: Text(error));
                             },
                             onEmpty: Center(
@@ -204,25 +204,25 @@ class _CustomerReviewedState extends State<CustomerReviewed> {
               ),
             ),
             getHeightSizedBox(h: 10),
-            if(reviewData.image != "")
-            ClipRRect(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-              child: FadeInImage(
-                placeholder: AssetImage(AppImages.placeHolder),
-                image: NetworkImage("${imageUrl + reviewData.image}"),
-                height: 120,
-                width: Get.width - 30,
-                imageErrorBuilder: (context, error, stackTrace) {
-                  return Image.asset(
-                    AppImages.placeHolder,
-                    height: 120,
-                    width: Get.width - 30,
-                    fit: BoxFit.cover,
-                  );
-                },
-                fit: BoxFit.cover,
+            if (reviewData.image != "")
+              ClipRRect(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                child: FadeInImage(
+                  placeholder: AssetImage(AppImages.placeHolder),
+                  image: NetworkImage("${imageUrl + reviewData.image}"),
+                  height: 120,
+                  width: Get.width - 30,
+                  imageErrorBuilder: (context, error, stackTrace) {
+                    return Image.asset(
+                      AppImages.placeHolder,
+                      height: 120,
+                      width: Get.width - 30,
+                      fit: BoxFit.cover,
+                    );
+                  },
+                  fit: BoxFit.cover,
+                ),
               ),
-            ),
           ],
         ),
       ),

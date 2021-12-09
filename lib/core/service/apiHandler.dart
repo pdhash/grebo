@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:grebo/core/service/repo/userRepo.dart';
 import 'package:grebo/core/utils/appFunctions.dart';
@@ -27,9 +28,9 @@ class API {
       if (await checkConnection()) {
         if (showLoader) LoadingOverlay.of().show();
 
-        log("URl ===> $url");
-        log("HEADER ===> $header");
-        log("BODY ===> $body");
+        // log("URl ===> $url");
+        // log("HEADER ===> $header");
+        // log("BODY ===> $body");
         if (requestType == RequestType.Get) {
           response = await http.get(
             Uri.parse(url),
@@ -41,7 +42,7 @@ class API {
         }
         if (response.body.isNotEmpty) {
           var res = jsonDecode(response.body);
-          log("RETURN RESPONSE BODY CREATE ====== $res");
+          // log("RETURN RESPONSE BODY CREATE ====== $res");
 
           if (showLoader) LoadingOverlay.of().hide();
 
@@ -65,7 +66,7 @@ class API {
         return null;
       }
     } catch (e) {
-      print("ERROR FROM API CLASS $e");
+      debugPrint("ERROR FROM API CLASS $e");
     }
   }
 
@@ -81,9 +82,9 @@ class API {
       bool connection = await checkConnection();
 
       if (connection) {
-        log("URl ===> $url");
-        log("HEADER ===> $header");
-        log("BODY ===> $field");
+        // log("URl ===> $url");
+        // log("HEADER ===> $header");
+        // log("BODY ===> $field");
 
         if (showLoader) LoadingOverlay.of().show();
         var request = http.MultipartRequest(
@@ -96,7 +97,7 @@ class API {
         if (fileImage != null) {
           fileImage.forEach((element) async {
             String? mimeType = mime(element.path);
-            print(mimeType);
+            debugPrint(mimeType);
             request.files.add(await http.MultipartFile.fromPath(
                 multiPartImageKeyName, element.path,
                 contentType: mimeee.MediaType(
@@ -119,7 +120,7 @@ class API {
           UserRepo.userLogout();
         } else {
           if (showLoader) LoadingOverlay.of().hide();
-          print("erroe $resDecode");
+          debugPrint("erroe $resDecode");
           flutterToast(resDecode["message"]);
 
           return null;
@@ -129,7 +130,6 @@ class API {
         return null;
       }
     } catch (e) {
-      print(e);
       return null;
     }
   }

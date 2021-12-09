@@ -43,7 +43,7 @@ class _AddServiceViewState extends State<AddServiceView> {
             .setImage(widget.serviceModel!.image);
       }
     }
-    print("AddServiceView BUILD ${widget.tag}");
+
     return Column(
       children: [
         Padding(
@@ -55,8 +55,7 @@ class _AddServiceViewState extends State<AddServiceView> {
                 builder: (controller) {
                   File? image =
                       widget.appImagePicker.imagePickerController.image;
-                  print(
-                      "AddServiceView IMAGE ${widget.tag} ${widget.index} ${image}");
+
                   if (image != null) {
                     widget.addServiceController.addServiceModels[widget.index]
                         .image = image;

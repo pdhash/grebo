@@ -34,14 +34,17 @@ class PostDetails extends StatefulWidget {
 
 class _PostDetailsState extends State<PostDetails> {
   final PostDetailController postDetailController =
-      Get.put(PostDetailController());
+      Get.find<PostDetailController>();
 
   final TextEditingController comment = TextEditingController();
   @override
   void initState() {
     GoogleAddService.showInterstitialAd();
+    postDetailController.selectedPostRef =
+        Get.find<HomeController>().currentPostRef;
 
     postDetailController.getPostDetails(widget.postRef!);
+    postDetailController.fetchCommentsLast2();
 
     super.initState();
   }

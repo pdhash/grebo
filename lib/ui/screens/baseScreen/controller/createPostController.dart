@@ -176,8 +176,6 @@ class AddPostController extends GetxController {
                 onTap: () async {
                   final cameraPermissionStatus = await Permission.camera.status;
                   if (cameraPermissionStatus.isDenied) {
-                    print("is denied");
-
                     Permission.camera.request().then((value) async {
                       if (value.isPermanentlyDenied) {
                         await openAppSettings();
@@ -188,7 +186,6 @@ class AddPostController extends GetxController {
                       }
                     });
                   } else if (cameraPermissionStatus.isRestricted) {
-                    print("is Restricted");
                     await openAppSettings();
                   } else if (cameraPermissionStatus.isGranted) {
                     browseImage(ImageSource.camera, isVideo)
@@ -197,7 +194,7 @@ class AddPostController extends GetxController {
                     });
                     ;
                   }
-                  print("ok");
+
                   Get.back();
                 },
               ),

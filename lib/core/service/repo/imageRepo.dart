@@ -21,7 +21,6 @@ class ImageRepo {
         return null;
       }
     } catch (e) {
-      print(e);
       return null;
     }
   }
@@ -40,7 +39,6 @@ class ImageRepo {
         return null;
       }
     } catch (e) {
-      print(e);
       return null;
     }
   }

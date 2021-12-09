@@ -183,7 +183,7 @@
     },
     {
       "name": "flutter_bloc",
-      "rootUri": "file:///Users/aksh/Workspace/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_bloc-7.1.0",
+      "rootUri": "file:///Users/aksh/Workspace/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_bloc-7.3.3",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -639,7 +639,7 @@
     },
     {
       "name": "provider",
-      "rootUri": "file:///Users/aksh/Workspace/flutter/.pub-cache/hosted/pub.dartlang.org/provider-5.0.0",
+      "rootUri": "file:///Users/aksh/Workspace/flutter/.pub-cache/hosted/pub.dartlang.org/provider-6.0.1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -836,7 +836,7 @@
       "languageVersion": "2.12"
     }
   ],
-  "generated": "2021-11-22T10:45:57.155024Z",
+  "generated": "2021-12-09T11:51:42.839437Z",
   "generator": "pub",
   "generatorVersion": "2.14.4"
 }

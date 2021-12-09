@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:grebo/core/service/repo/editProfileRepo.dart';
 import 'package:grebo/core/service/repo/postRepo.dart';
@@ -89,7 +90,7 @@ class HomeController extends GetxController {
       getPosts[getPosts.indexWhere((element) => element.id == currentPostRef)]
           .comment += 1;
     } on Exception catch (e) {
-      print("prince $e");
+      debugPrint("prince $e");
     }
     update();
   }

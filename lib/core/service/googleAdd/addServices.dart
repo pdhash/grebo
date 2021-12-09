@@ -12,16 +12,16 @@ class GoogleAddService {
       request: AdRequest(),
       listener: BannerAdListener(
         onAdLoaded: (Ad ad) {
-          print('Ad loaded.');
+          debugPrint('Ad loaded.');
         },
         onAdFailedToLoad: (Ad ad, LoadAdError error) {
-          print('Ad failed to load: $error');
+          debugPrint('Ad failed to load: $error');
         },
         onAdOpened: (Ad ad) {
-          print('Ad opened.');
+          debugPrint('Ad opened.');
         },
         onAdClosed: (Ad ad) {
-          print('Ad closed.');
+          debugPrint('Ad closed.');
         },
       ),
     );

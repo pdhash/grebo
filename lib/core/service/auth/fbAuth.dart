@@ -8,9 +8,6 @@ class FBAuth {
     if (result.status == LoginStatus.success) {
       // you are logged
       final AccessToken accessToken = result.accessToken!;
-    } else {
-      print(result.status);
-      print(result.message);
-    }
+    } else {}
   }
 }

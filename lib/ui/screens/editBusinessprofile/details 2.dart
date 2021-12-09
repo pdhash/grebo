@@ -125,7 +125,6 @@ class DetailsPage2 extends StatelessWidget {
                       text: 'opening_hour'.tr,
                       context: context,
                       onTap: () {
-                        print("okkkkk");
                         if (PlatformCheck.isIOS) {
                           DatePicker.showTime12hPicker(
                             context,
@@ -208,14 +207,14 @@ class DetailsPage2 extends StatelessWidget {
                     child: CustomButton(
                   text: isNext ? 'next'.tr : 'save'.tr,
                   onTap: () {
-                    // print("START ${DateTime.parse(controller.startTime)}");
-                    // print("END ${DateTime.parse(controller.endTime)}");
+                    // ("START ${DateTime.parse(controller.startTime)}");
+                    // debugPrint("END ${DateTime.parse(controller.endTime)}");
                     // print(
                     //     "COMPARE ${DateTime.parse(controller.startTime).compareTo(DateTime.parse(controller.endTime))}");
                     // if (DateTime.parse(controller.startTime)
                     //         .compareTo(DateTime.parse(controller.endTime)) <
                     //     0) {
-                    //   print("Start time must be before end time");
+                    //   debugPrint("Start time must be before end time");
                     //   return;
                     // }
 

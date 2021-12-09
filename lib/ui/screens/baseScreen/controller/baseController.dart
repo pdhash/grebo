@@ -56,14 +56,12 @@ class BaseController extends GetxController {
 
   getAddressFromLatLong(LatLongCoordinate locationData) async {
     if (!locationData.isNull) {
-      print("location is not null");
       saveUserLastLateLong(locationData.latitude!.toDouble(),
           locationData.longitude!.toDouble());
     }
     double? lat = locationData.latitude ?? readLastLateLong.call().latitude;
     double? long = locationData.longitude ?? readLastLateLong.call().longitude;
-    print("lat ====================>>> $lat");
-    print("long ====================>>> $long");
+
     List<Placemark> placeMarks =
         await placemarkFromCoordinates(lat.toDouble(), long.toDouble());
     Placemark place = placeMarks[0];

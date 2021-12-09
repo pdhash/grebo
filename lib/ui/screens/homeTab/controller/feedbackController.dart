@@ -24,7 +24,7 @@ class FeedbackController extends GetxController {
   }
 
   submitAllFields() async {
-    print(businessRef);
+    debugPrint(businessRef);
     var v = await PostRepo.updateReview({
       "businessRef": businessRef,
       "rating": rating,
@@ -43,7 +43,6 @@ class FeedbackController extends GetxController {
           onTap: () {
             Get.back();
             Get.back();
-
           });
     } else
       resetVar();

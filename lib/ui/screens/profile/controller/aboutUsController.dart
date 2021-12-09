@@ -6,6 +6,13 @@ class AboutUsController extends GetxController {
   String? tc;
   String? privacyPolicy;
 
+  bool isFetched() {
+    if (aboutUs != null && tc != null && privacyPolicy != null) {
+      return true;
+    } else
+      return false;
+  }
+
   Future aboutTheApp() async {
     var response = await ContactRepo.aboutTheApp();
     if (response != null) {
@@ -14,11 +21,5 @@ class AboutUsController extends GetxController {
       privacyPolicy = response["data"]["privacyPolicy"];
       update();
     }
-  }
-
-  @override
-  void onInit() {
-    aboutTheApp();
-    super.onInit();
   }
 }

@@ -118,8 +118,6 @@ class DetailsPage1 extends StatelessWidget {
   websites() {
     return GetBuilder(
       builder: (EditBProfileController controller) {
-        print(controller.websites);
-
         return controller.websites.length == 0
             ? SizedBox()
             : Column(
@@ -304,7 +302,7 @@ class DetailsPage1 extends StatelessWidget {
       builder: (EditBProfileController controller) => GestureDetector(
         onTap: () {
           disposeKeyboard();
-          print(userController.globalCategory.length);
+
           showCupertinoModalPopup(
             context: Get.context as BuildContext,
             builder: (_) => SizedBox(
@@ -407,7 +405,6 @@ class DetailsPage1 extends StatelessWidget {
       aspectRatio: 1.8,
       child: GetBuilder(
         builder: (EditBProfileController controller) {
-          print("CALLING GET BUILDER");
           return GridView.builder(
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3,
@@ -456,9 +453,6 @@ class DetailsPage1 extends StatelessWidget {
                           );
                   }
                 : (context, index) {
-                    print("length of multifile ${controller.multiFile.length}");
-                    print(
-                        "length of upload file ${controller.uploadMultiFile.length}");
                     return controller.uploadMultiFile.length > index
                         ? Stack(
                             clipBehavior: Clip.none,
@@ -506,8 +500,6 @@ class DetailsPage1 extends StatelessWidget {
                                       top: -4,
                                       child: GestureDetector(
                                         onTap: () {
-                                          print("remove server");
-
                                           controller.deleteImage(index);
                                         },
                                         child: buildWidget(

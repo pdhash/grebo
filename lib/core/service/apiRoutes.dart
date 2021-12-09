@@ -13,12 +13,20 @@
 //     "https://greboapp.s3.ap-south-1.amazonaws.com/development/videos/";
 
 ///---staging
-const String url = "http://3.109.136.124:3000/api/";
-const String socketBaseUrl = "http://3.109.136.124:3000";
+// const String url = "http://3.109.136.124:3000/api/";
+// const String socketBaseUrl = "http://3.109.136.124:3000";
+// const String imageUrl =
+//     "https://greboapp.s3.amazonaws.com/staging/images/average/";
+// const String videoUrl =
+//     "https://greboapp.s3.ap-south-1.amazonaws.com/staging/videos/";
+
+///---production
+const String url = "http://3.110.39.213:3000/api/";
+const String socketBaseUrl = "http://3.110.39.213:3000";
 const String imageUrl =
-    "https://greboapp.s3.amazonaws.com/staging/images/average/";
+    "https://greboapp.s3.amazonaws.com/production/images/average/";
 const String videoUrl =
-    "https://greboapp.s3.ap-south-1.amazonaws.com/staging/videos/";
+    "https://greboapp.s3.ap-south-1.amazonaws.com/production/videos/";
 
 class APIRoutes {
   static const String userLogin = url + "user/login";

@@ -46,7 +46,9 @@ class PostView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               profileImageView(),
-              getHeightSizedBox(w: 10),
+              SizedBox(
+                width: 10,
+              ),
               Expanded(
                 child: GestureDetector(
                   onTap: () {
@@ -70,7 +72,7 @@ class PostView extends StatelessWidget {
                                 Get.to(() => GuestLoginScreen());
                                 return;
                               }
-                              print(postData.userRef);
+                              debugPrint(postData.userRef);
                               Get.to(() => BusinessProfile(
                                     businessRef: postData.userRef,
                                   ));
@@ -106,7 +108,7 @@ class PostView extends StatelessWidget {
                               onTap: () {
                                 if (isPostDetail) {
                                   if (postData.image == "") {
-                                    print("ok");
+                                    debugPrint("ok");
                                     Get.to(() => VideoScreen(
                                         path: "${videoUrl + postData.video}"));
                                   }
@@ -133,14 +135,14 @@ class PostView extends StatelessWidget {
                                                 "${imageUrl + postData.thumbnail}")
                                             : NetworkImage(
                                                 "${imageUrl + postData.image}"),
-                                        height: 138,
-                                        width: 281,
+                                        height: Get.width - 94,
+                                        width: Get.width,
                                         imageErrorBuilder:
                                             (context, error, stackTrace) {
                                           return Image.asset(
                                             AppImages.placeHolder,
-                                            height: 138,
-                                            width: 281,
+                                            height: Get.width - 94,
+                                            width: Get.width,
                                             fit: BoxFit.cover,
                                           );
                                         },
@@ -249,7 +251,6 @@ class PostView extends StatelessWidget {
                                 }
                                 homeScreenController.currentPostRef =
                                     postData.id;
-
                                 Get.to(() => ViewComments(
                                       postData: postData,
                                     ));

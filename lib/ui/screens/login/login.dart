@@ -174,13 +174,13 @@ class _LoginScreenState extends State<LoginScreen> {
   socialButtons() {
     return Row(
       children: [
-        Spacer(),
-        socialButton(AppImages.facebook, () {
-          Get.find<BaseController>().resetInitialTab();
-
-          disposeKeyboard();
-          FBAuth.fbLogin();
-        }),
+        // Spacer(),
+        // socialButton(AppImages.facebook, () {
+        //   Get.find<BaseController>().resetInitialTab();
+        //
+        //   disposeKeyboard();
+        //   FBAuth.fbLogin();
+        // }),
         Spacer(),
         socialButton(AppImages.google, () async {
           Get.find<BaseController>().resetInitialTab();
