@@ -42,6 +42,15 @@ class Lang extends Translations {
           'enter_email': 'Please Enter Email',
           'enter_password': 'Please Enter Password',
           'check_your_connection': 'Check your connection',
+          'by_login_in': "By login in, you're agreeing to our ",
+          'by_sign_up_in': "By signup, you're agreeing to our ",
+          "terms_of_service": "Terms of Services",
+          "and": " and ",
+          "privacy_policy": "Privacy Policy",
+          "report": "Report",
+          "report_a_user": "Report a user",
+          "please_enter_word": "Please enter word",
+
           //forgot password
           'forgot_password': 'Forgot Password',
           'enter_your_email..': "Enter your email id to find account",

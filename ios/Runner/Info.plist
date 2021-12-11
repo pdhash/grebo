@@ -71,17 +71,17 @@
 		<true/>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>Upload image from camera for screen background</string>
+	<string>By agreed, you allow camera access to upload image or video on post.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>This app needs access to location when open and in the background.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>This app needs access to location when in the background.</string>
+	<string>By agreed, you allow location access to see near by post.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>This app needs access to location when open.</string>
+	<string>By agreed, you allow location access to see near by post.</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Post videos to profile</string>
+	<string>By agreed, you allow microphone access to record and upload video on post.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Used to demonstrate image picker plugin</string>
+	<string>By agreed, you allow photos access to upload image or video on post.</string>
 	<key>SKAdNetworkItems</key>
 	<array>
 		<dict>

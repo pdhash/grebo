@@ -16,6 +16,7 @@ import 'package:grebo/core/viewmodel/controller/businesscontroller.dart';
 import 'package:grebo/core/viewmodel/controller/selectservicecontoller.dart';
 import 'package:grebo/main.dart';
 import 'package:grebo/ui/screens/editBusinessprofile/details1.dart';
+import 'package:grebo/ui/screens/editBusinessprofile/widgets/reportScreen.dart';
 import 'package:grebo/ui/screens/homeTab/home.dart';
 import 'package:grebo/ui/screens/homeTab/serviceoffered.dart';
 import 'package:grebo/ui/screens/messagesTab/chatscreen.dart';
@@ -673,7 +674,15 @@ class _BusinessProfileState extends State<BusinessProfile> {
   appBarPro() {
     return userController.user.userType ==
             getServiceTypeCode(ServicesType.userType)
-        ? appBar(title: 'business_profile'.tr)
+        ? appBar(title: 'business_profile'.tr, actions: [
+            IconButton(
+                onPressed: () {
+                  Get.to(() => ReportScreen(
+                        reportId: businessController.userModel.id,
+                      ));
+                },
+                icon: Icon(Icons.more_vert))
+          ])
         : appBar(title: 'about_business'.tr, actions: [
             widget.isShow
                 ? IconButton(

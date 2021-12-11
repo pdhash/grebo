@@ -14,6 +14,7 @@ import 'package:grebo/ui/shared/appbar.dart';
 import 'package:grebo/ui/shared/custombutton.dart';
 import 'package:grebo/ui/shared/customtextfield.dart';
 import 'package:grebo/ui/shared/postview.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../global.dart';
 
@@ -84,6 +85,28 @@ class SignUp extends StatelessWidget {
                             }),
                         getHeightSizedBox(h: 20),
                         toLoginText(),
+                        getHeightSizedBox(h: 20),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: kDefaultPadding),
+                          child: RichText(
+                            text: TextSpan(children: [
+                              tcText1('by_sign_up_in'.tr),
+                              tcText2('terms_of_service'.tr, onTap: () async {
+                                if (!await launch(
+                                    "http://gogrebo.com/terms-and-conditions"))
+                                  throw 'Could not launch ';
+                              }),
+                              tcText1('and'.tr),
+                              tcText2('privacy_policy'.tr, onTap: () async {
+                                if (!await launch(
+                                    "http://gogrebo.com/privacy-policy"))
+                                  throw 'Could not launch ';
+                              }),
+                            ]),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
                         getHeightSizedBox(h: 40)
                       ],
                     ),
