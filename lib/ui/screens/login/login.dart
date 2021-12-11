@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -7,7 +8,6 @@ import 'package:grebo/core/constants/appSetting.dart';
 import 'package:grebo/core/constants/app_assets.dart';
 import 'package:grebo/core/constants/appcolor.dart';
 import 'package:grebo/core/extension/customButtonextension.dart';
-import 'package:grebo/core/service/auth/fbAuth.dart';
 import 'package:grebo/core/utils/config.dart';
 import 'package:grebo/core/viewmodel/controller/selectservicecontoller.dart';
 import 'package:grebo/main.dart';
@@ -19,6 +19,7 @@ import 'package:grebo/ui/screens/login/signup.dart';
 import 'package:grebo/ui/shared/appbar.dart';
 import 'package:grebo/ui/shared/custombutton.dart';
 import 'package:grebo/ui/shared/customtextfield.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'widgets/forgotpassword.dart';
 
@@ -117,7 +118,28 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 getHeightSizedBox(h: 23),
                 socialButtons(),
-                getHeightSizedBox(h: 20)
+                getHeightSizedBox(h: 20),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: kDefaultPadding * 2),
+                  child: RichText(
+                    text: TextSpan(children: [
+                      tcText1('by_login_in'.tr),
+                      tcText2('terms_of_service'.tr, onTap: () async {
+                        if (!await launch(
+                            "http://gogrebo.com/terms-and-conditions"))
+                          throw 'Could not launch ';
+                      }),
+                      tcText1('and'.tr),
+                      tcText2('privacy_policy'.tr, onTap: () async {
+                        if (!await launch("http://gogrebo.com/privacy-policy"))
+                          throw 'Could not launch ';
+                      }),
+                    ]),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                getHeightSizedBox(h: 20),
               ],
             ),
           ),
@@ -125,6 +147,8 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
+
+
 
   forgotPasswordButton() {
     return GestureDetector(
@@ -280,5 +304,28 @@ header(String title) {
       ),
       // Get.height < 800 ? getHeightSizedBox(h: 10) : SizedBox(),
     ],
+  );
+}
+tcText1(String title) {
+  return TextSpan(
+    text: title,
+    style: TextStyle(
+      fontSize: getProportionateScreenWidth(13),
+      fontFamily: kAppFont,
+      color: Colors.black,
+    ),
+  );
+}
+
+tcText2(String title, {Function()? onTap}) {
+  return TextSpan(
+    text: title,
+    recognizer: TapGestureRecognizer()..onTap = onTap,
+    style: TextStyle(
+      decoration: TextDecoration.underline,
+      fontFamily: kAppFont,
+      fontSize: getProportionateScreenWidth(13),
+      color: AppColor.kDefaultColor,
+    ),
   );
 }

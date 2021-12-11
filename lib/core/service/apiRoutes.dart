@@ -36,6 +36,7 @@ class APIRoutes {
   static const String imageDelete = url + "image/delete";
   static const String userUpdate = url + "user/update";
   static const String emailVerification = url + "user/resendVerification";
+  static const String reportAdd = url + "report/add";
   static const String providerPostList = url + "post/myList"; // provider
   static const String userPostList = url + "post/list"; // provider
   static const String addPost = url + "post/add";

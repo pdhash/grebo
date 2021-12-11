@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -7,6 +8,7 @@ import 'package:grebo/core/service/apiHandler.dart';
 import 'package:grebo/core/service/apiRoutes.dart';
 import 'package:grebo/core/utils/sharedpreference.dart';
 import 'package:grebo/core/viewmodel/controller/selectservicecontoller.dart';
+import 'package:grebo/main.dart';
 import 'package:grebo/ui/screens/baseScreen/controller/baseController.dart';
 import 'package:grebo/ui/screens/selectservice.dart';
 
@@ -113,6 +115,25 @@ class UserRepo {
         {"email": email, "requestType": 2, "userType": userType},
       ),
     );
+    if (responseBody != null) return responseBody;
+  }
+
+  static Future reportUser({
+    required String id,
+    required int userType,
+  }) async {
+    var responseBody = await API.apiHandler(
+      url: APIRoutes.reportAdd,
+      requestType: RequestType.Post,
+      header: {
+        "Authorization": userController.userToken,
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode(
+        {"userRef": id, "userType": userType},
+      ),
+    );
+
     if (responseBody != null) return responseBody;
   }
 
